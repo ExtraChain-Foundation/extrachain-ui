@@ -1,0 +1,77 @@
+message(STATUS "Begin add qml files.")
+
+set(UI_CONTROLS
+    UI/Controls/NotificationToolTip.qml
+    UI/Controls/RaccoonButton.qml
+    UI/Controls/RaccoonIconButton.qml
+    UI/Controls/MonserratText.qml
+    UI/Controls/DmsansText.qml
+    UI/Controls/RaccoonTextField.qml
+    UI/Controls/RaccoonCheckBox.qml
+    UI/Controls/RaccoonCoinComboBox.qml
+    UI/Controls/SquareButton.qml
+    UI/Controls/BackButton.qml
+    UI/Controls/DevActivator.qml
+    UI/Controls/RaccoonMessageBox.qml
+    UI/Controls/RaccoonOkMessageBox.qml
+    UI/Controls/RaccoonSwitch.qml
+    UI/Controls/QualitySignal.qml
+    UI/Controls/BlueButton.qml
+    UI/Controls/WalletQuickButton.qml
+    UI/Controls/DeepIndigoButton.qml
+    UI/Controls/WalletEditMobileMenu.qml
+    UI/Controls/RaccoonIconTextButton.qml
+    UI/Controls/OnboardingInformPanel.qml
+    UI/Controls/BlackRectangle.qml
+)
+
+set(UI_FONTS
+    UI/Fonts/IconText.qml
+)
+
+set(UI_PAGES
+    UI/Pages/Dfs.qml
+    UI/Pages/LoginPage.qml
+    UI/Pages/MenuSelector.qml
+    UI/Pages/Settings.qml
+    UI/Pages/Wallet.qml
+    UI/Pages/Updater.qml
+    UI/Pages/Subscription.qml
+    UI/Pages/Messenger.qml
+    UI/Pages/ExportPage.qml
+    UI/RaccoonPage.qml
+    UI/Pages/SettingsPopup.qml
+    UI/Pages/NotificationPopup.qml
+    UI/Pages/Notification.qml
+    UI/Pages/ExportColumn.qml
+    UI/Pages/GeneralPages.qml
+)
+
+set(UI_WALLET_PAGES
+    UI/Pages/Wallet/Deposit.qml
+    UI/Pages/Wallet/TransactionSend.qml
+    UI/Pages/Wallet/TxStatus.qml
+    UI/Pages/Wallet/Withdraw.qml
+    UI/Pages/Wallet/CreateToken.qml
+    UI/Pages/Wallet/CreateWallet.qml
+    UI/Pages/Wallet/SecureCode.qml
+    UI/Pages/Wallet/StatusCreateWallet.qml
+)
+
+set(UI_ADDITIONAL_COMPONENTS
+    UI/TopHeader.qml
+    UI/SyncBlockchainLoader.qml
+    UI/Delegates/MessageChooseDelegate.qml
+    UI/Delegates/FileMessengerDelegate.qml
+    UI/Delegates/VideoMessengerDelegate.qml
+    UI/Delegates/ImageMessengerDelegate.qml
+    UI/Delegates/GifMessengerDelegate.qml
+    UI/Delegates/TextMessengerDelegate.qml
+    UI/Delegates/MessageReply.qml
+    UI/Delegates/ReplyMessageItem.qml
+    UI/Delegates/FlashAnimation.qml
+    UI/Delegates/MessageAddMediaWithCaption.qml
+    UI/Delegates/MenuMessenger.qml
+    UI/ImagePreview.qml
+    UI/MiningInformPanel.qml
+)

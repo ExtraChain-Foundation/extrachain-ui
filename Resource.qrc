@@ -1,0 +1,562 @@
+<RCC>
+    <qresource prefix="/">
+        <file>UI/Colors.qml</file>
+        <file>UI/Fonts.qml</file>
+        <file>UI/IcoMoonSettings.qml</file>
+        <file>UI/UiSettings.qml</file>
+        <file>UI/Utils.qml</file>
+        <file>UI/Images/bg.svg</file>
+        <file>UI/MessageWindow.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>UI/Images/raccoon_title.png</file>
+        <file>UI/Images/canada.png</file>
+        <file>UI/Images/raccoon.png</file>
+        <file>UI/Images/raccoonline.png</file>
+        <file>UI/Images/file.png</file>
+        <file>UI/Images/image.png</file>
+        <file>UI/Images/fatal.png</file>
+        <file>UI/Images/raccoon_logo.png</file>
+        <file>UI/Images/Header.svg</file>
+        <file>UI/Images/file.svg</file>
+        <file>UI/Images/Header.png</file>
+        <file>UI/Images/raccoon_3x.png</file>
+        <file>UI/Images/raccoon_mobile_2x.png</file>
+        <file>UI/Images/raccoon_mobile.svg</file>
+        <file>UI/Images/bg.svg</file>
+        <file>UI/Images/raccoon_text_and_icon_logo.svg</file>
+        <file>UI/Images/mobile_top_header.svg</file>
+        <file>UI/Images/upnp.png</file>
+        <file>UI/Images/raccoon-round.png</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>UI/Fonts/Inter-Regular.ttf</file>
+        <file>UI/Fonts/IcoMoon/fonts/icomoon.ttf</file>
+        <file>UI/Fonts/Montserrat/static/Montserrat-Medium.ttf</file>
+        <file>UI/Fonts/Montserrat/static/Montserrat-Bold.ttf</file>
+        <file>UI/Fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf</file>
+        <file>UI/Fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf</file>
+    </qresource>
+    <qresource prefix="/coins">
+        <file>UI/Images/coins/Currency=Zilliqa (ZIL).png</file>
+        <file>UI/Images/coins/Currency=zec.png</file>
+        <file>UI/Images/coins/Currency=ZCoin (XZC).png</file>
+        <file>UI/Images/coins/Currency=ZClassic (ZCL).png</file>
+        <file>UI/Images/coins/Currency=Zcash.png</file>
+        <file>UI/Images/coins/Currency=XTRABYTES (XBY).png</file>
+        <file>UI/Images/coins/Currency=WhiteCoin (XWC).png</file>
+        <file>UI/Images/coins/Currency=WaykiChain (WICC).png</file>
+        <file>UI/Images/coins/Currency=Waves (WAVES).png</file>
+        <file>UI/Images/coins/Currency=Wanchain (WAN).png</file>
+        <file>UI/Images/coins/Currency=Waltonchain (WTC).png</file>
+        <file>UI/Images/coins/Currency=Vitae (VITAE).png</file>
+        <file>UI/Images/coins/Currency=Vipstar Coin (VIPS).png</file>
+        <file>UI/Images/coins/Currency=VINchain (VIN).png</file>
+        <file>UI/Images/coins/Currency=Viacoin (VIA).png</file>
+        <file>UI/Images/coins/Currency=Vertcoin (VTC).png</file>
+        <file>UI/Images/coins/Currency=VeriCoin (VRC).png</file>
+        <file>UI/Images/coins/Currency=Verge (XVG).png</file>
+        <file>UI/Images/coins/Currency=VeChain (VET).png</file>
+        <file>UI/Images/coins/Currency=usd.png</file>
+        <file>UI/Images/coins/Currency=Unobtanium (UNO).png</file>
+        <file>UI/Images/coins/Currency=Ubiq (UBQ.png</file>
+        <file>UI/Images/coins/Currency=TrustNote (TTT).png</file>
+        <file>UI/Images/coins/Currency=TrueUSD (TUSD).png</file>
+        <file>UI/Images/coins/Currency=TrueUSD (TUSD)-1.png</file>
+        <file>UI/Images/coins/Currency=TokenPay (TPAY).png</file>
+        <file>UI/Images/coins/Currency=ToaCoin (TOA).png</file>
+        <file>UI/Images/coins/Currency=Timicoin (TMC).png</file>
+        <file>UI/Images/coins/Currency=Tezos (XTZ).png</file>
+        <file>UI/Images/coins/Currency=Tether.png</file>
+        <file>UI/Images/coins/Currency=Syscoin (SYS).png</file>
+        <file>UI/Images/coins/Currency=Stratis (STRAT).png</file>
+        <file>UI/Images/coins/Currency=Stratis ( Strat).png</file>
+        <file>UI/Images/coins/Currency=Stellite (XTL).png</file>
+        <file>UI/Images/coins/Currency=Stellar.png</file>
+        <file>UI/Images/coins/Currency=Steem Dollars (SBD).png</file>
+        <file>UI/Images/coins/Currency=Steem (STEEM).png</file>
+        <file>UI/Images/coins/Currency=Spectrecoin (XSPEC).png</file>
+        <file>UI/Images/coins/Currency=Solaris (XLR).png</file>
+        <file>UI/Images/coins/Currency=SmartCash (SMART).png</file>
+        <file>UI/Images/coins/Currency=Skycoin (SKY).png</file>
+        <file>UI/Images/coins/Currency=Siacoin (SC).png</file>
+        <file>UI/Images/coins/Currency=Shift (SHIFT).png</file>
+        <file>UI/Images/coins/Currency=SHIELD (XSH).png</file>
+        <file>UI/Images/coins/Currency=Semux (SEM).png</file>
+        <file>UI/Images/coins/Currency=SelfSell (SSC).png</file>
+        <file>UI/Images/coins/Currency=SaluS (SLS).png</file>
+        <file>UI/Images/coins/Currency=SafeInsure (SINS).png</file>
+        <file>UI/Images/coins/Currency=Russian Miner Coin.png</file>
+        <file>UI/Images/coins/Currency=Rubycoin (RBY).png</file>
+        <file>UI/Images/coins/Currency=rocc.png</file>
+        <file>UI/Images/coins/Currency=ripple.png</file>
+        <file>UI/Images/coins/Currency=RevolutionVR (RVR).png</file>
+        <file>UI/Images/coins/Currency=Republic Protocol (REN).png</file>
+        <file>UI/Images/coins/Currency=ReddCoin(RDD).png</file>
+        <file>UI/Images/coins/Currency=Ravencoin (RVN).png</file>
+        <file>UI/Images/coins/Currency=Radium (RADS).png</file>
+        <file>UI/Images/coins/Currency=quarkchain (QKC).png</file>
+        <file>UI/Images/coins/Currency=quarkchain (QKC)  Copy.png</file>
+        <file>UI/Images/coins/Currency=Quantstamp (QSP).png</file>
+        <file>UI/Images/coins/Currency=Qtum (QTUM).png</file>
+        <file>UI/Images/coins/Currency=Pura (PURA).png</file>
+        <file>UI/Images/coins/Currency=Pundi X (NPXS).png</file>
+        <file>UI/Images/coins/Currency=PRIZM (PZM).png</file>
+        <file>UI/Images/coins/Currency=Primecoin (XPM).png</file>
+        <file>UI/Images/coins/Currency=Power Ledger (POWR).png</file>
+        <file>UI/Images/coins/Currency=PotCoin (POT).png</file>
+        <file>UI/Images/coins/Currency=POA Network (POA).png</file>
+        <file>UI/Images/coins/Currency=Po.et (POE).png</file>
+        <file>UI/Images/coins/Currency=PIVX (PIVX).png</file>
+        <file>UI/Images/coins/Currency=Phore (PHR).png</file>
+        <file>UI/Images/coins/Currency=Peerplays (PPY).png</file>
+        <file>UI/Images/coins/Currency=Peercoin (PPC).png</file>
+        <file>UI/Images/coins/Currency=Paxos Standard Token (PAX).png</file>
+        <file>UI/Images/coins/Currency=Pascal Coin (PASC).png</file>
+        <file>UI/Images/coins/Currency=Particl (PART).png</file>
+        <file>UI/Images/coins/Currency=PACcoin ($PAC).png</file>
+        <file>UI/Images/coins/Currency=Ontology (ONT).png</file>
+        <file>UI/Images/coins/Currency=OmiseGO (OMG).png</file>
+        <file>UI/Images/coins/Currency=Nxt (NXT).png</file>
+        <file>UI/Images/coins/Currency=Nuls (NULS).png</file>
+        <file>UI/Images/coins/Currency=Novacoin (NVC).png</file>
+        <file>UI/Images/coins/Currency=Noname.png</file>
+        <file>UI/Images/coins/Currency=NIX (NIX).png</file>
+        <file>UI/Images/coins/Currency=Nimiq (NIM).png</file>
+        <file>UI/Images/coins/Currency=Nimiq (NIM) Copy.png</file>
+        <file>UI/Images/coins/Currency=Nexus (NXS).png</file>
+        <file>UI/Images/coins/Currency=Nexty (NTY).png</file>
+        <file>UI/Images/coins/Currency=New Power Coin (NPW).png</file>
+        <file>UI/Images/coins/Currency=NEO.png</file>
+        <file>UI/Images/coins/Currency=NEM (XEM).png</file>
+        <file>UI/Images/coins/Currency=Nebulas (NAS).png</file>
+        <file>UI/Images/coins/Currency=Neblio (NEBL).png</file>
+        <file>UI/Images/coins/Currency=NavCoin (NAV).png</file>
+        <file>UI/Images/coins/Currency=nano (NANO).png</file>
+        <file>UI/Images/coins/Currency=Namecoin (NMC).png</file>
+        <file>UI/Images/coins/Currency=Myriad (XMY).png</file>
+        <file>UI/Images/coins/Currency=MonetaryUnit (MUE).png</file>
+        <file>UI/Images/coins/Currency=Monero.png</file>
+        <file>UI/Images/coins/Currency=MonaCoin (MONA).png</file>
+        <file>UI/Images/coins/Currency=Moeda Loyalty Points (MDA).png</file>
+        <file>UI/Images/coins/Currency=MOAC (MOAC).png</file>
+        <file>UI/Images/coins/Currency=MintCoin (MINT).png</file>
+        <file>UI/Images/coins/Currency=MinexCoin (MNX.png</file>
+        <file>UI/Images/coins/Currency=Metaverse (ETP).png</file>
+        <file>UI/Images/coins/Currency=LUXCoin (LUX).png</file>
+        <file>UI/Images/coins/Currency=Loki (LOKI) loki-logo.svg.png</file>
+        <file>UI/Images/coins/Currency=Litecoin Cash (LCC).png</file>
+        <file>UI/Images/coins/Currency=lite.png</file>
+        <file>UI/Images/coins/Currency=Lisk (LSK).png</file>
+        <file>UI/Images/coins/Currency=LinkEye (LET).png</file>
+        <file>UI/Images/coins/Currency=LEOcoin (LEO).png</file>
+        <file>UI/Images/coins/Currency=LBRY Credits (LBC).png</file>
+        <file>UI/Images/coins/Currency=Komodo (KMD).png</file>
+        <file>UI/Images/coins/Currency=ION (ION).png</file>
+        <file>UI/Images/coins/Currency=IO Coin (IOC).png</file>
+        <file>UI/Images/coins/Currency=Insolar (INS).png</file>
+        <file>UI/Images/coins/Currency=IFactom (FCT).png</file>
+        <file>UI/Images/coins/Currency=ICON (ICX).png</file>
+        <file>UI/Images/coins/Currency=ICON (ICX)-1.png</file>
+        <file>UI/Images/coins/Currency=ICON (ICX) Copy 9.png</file>
+        <file>UI/Images/coins/Currency=IArdor(ARDE).png</file>
+        <file>UI/Images/coins/Currency=HyperCash(HC).png</file>
+        <file>UI/Images/coins/Currency=Huobi Token (HT).png</file>
+        <file>UI/Images/coins/Currency=HTMLCOIN (HTML).png</file>
+        <file>UI/Images/coins/Currency=Horizen (ZEN).png</file>
+        <file>UI/Images/coins/Currency=Holo (HOT).png</file>
+        <file>UI/Images/coins/Currency=HempCoin (THC).png</file>
+        <file>UI/Images/coins/Currency=Haven Protocol (XHV).png</file>
+        <file>UI/Images/coins/Currency=Happycoin (HPC).png</file>
+        <file>UI/Images/coins/Currency=GXChain (GXS).png</file>
+        <file>UI/Images/coins/Currency=Gulden (NLG).png</file>
+        <file>UI/Images/coins/Currency=GridCoin (GRC).png</file>
+        <file>UI/Images/coins/Currency=Graft (GRFT).png</file>
+        <file>UI/Images/coins/Currency=Golem (GNT).png</file>
+        <file>UI/Images/coins/Currency=GoChain (GO).png</file>
+        <file>UI/Images/coins/Currency=GoByte (GBX).png</file>
+        <file>UI/Images/coins/Currency=Global Currency Reserve (GCR).png</file>
+        <file>UI/Images/coins/Currency=GINcoin (GIN).png</file>
+        <file>UI/Images/coins/Currency=GameCredits (GAME).png</file>
+        <file>UI/Images/coins/Currency=Flash (FLASH).png</file>
+        <file>UI/Images/coins/Currency=Feathercoin (FTC).png</file>
+        <file>UI/Images/coins/Currency=FairCoin (FAIR).png</file>
+        <file>UI/Images/coins/Currency=Experience Points (XP).png</file>
+        <file>UI/Images/coins/Currency=eur.png</file>
+        <file>UI/Images/coins/Currency=Ethersocial (ESN).png</file>
+        <file>UI/Images/coins/Currency=Ethereum.png</file>
+        <file>UI/Images/coins/Currency=Ethereum Classic (ETH).png</file>
+        <file>UI/Images/coins/Currency=EOS.png</file>
+        <file>UI/Images/coins/Currency=EOS Copy.png</file>
+        <file>UI/Images/coins/Currency=Enjin Coin (ENJ).png</file>
+        <file>UI/Images/coins/Currency=Enigma (ENG).png</file>
+        <file>UI/Images/coins/Currency=Emercoin (EMC).png</file>
+        <file>UI/Images/coins/Currency=Electroneum (ETN).png</file>
+        <file>UI/Images/coins/Currency=Electra (ECA).png</file>
+        <file>UI/Images/coins/Currency=Elastos (ELA).png</file>
+        <file>UI/Images/coins/Currency=Elastic (XEL).png</file>
+        <file>UI/Images/coins/Currency=Einsteinium (EMC2).png</file>
+        <file>UI/Images/coins/Currency=ECC (ECC).png</file>
+        <file>UI/Images/coins/Currency=E-Dinar Coin (EDR).png</file>
+        <file>UI/Images/coins/Currency=DubaiCoin (DBIX).png</file>
+        <file>UI/Images/coins/Currency=Dogecoin (DOGE).png</file>
+        <file>UI/Images/coins/Currency=DNotes (NOTE).png</file>
+        <file>UI/Images/coins/Currency=Dimecoin (DIME.png</file>
+        <file>UI/Images/coins/Currency=DigixDAO.png</file>
+        <file>UI/Images/coins/Currency=DigitalNote (XDN).png</file>
+        <file>UI/Images/coins/Currency=DigiByte (DGB).png</file>
+        <file>UI/Images/coins/Currency=Diamond (DMD)).png</file>
+        <file>UI/Images/coins/Currency=DeviantCoin (DEV).png</file>
+        <file>UI/Images/coins/Currency=Dero (DERO).png</file>
+        <file>UI/Images/coins/Currency=Dent (DENT).png</file>
+        <file>UI/Images/coins/Currency=DeepOnion (ONION).png</file>
+        <file>UI/Images/coins/Currency=Decred (DCR).png</file>
+        <file>UI/Images/coins/Currency=Decred (DCR) Copy.png</file>
+        <file>UI/Images/coins/Currency=Decentraland (MANA).png</file>
+        <file>UI/Images/coins/Currency=DECENT (DCT).png</file>
+        <file>UI/Images/coins/Currency=dash.png</file>
+        <file>UI/Images/coins/Currency=Cryptonex (CNX).png</file>
+        <file>UI/Images/coins/Currency=Crown (CRW).png</file>
+        <file>UI/Images/coins/Currency=Counterparty (XCP).png</file>
+        <file>UI/Images/coins/Currency=ColossusXT (COLX).png</file>
+        <file>UI/Images/coins/Currency=CloakCoin (CLOAK).png</file>
+        <file>UI/Images/coins/Currency=Clams (CLAM).png</file>
+        <file>UI/Images/coins/Currency=ChatCoin (CHAT).png</file>
+        <file>UI/Images/coins/Currency=Chainlink (LINK).png</file>
+        <file>UI/Images/coins/Currency=CasinoCoin (CSC).png</file>
+        <file>UI/Images/coins/Currency=Cashbery Coin (CBC).png</file>
+        <file>UI/Images/coins/Currency=Cardano.png</file>
+        <file>UI/Images/coins/Currency=Callisto Network (CLO).png</file>
+        <file>UI/Images/coins/Currency=Bytom (BTM).png</file>
+        <file>UI/Images/coins/Currency=Bytecoin (BCN).png</file>
+        <file>UI/Images/coins/Currency=Byteball Bytes (GBYTE).png</file>
+        <file>UI/Images/coins/Currency=Burst (BURST).png</file>
+        <file>UI/Images/coins/Currency=Bulwark (BWK).png</file>
+        <file>UI/Images/coins/Currency=btc.png</file>
+        <file>UI/Images/coins/Currency=BridgeCoin (BCO).png</file>
+        <file>UI/Images/coins/Currency=BOScoin (BOS).png</file>
+        <file>UI/Images/coins/Currency=Boolberry.png</file>
+        <file>UI/Images/coins/Currency=Blocknet (BLOCK).png</file>
+        <file>UI/Images/coins/Currency=BlackCoin (BLK).png</file>
+        <file>UI/Images/coins/Currency=BitTube (TUBE).png</file>
+        <file>UI/Images/coins/Currency=BitSend (BSD).png</file>
+        <file>UI/Images/coins/Currency=BitNewChain (BTN).png</file>
+        <file>UI/Images/coins/Currency=Bitcore (BTX).png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Private (BTCP).png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Interest (BCI).png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Green (BITG).png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Gold.png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Diamond (BCD).png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Diamond (BCD) Copy.png</file>
+        <file>UI/Images/coins/Currency=Bitcoin Cash.png</file>
+        <file>UI/Images/coins/Currency=BitBay (BAY).png</file>
+        <file>UI/Images/coins/Currency=Bismuth (BIS).png</file>
+        <file>UI/Images/coins/Currency=Binance Coin (BNB).png</file>
+        <file>UI/Images/coins/Currency=Bbch.png</file>
+        <file>UI/Images/coins/Currency=Basic Attention Token  (BAT).png</file>
+        <file>UI/Images/coins/Currency=Baelf (ELF).png</file>
+        <file>UI/Images/coins/Currency=Apollo Currency (APL).png</file>
+        <file>UI/Images/coins/Currency=ALQO (XLQ).png</file>
+        <file>UI/Images/coins/Currency=Aion (AION).png</file>
+        <file>UI/Images/coins/Currency=aeron.png</file>
+        <file>UI/Images/coins/Currency=Aeon (AEON).png</file>
+        <file>UI/Images/coins/Currency=Achain (ACT).png</file>
+        <file>UI/Images/coins/Currency=AC3 (AC3).png</file>
+        <file>UI/Images/coins/Currency=0x.png</file>
+    </qresource>
+    <qresource prefix="/flags">
+        <file>UI/Images/flags/belize.png</file>
+        <file>UI/Images/flags/morocco.png</file>
+        <file>UI/Images/flags/botswana.png</file>
+        <file>UI/Images/flags/norway.png</file>
+        <file>UI/Images/flags/sardinia.png</file>
+        <file>UI/Images/flags/mexico.png</file>
+        <file>UI/Images/flags/chile.png</file>
+        <file>UI/Images/flags/indonesia.png</file>
+        <file>UI/Images/flags/nauru.png</file>
+        <file>UI/Images/flags/slovakia.png</file>
+        <file>UI/Images/flags/slovenia.png</file>
+        <file>UI/Images/flags/lithuania.png</file>
+        <file>UI/Images/flags/romania.png</file>
+        <file>UI/Images/flags/finland.png</file>
+        <file>UI/Images/flags/ireland.png</file>
+        <file>UI/Images/flags/uruguay.png</file>
+        <file>UI/Images/flags/malta.png</file>
+        <file>UI/Images/flags/norfolk island.png</file>
+        <file>UI/Images/flags/vietnam.png</file>
+        <file>UI/Images/flags/japan.png</file>
+        <file>UI/Images/flags/wales.png</file>
+        <file>UI/Images/flags/united states.png</file>
+        <file>UI/Images/flags/niger.png</file>
+        <file>UI/Images/flags/bosnia and herzegovina.png</file>
+        <file>UI/Images/flags/british virgin islands.png</file>
+        <file>UI/Images/flags/egypt.png</file>
+        <file>UI/Images/flags/fiji.png</file>
+        <file>UI/Images/flags/jordan.png</file>
+        <file>UI/Images/flags/hawaii.png</file>
+        <file>UI/Images/flags/malawi.png</file>
+        <file>UI/Images/flags/croatia.png</file>
+        <file>UI/Images/flags/vanuatu.png</file>
+        <file>UI/Images/flags/abkhazia.png</file>
+        <file>UI/Images/flags/dominican republic.png</file>
+        <file>UI/Images/flags/bonaire.png</file>
+        <file>UI/Images/flags/iraq.png</file>
+        <file>UI/Images/flags/palestine.png</file>
+        <file>UI/Images/flags/swaziland.png</file>
+        <file>UI/Images/flags/isle of man.png</file>
+        <file>UI/Images/flags/bahamas.png</file>
+        <file>UI/Images/flags/georgia.png</file>
+        <file>UI/Images/flags/netherlands.png</file>
+        <file>UI/Images/flags/antigua and barbuda.png</file>
+        <file>UI/Images/flags/Rapa Nui.png</file>
+        <file>UI/Images/flags/ethiopia.png</file>
+        <file>UI/Images/flags/peru.png</file>
+        <file>UI/Images/flags/india.png</file>
+        <file>UI/Images/flags/lebanon.png</file>
+        <file>UI/Images/flags/singapore.png</file>
+        <file>UI/Images/flags/new zealand.png</file>
+        <file>UI/Images/flags/albania.png</file>
+        <file>UI/Images/flags/philippines.png</file>
+        <file>UI/Images/flags/barbados.png</file>
+        <file>UI/Images/flags/falkland islands.png</file>
+        <file>UI/Images/flags/belarus.png</file>
+        <file>UI/Images/flags/denmark.png</file>
+        <file>UI/Images/flags/czech republic.png</file>
+        <file>UI/Images/flags/palau.png</file>
+        <file>UI/Images/flags/eritrea.png</file>
+        <file>UI/Images/flags/chad.png</file>
+        <file>UI/Images/flags/jersey.png</file>
+        <file>UI/Images/flags/liechtenstein.png</file>
+        <file>UI/Images/flags/brunei.png</file>
+        <file>UI/Images/flags/american samoa.png</file>
+        <file>UI/Images/flags/ossetia.png</file>
+        <file>UI/Images/flags/british columbia.png</file>
+        <file>UI/Images/flags/italy.png</file>
+        <file>UI/Images/flags/zimbabwe.png</file>
+        <file>UI/Images/flags/kuwait.png</file>
+        <file>UI/Images/flags/thailand.png</file>
+        <file>UI/Images/flags/france.png</file>
+        <file>UI/Images/flags/south africa.png</file>
+        <file>UI/Images/flags/ivory coast.png</file>
+        <file>UI/Images/flags/dominica.png</file>
+        <file>UI/Images/flags/bangladesh.png</file>
+        <file>UI/Images/flags/serbia.png</file>
+        <file>UI/Images/flags/mali.png</file>
+        <file>UI/Images/flags/suriname.png</file>
+        <file>UI/Images/flags/burkina faso.png</file>
+        <file>UI/Images/flags/galapagos islands.png</file>
+        <file>UI/Images/flags/mongolia.png</file>
+        <file>UI/Images/flags/bahrain.png</file>
+        <file>UI/Images/flags/luxembourg.png</file>
+        <file>UI/Images/flags/paraguay.png</file>
+        <file>UI/Images/flags/guinea bissau.png</file>
+        <file>UI/Images/flags/turks and caicos.png</file>
+        <file>UI/Images/flags/spain.png</file>
+        <file>UI/Images/flags/tuvalu.png</file>
+        <file>UI/Images/flags/orkney islands.png</file>
+        <file>UI/Images/flags/mauritius.png</file>
+        <file>UI/Images/flags/portugal.png</file>
+        <file>UI/Images/flags/myanmar.png</file>
+        <file>UI/Images/flags/martinique.png</file>
+        <file>UI/Images/flags/san marino.png</file>
+        <file>UI/Images/flags/costa rica.png</file>
+        <file>UI/Images/flags/nicaragua.png</file>
+        <file>UI/Images/flags/turkmenistan.png</file>
+        <file>UI/Images/flags/haiti.png</file>
+        <file>UI/Images/flags/israel.png</file>
+        <file>UI/Images/flags/latvia.png</file>
+        <file>UI/Images/flags/macao.png</file>
+        <file>UI/Images/flags/sudan.png</file>
+        <file>UI/Images/flags/basque country.png</file>
+        <file>UI/Images/flags/uganda.png</file>
+        <file>UI/Images/flags/austria.png</file>
+        <file>UI/Images/flags/somalia.png</file>
+        <file>UI/Images/flags/maldives.png</file>
+        <file>UI/Images/flags/saba island.png</file>
+        <file>UI/Images/flags/bhutan.png</file>
+        <file>UI/Images/flags/germany.png</file>
+        <file>UI/Images/flags/united kingdom.png</file>
+        <file>UI/Images/flags/cayman islands.png</file>
+        <file>UI/Images/flags/puerto rico.png</file>
+        <file>UI/Images/flags/azerbaijan.png</file>
+        <file>UI/Images/flags/republic of the congo.png</file>
+        <file>UI/Images/flags/qatar.png</file>
+        <file>UI/Images/flags/st barts.png</file>
+        <file>UI/Images/flags/mauritania.png</file>
+        <file>UI/Images/flags/bulgaria.png</file>
+        <file>UI/Images/flags/azores islands.png</file>
+        <file>UI/Images/flags/pakistan.png</file>
+        <file>UI/Images/flags/tokelau.png</file>
+        <file>UI/Images/flags/togo.png</file>
+        <file>UI/Images/flags/madeira.png</file>
+        <file>UI/Images/flags/gambia.png</file>
+        <file>UI/Images/flags/sri lanka.png</file>
+        <file>UI/Images/flags/united arab emirates.png</file>
+        <file>UI/Images/flags/european union.png</file>
+        <file>UI/Images/flags/yemen.png</file>
+        <file>UI/Images/flags/guyana.png</file>
+        <file>UI/Images/flags/canada.png</file>
+        <file>UI/Images/flags/anguilla.png</file>
+        <file>UI/Images/flags/micronesia.png</file>
+        <file>UI/Images/flags/solomon islands.png</file>
+        <file>UI/Images/flags/transnistria.png</file>
+        <file>UI/Images/flags/melilla.png</file>
+        <file>UI/Images/flags/cape verde.png</file>
+        <file>UI/Images/flags/nigeria.png</file>
+        <file>UI/Images/flags/northern cyprus.png</file>
+        <file>UI/Images/flags/sao tome and prince.png</file>
+        <file>UI/Images/flags/south sudan.png</file>
+        <file>UI/Images/flags/marshall island.png</file>
+        <file>UI/Images/flags/sahrawi arab democratic republic.png</file>
+        <file>UI/Images/flags/corsica.png</file>
+        <file>UI/Images/flags/switzerland.png</file>
+        <file>UI/Images/flags/panama.png</file>
+        <file>UI/Images/flags/comoros.png</file>
+        <file>UI/Images/flags/malaysia.png</file>
+        <file>UI/Images/flags/oman.png</file>
+        <file>UI/Images/flags/senegal.png</file>
+        <file>UI/Images/flags/st lucia.png</file>
+        <file>UI/Images/flags/madagascar.png</file>
+        <file>UI/Images/flags/grenada.png</file>
+        <file>UI/Images/flags/bermuda.png</file>
+        <file>UI/Images/flags/montenegro.png</file>
+        <file>UI/Images/flags/montserrat.png</file>
+        <file>UI/Images/flags/tonga.png</file>
+        <file>UI/Images/flags/equatorial guinea.png</file>
+        <file>UI/Images/flags/canary islands.png</file>
+        <file>UI/Images/flags/syria.png</file>
+        <file>UI/Images/flags/uzbekistán.png</file>
+        <file>UI/Images/flags/libya.png</file>
+        <file>UI/Images/flags/gabon.png</file>
+        <file>UI/Images/flags/cyprus.png</file>
+        <file>UI/Images/flags/el salvador.png</file>
+        <file>UI/Images/flags/ecuador.png</file>
+        <file>UI/Images/flags/balearic islands.png</file>
+        <file>UI/Images/flags/andorra.png</file>
+        <file>UI/Images/flags/greece.png</file>
+        <file>UI/Images/flags/benin.png</file>
+        <file>UI/Images/flags/mozambique.png</file>
+        <file>UI/Images/flags/brazil.png</file>
+        <file>UI/Images/flags/belgium.png</file>
+        <file>UI/Images/flags/virgin islands.png</file>
+        <file>UI/Images/flags/moldova.png</file>
+        <file>UI/Images/flags/central african republic.png</file>
+        <file>UI/Images/flags/seychelles.png</file>
+        <file>UI/Images/flags/burundi.png</file>
+        <file>UI/Images/flags/sweden.png</file>
+        <file>UI/Images/flags/democratic republic of congo.png</file>
+        <file>UI/Images/flags/pitcairn islands.png</file>
+        <file>UI/Images/flags/gibraltar.png</file>
+        <file>UI/Images/flags/england.png</file>
+        <file>UI/Images/flags/south korea.png</file>
+        <file>UI/Images/flags/hong kong.png</file>
+        <file>UI/Images/flags/nepal.png</file>
+        <file>UI/Images/flags/cameroon.png</file>
+        <file>UI/Images/flags/australia.png</file>
+        <file>UI/Images/flags/monaco.png</file>
+        <file>UI/Images/flags/turkey.png</file>
+        <file>UI/Images/flags/guam.png</file>
+        <file>UI/Images/flags/taiwan.png</file>
+        <file>UI/Images/flags/french polynesia.png</file>
+        <file>UI/Images/flags/niue.png</file>
+        <file>UI/Images/flags/kiribati.png</file>
+        <file>UI/Images/flags/armenia.png</file>
+        <file>UI/Images/flags/honduras.png</file>
+        <file>UI/Images/flags/faroe islands.png</file>
+        <file>UI/Images/flags/rwanda.png</file>
+        <file>UI/Images/flags/somaliland.png</file>
+        <file>UI/Images/flags/aruba.png</file>
+        <file>UI/Images/flags/curacao.png</file>
+        <file>UI/Images/flags/East Timor.png</file>
+        <file>UI/Images/flags/sint maarten.png</file>
+        <file>UI/Images/flags/vatican city.png</file>
+        <file>UI/Images/flags/Algeria.png</file>
+        <file>UI/Images/flags/sierra leone.png</file>
+        <file>UI/Images/flags/greenland.png</file>
+        <file>UI/Images/flags/kosovo.png</file>
+        <file>UI/Images/flags/aland islands.png</file>
+        <file>UI/Images/flags/cuba.png</file>
+        <file>UI/Images/flags/tajikistan.png</file>
+        <file>UI/Images/flags/kyrgyzstan.png</file>
+        <file>UI/Images/flags/laos.png</file>
+        <file>UI/Images/flags/northern marianas islands.png</file>
+        <file>UI/Images/flags/cook islands.png</file>
+        <file>UI/Images/flags/trinidad and tobago.png</file>
+        <file>UI/Images/flags/republic of macedonia.png</file>
+        <file>UI/Images/flags/estonia.png</file>
+        <file>UI/Images/flags/guinea.png</file>
+        <file>UI/Images/flags/cocos island.png</file>
+        <file>UI/Images/flags/ukraine.png</file>
+        <file>UI/Images/flags/papua new guinea.png</file>
+        <file>UI/Images/flags/united nations.png</file>
+        <file>UI/Images/flags/tunisia.png</file>
+        <file>UI/Images/flags/scotland.png</file>
+        <file>UI/Images/flags/lesotho.png</file>
+        <file>UI/Images/flags/angola.png</file>
+        <file>UI/Images/flags/djibouti.png</file>
+        <file>UI/Images/flags/tibet.png</file>
+        <file>UI/Images/flags/cambodia.png</file>
+        <file>UI/Images/flags/zambia.png</file>
+        <file>UI/Images/flags/jamaica.png</file>
+        <file>UI/Images/flags/tanzania.png</file>
+        <file>UI/Images/flags/nato.png</file>
+        <file>UI/Images/flags/sint eustatius.png</file>
+        <file>UI/Images/flags/namibia.png</file>
+        <file>UI/Images/flags/iran.png</file>
+        <file>UI/Images/flags/colombia.png</file>
+        <file>UI/Images/flags/liberia.png</file>
+        <file>UI/Images/flags/venezuela.png</file>
+        <file>UI/Images/flags/guernsey.png</file>
+        <file>UI/Images/flags/kazakhstan.png</file>
+        <file>UI/Images/flags/argentina.png</file>
+        <file>UI/Images/flags/china.png</file>
+        <file>UI/Images/flags/poland.png</file>
+        <file>UI/Images/flags/iceland.png</file>
+        <file>UI/Images/flags/saudi arabia.png</file>
+        <file>UI/Images/flags/ceuta.png</file>
+        <file>UI/Images/flags/hungary.png</file>
+        <file>UI/Images/flags/ghana.png</file>
+        <file>UI/Images/flags/north korea.png</file>
+        <file>UI/Images/flags/bolivia.png</file>
+        <file>UI/Images/flags/guatemala.png</file>
+        <file>UI/Images/flags/russia.png</file>
+        <file>UI/Images/flags/afghanistan.png</file>
+        <file>UI/Images/flags/british indian ocean territory.png</file>
+        <file>UI/Images/flags/kenya.png</file>
+        <file>UI/Images/flags/samoa.png</file>
+        <file>UI/Images/flags/st vincent and the grenadines.png</file>
+    </qresource>
+    <qresource prefix="/new_design">
+        <file>UI/Images/new_design/vpn_connecting_button.svg</file>
+        <file>UI/Images/new_design/vpn_not_cennected_button.svg</file>
+        <file>UI/Images/new_design/vpn_connected_button.svg</file>
+        <file>UI/Images/new_design/dark_blue_shadow.svg</file>
+        <file>UI/Images/new_design/light_blue_shadow.svg</file>
+        <file>UI/Images/new_design/vpn.svg</file>
+        <file>UI/Images/new_design/effect_for_box.png</file>
+        <file>UI/Images/new_design/raccoon_coin.svg</file>
+        <file>UI/Images/new_design/raccoon_logo_and_text.png</file>
+        <file>UI/Images/new_design/mining.png</file>
+        <file>UI/Images/new_design/upgrage.svg</file>
+        <file>UI/Images/new_design/BlueButton.png</file>
+        <file>UI/Images/new_design/subscription_check.svg</file>
+        <file>UI/Images/new_design/withdraw.svg</file>
+        <file>UI/Images/new_design/rewards.svg</file>
+        <file>UI/Images/new_design/deposited.svg</file>
+        <file>UI/Images/new_design/mining.svg</file>
+        <file>UI/Images/new_design/add_rounded.png</file>
+        <file>UI/Images/new_design/lorem_text.png</file>
+        <file>UI/Images/new_design/settings.svg</file>
+        <file>UI/Images/new_design/check.svg</file>
+        <file>UI/Images/new_design/upload.svg</file>
+        <file>UI/Images/new_design/power_off.svg</file>
+        <file>UI/Images/new_design/power_on.svg</file>
+        <file>UI/Images/new_design/raccoon_logo_and_text_wt.png</file>
+    </qresource>
+    <qresource prefix="/lottie">
+        <file>UI/Lottie/Loader.html</file>
+        <file>UI/Lottie/Loader_Out.json</file>
+        <file>UI/Lottie/Loader_Loop.json</file>
+        <file>UI/Lottie/Loader_In.json</file>
+    </qresource>
+</RCC>
