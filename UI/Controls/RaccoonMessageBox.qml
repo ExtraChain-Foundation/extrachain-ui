@@ -99,14 +99,14 @@ Dialog {
             id: login
             Layout.preferredHeight: visible *40
             Layout.fillWidth: true
-            placeholderText: "Login"
+            placeholderText: qsTr("Login")
             visible: use_required_login_and_password
         }
         RaccoonTextField {
             id: password
             Layout.preferredHeight: visible *40
             Layout.fillWidth: true
-            placeholderText: "Password"
+            placeholderText: qsTr("Password")
             visible: use_required_login_and_password
             echoMode: TextInput.Password
         }

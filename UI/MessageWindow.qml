@@ -31,13 +31,13 @@ Window {
     Component.onCompleted: {
         wnd.x = (Screen.width - (wnd.width/2)) / 2
         wnd.y = (Screen.height - (wnd.height/2)) / 2
-        console.log("isDarkMode", appSettings.isDarkMode)
-        Colors.isDarkMode = appSettings.isDarkMode
+        console.log("isDarkMode", appSettings.isDarkTheme)
+        Colors.isDarkTheme = appSettings.isDarkTheme
     }
 
     QtCore.Settings {
         id: appSettings
-        property bool isDarkMode: true
+        property bool isDarkTheme: true
     }
 
     RowLayout {
@@ -49,7 +49,7 @@ Window {
         Image {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: height
-            source: "qrc:/images/UI/Images/raccoon_logo.png"
+            source: "qrc:/UI/Images/extrachain_lite.png"
             antialiasing: true
             layer.enabled: !isSoftwareRendering
             layer.effect: DropShadow {

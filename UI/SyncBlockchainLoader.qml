@@ -36,11 +36,11 @@ Item {
         target: raccoonController
 
         function dagSyncFinish() {
-            txtDownloading.text = "Finishing AcyclicChain..."
+            txtDownloading.text = qsTr("Finishing AcyclicChain...")
         }
 
         function onDagSearchControlStarted(sectionId) {
-            txtDownloading.text = "Checking the integrity of AcyclicChain..."
+            txtDownloading.text = qsTr("Checking the integrity of AcyclicChain...")
             alwaysShowSection = true
         }
 
@@ -50,7 +50,7 @@ Item {
         }
 
         function onDagControlStarted() {
-            txtDownloading.text = "Generating controls for AcyclicChain..."
+            txtDownloading.text = qsTr("Generating controls for AcyclicChain...")
             alwaysShowSection = true
         }
 
@@ -60,7 +60,7 @@ Item {
         }
 
         function onActorsStarted() {
-            txtDownloading.text = "Downloading actors..."
+            txtDownloading.text = qsTr("Downloading actors...")
             alwaysShowSection = true
             txtSections.text = ""
         }
@@ -73,7 +73,7 @@ Item {
 
         function onActorsProgress(current, to) {
             if (current >= to) {
-                txtSections.text = "Finishing..."
+                txtSections.text = qsTr("Finishing...")
                 return
             }
 
@@ -129,7 +129,7 @@ Item {
 
                     function resetText() {
                         txtDownloading.text = Qt.binding(function() { return walletUIController?.syncing ? (progressInfoPanel.isFinal ? qsTr("Preparing AcyclicChain...") : qsTr("Downloading AcyclicChain..."))
-                                                                                                         : (uiController?.networkStatus ? "Receiving data from the network..." : "Waiting for connection...") })
+                                                                                                         : (uiController?.networkStatus ? qsTr("Receiving data from the network...") : qsTr("Waiting for connection...")) })
 
                     }
 

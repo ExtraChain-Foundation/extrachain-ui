@@ -17,6 +17,10 @@ RaccoonPage {
     property string url: isPlayMarket ? "https://play.google.com/store/apps/details?id=com.raccoonline." + isMessenger ? "vpnapp" : "messenger" : "https://raccoonline.com/#download"
     property string version
 
+    onVisibleChanged: {
+        updater.forceActiveFocus()
+    }
+
     MouseArea { anchors.fill: parent }
 
     Image {
@@ -39,6 +43,22 @@ RaccoonPage {
         height: paintedHeight
     }
 
+    MonserratText {
+        anchors.bottom: parent.bottom; anchors.bottomMargin: 18
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: !ios_platform && !isPlayMarket
+        color: "white"
+        font.pixelSize: 13
+        text: "or download from <font color='#70cbff'>raccoonline.com</font>"
+
+        MouseArea {
+            anchors.fill: parent; anchors.margins: -16
+            onClicked: {
+                Qt.openUrlExternally(updater.url)
+            }
+        }
+    }
+
     BlueButton {
         id: updateNewVersionBtn
         anchors.centerIn: parent
@@ -49,20 +69,20 @@ RaccoonPage {
         onClicked: {
             enabled = false
 
-            if (android_platform) {
+            if (isPlayMarket) {
                 enabled = true
                 Qt.openUrlExternally(updater.url)
                 return
             }
 
-            if (Qt.platform.os === "windows" || Qt.platform.os === "linux") {
+            if (Qt.platform.os === "windows" || Qt.platform.os === "linux" || Qt.platform.os === "android") {
                 text = "Downloading..."
                 progressBar.visible = true
             }
 
             const canUpdate = uiController.downloadUpdate()
             if (!canUpdate) {
-                text = "Error"
+                text = etUtils.isRelease ? "Error" : "debug build"
             }
         }
     }
@@ -71,7 +91,7 @@ RaccoonPage {
         id: progressBar
         anchors.top: updateNewVersionBtn.bottom; anchors.topMargin: 60
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width * 0.4
+        width: parent.width * (isMobile ? 0.8 : 0.4)
         visible: false
     }
 

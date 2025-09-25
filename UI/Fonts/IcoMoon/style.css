@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?c7c2hm');
-  src:  url('fonts/icomoon.eot?c7c2hm#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?c7c2hm') format('truetype'),
-    url('fonts/icomoon.woff?c7c2hm') format('woff'),
-    url('fonts/icomoon.svg?c7c2hm#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?5vzf20');
+  src:  url('fonts/icomoon.eot?5vzf20#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?5vzf20') format('truetype'),
+    url('fonts/icomoon.woff?5vzf20') format('woff'),
+    url('fonts/icomoon.svg?5vzf20#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-exc_light-logo:before {
+  content: "\e973";
+}
 .icon-raccoon_logo:before {
   content: "\e965";
   color: #fff;

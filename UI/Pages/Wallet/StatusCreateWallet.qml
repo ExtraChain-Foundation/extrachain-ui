@@ -17,7 +17,7 @@ RaccoonPage {
 
     Connections {
         target: root
-        function onSellected_windowChanged() {
+        function onCurrentPageChanged() {
             loaderWithdrawal.visible = false
         }
     }

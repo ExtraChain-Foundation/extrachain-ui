@@ -95,7 +95,7 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
 #endif
 
 #ifndef Q_OS_IOS
-  Logger::start_file("extraChain");
+  Logger::start_file("extrachain");
 #endif
 
   eLog("RaccoonLine {}, core {}", raccoon_version, extrachain_version);
@@ -105,13 +105,14 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
   networkStatus = true;
 #endif
 
-  bool isProfilesEmpty = AccountController::profilesList().empty();
-  bool hashExists = AutologinHash::isAvailable();
+  bool isProfilesEmpty = AccountController::profiles_list().empty();
+  bool hashExists = AutologinHash::is_available();
   eLog("Contructor RaccoonOnlineController isProfilesEmpty: {}  hashExists: {}",
        isProfilesEmpty, hashExists);
+
   auto rootContext = engine->rootContext();
 
-  nodeWrapper = new ExtraChainNodeWrapper(this, true, false, true);
+  nodeWrapper = new ExtraChainNodeWrapper(this, true, true);
 
   etUtils = std::make_shared<EtUtils>(nodeWrapper->node);
   engine->rootContext()->setContextProperty("etUtils", etUtils.get());
@@ -147,14 +148,12 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
 #endif
 
   connect(
-      nodeWrapper->node, &ExtraChainNode::NodeInitialised, this,
+      nodeWrapper->node, &ExtraChainNode::nodeInitialised, this,
       [engine, this]() {
         auto node = nodeWrapper->node;
         availableFullModeInit();
 
-        m_vpnConnectorManager = new VPNConnectorManagerWrapper(node, this);
-
-        nodeWrapper->node->InitVPN(nullptr);
+        nodeWrapper->node->init_vpn(nullptr);
         uiController = new ClientController();
         uiController->setNode(node);
         uiController->setShareUtils(shareUtils);
@@ -199,6 +198,20 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
 }
 
 RaccoonController::~RaccoonController() {
+  // if (!nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId.empty()) {
+  //     for (auto &it : nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId)
+  //     {
+  //         if
+  //         (nodeWrapper->node->dfs()->removeLocalFile(nodeWrapper->node->accountController()->mainActor().id(),
+  //                                                       it))
+  //             eLog("DFS file with VPN keys deleted");
+  //     }
+  // }
+  // if
+  // (!m_vpnConnectorManager->vpnConnectorManager->vpnFileLocalPath.isEmpty())
+  //     m_vpnConnectorManager->vpnConnectorManager->vpnManager->removePublicKeyToFile(
+  //         m_vpnConnectorManager->vpnConnectorManager->vpnFileLocalPath);
+
   eLog("[Destructor RaccoonLineController].");
   if (uiController != nullptr && uiController->needWipe()) {
     // Utils::wipeDataFiles();
@@ -385,10 +398,10 @@ void RaccoonController::exportProfile(const QString &folderExport,
     return;
   }
 
-  auto fileContent =
-      nodeWrapper->node->accountController()->profile_type() == ProfileType::New
-          ? res.value()
-          : Utils::to_base64(res.value());
+  auto fileContent = nodeWrapper->node->account_controller()->profile_type() ==
+                             ProfileType::New
+                         ? res.value()
+                         : Utils::to_base64(res.value());
 
   if (!file.write(fileContent.c_str(), fileContent.size())) {
     emit exportImportKeystore("Export operation failed: file write");
@@ -409,7 +422,7 @@ void RaccoonController::exportProfile(const QString &folderExport,
 void RaccoonController::fillMainActorData() {
   eLog("begin fill main actor data");
   auto mainId =
-      nodeWrapper->node->accountController()->currentProfile().main_id();
+      nodeWrapper->node->account_controller()->current_profile().main_id();
   setMainActor(mainId.toQString());
   walletUiController->startControl();
 }
@@ -433,7 +446,7 @@ void RaccoonController::createToken(const QString &tokenCount,
     return;
   }
 
-  nodeWrapper->node->tokenManager()->create_token(
+  nodeWrapper->node->token_manager()->create_token(
       ActorId(relAddress.toStdString()), tokenName.toStdString(),
       symbol.toStdString(), count.value(), color.toStdString());
 }
@@ -465,32 +478,6 @@ void RaccoonController::kill() { std::exit(0); }
 
 void RaccoonController::changeVpnMode(const int &mode) {
   qDebug() << "Set vpn mode" << mode;
-
-  raccoon::vpn::VPNManager::VPNPermission permission =
-      raccoon::vpn::VPNManager::VPNPermission::CLIENT;
-  switch (mode) {
-  case 0:
-    permission = raccoon::vpn::VPNManager::VPNPermission::CLIENT;
-    eLog("Selected Permission Vpn - CLIENT");
-    break;
-  case 1:
-    permission = raccoon::vpn::VPNManager::VPNPermission::PROXY;
-    eLog("Selected Permission Vpn - PROXY");
-    break;
-
-  case 2:
-    permission = raccoon::vpn::VPNManager::VPNPermission::PROXY_SERVER;
-    eLog("Selected Permission Vpn - PROXY_SERVER");
-    break;
-
-  default: {
-    eWarning("SOMETHING WRONG. SET PERMISSION VPN TYPE - CLIENT BY DEFAULT.");
-    break;
-  }
-  }
-
-  m_vpnConnectorManager->vpnConnectorManager->setVPNServerPermission(
-      permission);
 }
 
 #ifdef Q_OS_IOS
@@ -523,12 +510,12 @@ void RaccoonController::updatePath() {
 void RaccoonController::connections() {
   auto dfs = nodeWrapper->node->dfs();
   auto networkManager = nodeWrapper->node->network();
-  auto accController = nodeWrapper->node->accountController();
-  auto actorIndex = nodeWrapper->node->actorIndex();
+  auto accController = nodeWrapper->node->account_controller();
+  auto actorIndex = nodeWrapper->node->actor_index();
   auto dag = nodeWrapper->node->dag();
 
   connect(uiController, &ClientController::connectToNode, networkManager,
-          &NetworkManager::connectToNode);
+          &NetworkManager::connect_to_node);
   connect(networkManager, &NetworkManager::connectionStatusChanged,
           uiController, &ClientController::setNetworkStatus);
   connect(networkManager, &NetworkManager::connectionsCountChanged,
@@ -574,7 +561,7 @@ void RaccoonController::connections() {
   connect(uiController->getWelcomePage(), &WelcomePage::regStarted,
           [=, this](QByteArray hash) {
             auto profile =
-                nodeWrapper->node->accountController()->create_profile(
+                nodeWrapper->node->account_controller()->create_profile(
                     hash.toStdString(), ActorType::User);
             uiController->userRegistrationCompletion(
                 profile.actors().front().id(), true);
@@ -626,37 +613,34 @@ void RaccoonController::connections() {
           emit dagTxSended(QString::fromStdString(hash));
       });
 
-  connect(nodeWrapper->node->actorIndex(), &ActorIndex::firstSyncStarted, this,
+  connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncStarted, this,
           &RaccoonController::actorsStarted);
-  connect(nodeWrapper->node->actorIndex(), &ActorIndex::firstSyncEnded, this,
+  connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncEnded, this,
           &RaccoonController::actorsEnded);
-  connect(nodeWrapper->node->actorIndex(), &ActorIndex::firstSyncProgress, this,
-          &RaccoonController::actorsProgress);
+  connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncProgress,
+          this, &RaccoonController::actorsProgress);
 
-  connect(nodeWrapper->node->tokenManager(), &TokenManager::errorNameTokenExist,
-          this, &RaccoonController::errorNameTokenExist);
-  connect(nodeWrapper->node->tokenManager(),
+  connect(nodeWrapper->node->token_manager(),
+          &TokenManager::errorNameTokenExist, this,
+          &RaccoonController::errorNameTokenExist);
+  connect(nodeWrapper->node->token_manager(),
           &TokenManager::errorTickerTokenExist, this,
           &RaccoonController::errorSymbolTokenExist);
-  connect(nodeWrapper->node->tokenManager(), &TokenManager::added, this,
+  connect(nodeWrapper->node->token_manager(), &TokenManager::added, this,
           &RaccoonController::addedToken);
-
-  connect(uiController, &ClientController::sendVpnsRequest,
-          m_vpnConnectorManager->vpnConnectorManager,
-          &VPNConnectorManager::send_vpns_request);
 
   QObject::connect(nodeWrapper->node->dfs(), &DfsController::downloaded,
                    [this](ActorId owner_id, Dfs::DirRow dirRow) {
                      auto network_id =
-                         nodeWrapper->node->actorIndex()->network_id();
+                         nodeWrapper->node->actor_index()->network_id();
                      auto raccoon_id =
                          ActorId("46710a2d823c23db9fc2ac01e0f84212a8128373");
 
                      if (owner_id == network_id && dirRow.folder.has_value() &&
                          dirRow.folder.value() == Dfs::Basic::TEMPLATE_VECTOR &&
                          dirRow.name == "Usernames") {
-                       auto main_id = nodeWrapper->node->accountController()
-                                          ->currentProfile()
+                       auto main_id = nodeWrapper->node->account_controller()
+                                          ->current_profile()
                                           .main_id();
                        uiController->loadUserName(main_id.toQString());
                      }
@@ -707,7 +691,7 @@ void RaccoonController::sendTransactionFromUi(ActorId reciever,
 
 void RaccoonController::addNewWallet(const QString &nameWallet) {
   auto future = QtConcurrent::run([=, this] {
-    auto actor = nodeWrapper->node->accountController()->createWallet(
+    auto actor = nodeWrapper->node->account_controller()->create_wallet(
         ActorId(), nameWallet.toStdString());
     auto walletId = actor.id().toQString();
     walletUiController->addWallet(actor.id(), nameWallet);
@@ -732,18 +716,18 @@ void RaccoonController::createTx(const QString &walletTo,
     return;
   }
 
-  auto mainActor = nodeWrapper->node->accountController()->system_actor();
+  auto mainActor = nodeWrapper->node->account_controller()->system_actor();
   Transaction tx;
   tx.set_sender(mainActor.id());
   tx.set_receiver(ActorId(walletTo.toStdString()));
   tx.set_amount(BigNumberFloat(amount.toStdString(), NumeralBase::Dec));
 
   std::expected<Transaction, TransactionError> createdTx =
-      nodeWrapper->node->createTransaction(tx);
+      nodeWrapper->node->create_transaction(tx);
 
   if (!createdTx.has_value()) {
     auto error =
-        nodeWrapper->node->transactionErrorDescription(createdTx.error());
+        nodeWrapper->node->transaction_error_description(createdTx.error());
     emit failedTxCreate(QString::fromStdString(error));
   } else {
     nodeWrapper->node->send_transaction(tx, mainActor);
@@ -770,7 +754,7 @@ void RaccoonController::sendTx(const QString &walletFrom,
   TokenManager tm(nodeWrapper->node);
   // auto         map = tm.mapTokens();
   // if (map.empty() || !map.contains(coinName))
-  auto existActor = nodeWrapper->node->actorIndex()->exists(
+  auto existActor = nodeWrapper->node->actor_index()->exists(
       ActorId(walletTo.trimmed().toStdString()));
   if (!existActor) {
     emit failedTxCreate(
@@ -785,15 +769,15 @@ void RaccoonController::sendTx(const QString &walletFrom,
   tx.set_amount(BigNumberFloat(amount.toStdString(), NumeralBase::Dec));
   tx.set_token(ActorId("468faf2f1be6504a9a26f7f027f7e43380b0d77d"));
 
-  auto createdTx = nodeWrapper->node->createTransaction(tx);
+  auto createdTx = nodeWrapper->node->create_transaction(tx);
 
   if (!createdTx.has_value()) {
     auto error =
-        nodeWrapper->node->transactionErrorDescription(createdTx.error());
+        nodeWrapper->node->transaction_error_description(createdTx.error());
     emit failedTxCreate(QString::fromStdString(error));
   } else {
     auto signer =
-        nodeWrapper->node->accountController()->currentProfile().get_actor(
+        nodeWrapper->node->account_controller()->current_profile().get_actor(
             ActorId(walletFrom.toStdString()));
     if (!signer.has_value()) {
       emit failedTxCreate(QString::fromStdString("No wallet"));

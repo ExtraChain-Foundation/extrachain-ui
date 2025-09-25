@@ -93,7 +93,7 @@ void DfsModel::removeFile(int index) {
                                                    Dfs::Path::filePath(ActorId(currentDir), hash).string()))
                     .replace("\\", "/");
 
-    const auto mainActor = node.accountController()->system_actor().id();
+    const auto mainActor = node.account_controller()->system_actor().id();
     // node.dfs()->remove_stored_file(mainActor, file id);
     remove(index, 1);
 }

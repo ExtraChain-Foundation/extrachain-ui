@@ -20,12 +20,12 @@ Rectangle {
         target: raccoonController
 
         function onDagControlStarted() {
-            informText.text = "Generating controls for AcyclicChain..."
+            informText.text = qsTr("Generating controls for AcyclicChain...")
         }
 
         function onDagControlEnded() {
             // informText.text = Qt.binding(function() { return Number(walletUIController?.estimatedBalance).toFixed(3) == "NaN" ? "~" : Utils.mask(Number(walletUIController?.estimatedBalance).toFixed(3), securityState) });
-        informText.text = Qt.binding(function() { return Utils.mask(!uiController?.networkStatus ? "Connecting to network..." : ("Mining " + (miningActive ? "active" : "inactive")), securityState) });
+        informText.text = Qt.binding(function() { return Utils.mask(!uiController?.networkStatus ? qsTr("Connecting to network...") : (qsTr("Mining ") + (miningActive ? qsTr("active") : qsTr("inactive"))), securityState) });
         }
     }
     
@@ -106,7 +106,7 @@ Rectangle {
             id: informText
             Layout.preferredHeight: 24
             Layout.fillWidth: true
-            text: !uiController?.networkStatus ? "Connecting to network..." : ("Mining " + (miningActive ? "active" : "inactive"))
+            text: !uiController?.networkStatus ? qsTr("Connecting to network...") : (qsTr("Mining ") + (miningActive ? qsTr("active") : qsTr("inactive")))
             font.pixelSize: 12
             color: miningActive ? Colors.mining_text_color : Colors.inactive_mining_text_color
             verticalAlignment: Text.AlignVCenter

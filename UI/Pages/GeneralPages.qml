@@ -28,7 +28,7 @@ Item {
         anchors.fill: parent
         anchors.margins: 16
         spacing: 20
-        visible: !isMobile
+        visible: isDesktop
 
         MenuSelector {
             id: menu
@@ -64,9 +64,9 @@ Item {
         }
     }
 
-    Settings { id: settingsPage; parent: mainItemCol; visible: (root.sellected_window === MenuSelector.Settings && isMobile ) }
+    Settings { id: settingsPage; parent: mainItemCol; visible: (currentPage === MenuSelector.Settings ) }
 
-    Notification { id: notificationPage; parent: mainItemCol; visible: (root.sellected_window === MenuSelector.Notification && isMobile ) }
+    Notification { id: notificationPage; parent: mainItemCol; visible: (currentPage === MenuSelector.Notification ) }
 
     Subscription {
         id: subscription
@@ -81,24 +81,22 @@ Item {
             when: isMobile
             // PropertyChanges { target: menuRow; visible: false }
             PropertyChanges { target: menuColumn; visible: true }
-            PropertyChanges { target: vpnPage; parent: mainItemCol }
             PropertyChanges { target: walletPage; parent: mainItemCol }
-            PropertyChanges { target: locationsPage; parent: mainItemCol }
             PropertyChanges { target: dfsPage; parent: mainItemCol }
-            // PropertyChanges { target: settingsPage; parent: mainItemCol }
-            // PropertyChanges { target: notificationPage; parent: mainItemCol }
+            PropertyChanges { target: settingsPage; parent: mainItemCol }
+            PropertyChanges { target: notificationPage; parent: mainItemCol }
         },
         State {
             name: "desktop_state"
-            when: !isMobile
+            when: isDesktop
             // PropertyChanges { target: menuRow; visible: true }
             PropertyChanges { target: menuColumn; visible: false }
             PropertyChanges { target: vpnPage; parent: mainItemRow }
             PropertyChanges { target: walletPage; parent: mainItemRow }
             PropertyChanges { target: locationsPage; parent: mainItemRow }
             PropertyChanges { target: dfsPage; parent: mainItemRow }
-            // PropertyChanges { target: settingsPage; parent: nullptr }
-            // PropertyChanges { target: notificationPage; parent: undefined }
+            PropertyChanges { target: settingsPage; parent: nullptr }
+            PropertyChanges { target: notificationPage; parent: undefined }
         }
     ]
 

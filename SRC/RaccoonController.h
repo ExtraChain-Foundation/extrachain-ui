@@ -16,7 +16,6 @@
 #include "SRC/keychainclass.h"
 #include "ShareUtils.hpp"
 #include "managers/extrachain_node.h"
-#include "vpn_connector_manager.h"
 #include <QString>
 
 #include "SRC/platforms/android/androidutils.h"
@@ -32,7 +31,6 @@ constexpr double FULL_DAG_MODE_AND_DFS_MIN_SIZE = 4;
 class RaccoonController : public QObject {
   Q_OBJECT
   QQmlApplicationEngine *_engine;
-  // ConnectController*          connectController;
   ExtraChainNodeWrapper *nodeWrapper;
   std::shared_ptr<EtUtils> etUtils;
   std::shared_ptr<ShareUtils> shareUtils;
@@ -72,6 +70,8 @@ public:
   QString availableGB() const;
 
   Q_INVOKABLE void closeApp() const;
+
+  Q_INVOKABLE void retranslate() const { _engine->retranslate(); }
 
 public slots:
   void sighUp(const QString ip, const QString login, const QString &password,
@@ -145,7 +145,6 @@ public slots:
 private:
   void connections();
   QString _walletBalance;
-  VPNConnectorManagerWrapper *m_vpnConnectorManager;
 #ifdef Q_OS_IOS
   ApplePlatformUtils *iosUtils;
 #endif
@@ -153,25 +152,11 @@ private:
   QString _availableGB;
 };
 
-class MenuSelector : public QObject {
-  Q_OBJECT
-public:
-  enum SelectorMenu {
-    Vpn,
-    Wallet,
-    Dfs,
-    Settings,
-    Messenger,
-    Locations,
-    Notification
-  };
-  Q_ENUM(SelectorMenu)
-};
-
 class Onboarding : public QObject {
   Q_OBJECT
 public:
   enum OnboardingPage {
+    Mining_Info,                       // 3
     Wallet_Access,                     // 4
     Notifications_And_Settings,        // 5
     Storage_Space,                     // 6
@@ -208,4 +193,11 @@ class ConnectStatus : public QObject {
 public:
   enum StatusConnect { NotConnected, InProcess, Connected };
   Q_ENUM(StatusConnect)
+};
+
+class MenuSelector : public QObject {
+  Q_OBJECT
+public:
+  enum SelectorMenu { Wallet, Dfs, Settings, Notification };
+  Q_ENUM(SelectorMenu)
 };

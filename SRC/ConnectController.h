@@ -13,7 +13,6 @@
 constexpr int timer_interval = 30000;
 class ExtraChainNode;
 class ConnectStatus;
-class VPNConnectorManager;
 
 class ConnectController : public QObject {
     Q_OBJECT
@@ -42,7 +41,6 @@ public:
     explicit ConnectController(QObject *parent = nullptr);
     ~ConnectController();
 
-    void setVPNConnectorManager(VPNConnectorManager *vpnConnectorManager);
 
     StatusConnect connectStatus() const;
     void          setConnectStatus(StatusConnect newConnectStatus);
@@ -122,7 +120,6 @@ private:
     bool                    _signUpStage;
     int                     _countConnection;
     CountryModel           *_countryModel = nullptr;
-    VPNConnectorManager    *m_vpnConnectorManager;
     QTimer                 *timer;
     int                     m_vpn_send_try_counter = 0;
     bool                    m_vpn_random_sended    = false;
@@ -130,3 +127,67 @@ private:
     QSortFilterProxyModel  *_sortFilterCountryModel;
 };
 
+class MenuSelector : public QObject {
+    Q_OBJECT
+public:
+    enum SelectorMenu {
+        Vpn,
+        Wallet,
+        Dfs,
+        Settings,
+        Messenger,
+        Locations,
+        Notification
+    };
+    Q_ENUM(SelectorMenu)
+};
+
+class Onboarding : public QObject {
+    Q_OBJECT
+public:
+    enum OnboardingPage {
+        Vpn_Tab_To_Connect,                // 0
+        Vpn_Connection_Status,             // 1
+        Vpn_Location_Select,               // 2
+        Mining_Info,                       // 3
+        Wallet_Access,                     // 4
+        Notifications_And_Settings,        // 5
+        Storage_Space,                     // 6
+        Storage_Upgrade,                   // 7
+        Storage_Search,                    // 8
+        Storage_View_Options,              // 9
+        Storage_Notification_and_Settings, // 10
+        Wallet_Estimate_Balance,           // 11
+        Wallet_Transaction_List,           // 12
+        Wallet_Select,                     // 13
+        Finished
+    };
+    Q_ENUM(OnboardingPage)
+};
+
+class Tooltip : public QObject {
+    Q_OBJECT
+public:
+    enum TooltipType {
+        Deposit,
+        Withdraw,
+        Settings,
+        UploadFile,
+        Mining,
+        CopiedAddress,
+        Message
+    };
+    Q_ENUM(TooltipType)
+};
+
+class ConnectStatus : public QObject {
+    Q_OBJECT
+
+public:
+    enum StatusConnect {
+        NotConnected,
+        InProcess,
+        Connected
+    };
+    Q_ENUM(StatusConnect)
+};

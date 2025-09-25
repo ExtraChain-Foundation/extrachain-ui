@@ -13,8 +13,7 @@ Rectangle {
     Layout.fillHeight: true
 
     anchors.fill: parent
-    // color: Colors.background
-    color: Colors.background
+    color: Colors.deposit.background
     border.color: Colors.border_color
     border.width: isMobile ? 0 : 1
     radius: 8
@@ -31,7 +30,6 @@ Rectangle {
     property string selected_wallet_id
 
     onVisibleChanged: {
-        console.log("cscsdcdscdsc", visible, selectWalletCB.model.count, appSettings.depositSelectedWalletIndex)
         if(visible && selectWalletCB.model.count > appSettings.depositSelectedWalletIndex) {
             selectWalletCB.currentIndex = appSettings.depositSelectedWalletIndex
         }
@@ -39,7 +37,7 @@ Rectangle {
 
     Connections {
         target: root
-        function onSellected_windowChanged() {
+        function onCurrentPageChanged() {
             loaderWithdrawal.visible = false
         }
     }
@@ -56,7 +54,7 @@ Rectangle {
         BackButton {
             Layout.preferredWidth: 174
             Layout.preferredHeight: 46
-            text: "Back to My wallet"
+            text: qsTr("Back to My wallet")
             onClickedBack: loaderWithdrawal.visible = false
         }
 
@@ -153,8 +151,14 @@ Rectangle {
                 color: Colors.background
                 border.width: 1
                 border.color: Colors.border_color
-                Rectangle {
-                    color:Colors.background
+                Item {
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.top: paretn.verticalCenter
+                        width: parent.width
+                        color: Colors.deposit.background
+                    }
+
                     anchors.verticalCenter: parent.top
                     anchors.left: parent.left
                     anchors.leftMargin: 16
@@ -162,7 +166,7 @@ Rectangle {
                     width: placeholder.paintedWidth + 8
                     DmsansText {
                         id: placeholder
-                        text: "Deposit Address"
+                        text: qsTr("Deposit Address")
                         font.pixelSize: 12
                         color: Colors.grape_gray_color
                         leftPadding: 4
@@ -217,7 +221,7 @@ Rectangle {
                     Layout.preferredHeight: 16
                     color: Colors.grape_gray_color
                     font.pixelSize: 12
-                    text: "Network"
+                    text: qsTr("Network")
                 }
 
                 DmsansText {
@@ -225,7 +229,7 @@ Rectangle {
                     Layout.preferredHeight: 20
                     color: Colors.def_color_text
                     font.pixelSize: 16
-                    text: "ROCC     Network"
+                    text: qsTr("ExC     Network")
                 }
 
 
@@ -234,7 +238,7 @@ Rectangle {
                     Layout.preferredHeight: 16
                     color: Colors.grape_gray_color
                     font.pixelSize: 12
-                    text: "Deposit Address"
+                    text: qsTr("Deposit Address")
                 }
 
                 MouseArea {
@@ -242,9 +246,9 @@ Rectangle {
                     Layout.preferredHeight: 20
                     onClicked: {
                         walletUIController.copyWalletAddress(selected_wallet_id)
-                        notificationToolTip.message = "You copied wallet address "
+                        notificationToolTip.message = qsTr("You copied wallet address ")
                                 + selected_wallet_id + "."
-                        notificationToolTip.showMessage("ADDRESS COPIED TO CLIPBOARD", Tooltip.CopiedAddress)
+                        notificationToolTip.showMessage(qsTr("ADDRESS COPIED TO CLIPBOARD"), Tooltip.CopiedAddress)
                     }
                     enabled: selectWalletCB.currentIndex >= 0
 
@@ -293,6 +297,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: qsTr("Save and Share Address")
                 font.pixelSize: 16
+                color: Colors.deposit.text
             }
             enabled: selectWalletCB.currentIndex >= 0
 
@@ -301,9 +306,9 @@ Rectangle {
                 onClicked: {
                     console.log("pressed back")
                     walletUIController.copyWalletAddress(selectWalletCB.currentText)
-                    notificationToolTip.message = "You copied wallet address "
+                    notificationToolTip.message = qsTr("You copied wallet address ")
                             + selectWalletCB.currentText + "."
-                    notificationToolTip.showMessage("ADDRESS COPIED TO CLIPBOARD", Tooltip.CopiedAddress)
+                    notificationToolTip.showMessage(qsTr("ADDRESS COPIED TO CLIPBOARD"), Tooltip.CopiedAddress)
                     loaderWithdrawal.visible = false
                 }
             }

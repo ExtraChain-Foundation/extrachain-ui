@@ -11,7 +11,7 @@ import "../"
 
 Item {
     id: settingsPage
-    visible: root.sellected_window === MenuSelector.Settings && isMobile
+    visible: currentPage === MenuSelector.Settings && isMobile
     anchors.fill: parent
 
     readonly property double minDiskSpaceForFullModeRequired: 2.0
@@ -42,7 +42,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         visible: isMobile
-        color:  Colors.settings_page.background
+        color:  Colors.background
     }
 
     Timer {
@@ -82,7 +82,7 @@ Item {
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         height: visible ? 56 : 0
-        visible: isMobile
+        visible: false//isMobile
 
         Image {
             Layout.preferredHeight: 24
@@ -126,7 +126,7 @@ Item {
 
                 onClicked: {
                     console.log("show notifications")
-                    root.sellected_window = MenuSelector.Notification
+                    currentPage = MenuSelector.Notification
                 }
             }
 
@@ -156,23 +156,23 @@ Item {
 
                 Connections {
                     target: root
-                    onSellected_windowChanged: {
-                        if(root.sellected_window !== MenuSelector.Settings)
-                            maSettings.saved_previous_window = root.sellected_window
+                    onCurrentPageChanged: {
+                        if(currentPage !== MenuSelector.Settings)
+                            maSettings.saved_previous_window = currentPage
                     }
                 }
 
                 onClicked: {
-                    console.log("show settings", root.sellected_window, settingsPopup.visible)
-                    if(root.sellected_window === MenuSelector.Settings) {
+                    console.log("show settings", currentPage, settingsPopup.visible)
+                    if(currentPage === MenuSelector.Settings) {
                         if(saved_previous_window === MenuSelector.Vpn)
-                            root.sellected_window = MenuSelector.Vpn
+                            currentPage = MenuSelector.Vpn
                         else if(saved_previous_window === MenuSelector.Wallet)
-                            root.sellected_window = MenuSelector.Wallet
+                            currentPage = MenuSelector.Wallet
                         else if(saved_previous_window === MenuSelector.Locations)
-                            root.sellected_window = MenuSelector.Locations
+                            currentPage = MenuSelector.Locations
                         else
-                            root.sellected_window = MenuSelector.Vpn
+                            currentPage = MenuSelector.Vpn
                     }
                 }
             }
@@ -205,7 +205,7 @@ Item {
                 icon: IcoMoon.close
                 koef_icon_size: 1.0
                 rotation: 90
-                visible: !isMobile
+                visible: isDesktop
 
                 onClicked: {
                     settingsPopup.close()
@@ -217,25 +217,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 24
                 Layout.maximumHeight: 24
-
-                Item {
-                    Layout.preferredHeight: 24
-                    Layout.preferredWidth: 24
-                    visible: isMobile
-
-                    SquareButton {
-                        anchors.fill: parent
-                        style: Colors.wallet_withdraw_page.button_back_style
-                        icon: IcoMoon.down
-                        koef_icon_size: 1.0
-                        rotation: 90
-
-                        onClicked: {
-                            settingsPopup.close()
-                            root.sellected_window = MenuSelector.Vpn
-                        }
-                    }
-                }
+                visible: isDesktop
 
                 DmsansText {
                     Layout.fillWidth: true
@@ -276,7 +258,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Export profile"
+                            text: qsTr("Export profile")
                             icon: IcoMoon.export_profile
                             onClicked: {
                                 stackview.push(exportProfileComponent)
@@ -286,7 +268,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Account"
+                            text: qsTr("Account")
                             icon: IcoMoon.user
                             onClicked: {
                                 stackview.push(accountComponent)
@@ -296,12 +278,12 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Subscription"
+                            text: qsTr("Subscription")
                             icon: IcoMoon.subscribe
                             visible: false
                             onClicked: {
                                 settingsPopup.visible = false
-                                root.sellected_window = MenuSelector.Wallet
+                                currentPage = MenuSelector.Wallet
                                 walletPage.showSubscriptionPage()
                             }
                         }
@@ -309,7 +291,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Light Chain"
+                            text: qsTr("Light Chain")
                             icon: IcoMoon.light_chain
                             onClicked: {
                                 raccoonController.availableFullModeInit()
@@ -320,7 +302,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Face ID"
+                            text: qsTr("Face ID")
                             icon: IcoMoon.face_id
                             visible: ios_platform && faceIdAvailable
                             onClicked: {
@@ -331,13 +313,13 @@ Item {
                         SwitchSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Software Rendering"
+                            text: qsTr("Software Rendering")
                             icon: IcoMoon.rendering
                             checked: appSettings.softwareRendering
 
                             onClicked: {
                                 console.log("Software rendering changed", checked)
-                                notificationToolTip.showMessage("Changes will take effect after restart")
+                                notificationToolTip.showMessage(qsTr("Changes will take effect after restart"))
                                 appSettings.softwareRendering = checked
                             }
                         }
@@ -345,7 +327,7 @@ Item {
                         SwitchSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Hide mining reward"
+                            text: qsTr("Hide mining reward")
                             icon: IcoMoon.rendering
                             visible: UiSettings.debugMode
                             checked: appSettings.hideMining
@@ -361,7 +343,7 @@ Item {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
                             checked: appSettings.isDarkTheme
-                            text: appSettings.isDarkTheme ? "Dark theme" : "Light theme"
+                            text: appSettings.isDarkTheme ? qsTr("Dark theme") : qsTr("Light theme")
                             icon: appSettings.isDarkTheme ? IcoMoon.dark_theme : IcoMoon.light_theme
 
                             onClicked: {
@@ -375,14 +357,14 @@ Item {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
                             checked: root.cheatMode
-                            text: root.cheatMode ? "Return to mortality" : "Almighty"
+                            text: root.cheatMode ? qsTr("Return to mortality") : qsTr("Almighty")
                             icon: root.cheatMode ? IcoMoon.happy : IcoMoon.circle
                             visible: UiSettings.debugMode
 
                             onClicked: {
                                 console.log("Almighty changed", checked)
                                 root.cheatMode = checked
-                                var message = root.cheatMode ? "⚡ GODMODE ACTIVATED ⚡\nWith great power..." : "Back to suffering, mortal"
+                                var message = root.cheatMode ? qsTr("⚡ GODMODE ACTIVATED ⚡\nWith great power...") : qsTr("Back to suffering, mortal")
                                 notificationToolTip.showMessage(message)
                             }
                         }
@@ -407,7 +389,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Connections"
+                            text: qsTr("Connections")
                             icon: IcoMoon.connections
                             visible: UiSettings.debugMode
                             onClicked: {
@@ -418,18 +400,18 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "License Details"
+                            text: qsTr("License Details")
                             icon: IcoMoon.license
                             visible: UiSettings.debugMode
                             onClicked: {
-                                notificationToolTip.showMessage("Soon. Available later.")
+                                notificationToolTip.showMessage(qsTr("Soon. Available later."))
                             }
                         }
 
                         SwitchSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: checked ? "Enable UPnP" : "Disable UPnP"
+                            text: checked ? qsTr("Enable UPnP") : qsTr("Disable UPnP")
                             icon: checked ? IcoMoon.happy : IcoMoon.circle
                             visible: UiSettings.debugMode
 
@@ -442,12 +424,12 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Show tutorial"
+                            text: qsTr("Show tutorial")
                             icon: IcoMoon.attention
                             onClicked: {
                                 appSettings.onboard_finished = false
                                 onboarding_current_page = Onboarding.Vpn_Tab_To_Connect
-                                root.sellected_window = MenuSelector.Vpn
+                                currentPage = MenuSelector.Vpn
                                 settingsPopup.close()
                             }
                         }
@@ -455,7 +437,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Check Update"
+                            text: qsTr("Check Update")
                             icon: IcoMoon.update
                             visible: UiSettings.debugMode
                             onClicked: {
@@ -464,10 +446,10 @@ Item {
                                 enabled = true
 
                                 if (settingsPage.canUpdate) {
-                                    notificationToolTip.showMessage("New software updates are available")
+                                    notificationToolTip.showMessage(qsTr("New software updates are available"))
                                     updater.visible = true
                                 } else {
-                                    notificationToolTip.showMessage("Your software is up to date")
+                                    notificationToolTip.showMessage(qsTr("Your software is up to date"))
                                 }
                             }
                         }
@@ -475,7 +457,7 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Remove profiles and all user data"
+                            text: qsTr("Remove profiles and all user data")
                             icon: IcoMoon.trash
                             visible: UiSettings.debugMode
                             _colorIcon: Colors.red
@@ -491,13 +473,13 @@ Item {
                         ActionSettingsItem {
                             Layout.preferredHeight: 64
                             Layout.fillWidth: true
-                            text: "Logout"
+                            text: qsTr("Logout")
                             icon: IcoMoon.logout
                             _colorIcon: Colors.red
                             _textColor: Colors.red
                             onClicked: {
                                 forceClose = true
-                                const keychainName = "Hash" + (etUtils.isRelease ? "" : "Debug")
+                                const keychainName = qsTr("Hash") + (etUtils.isRelease ? "" : qsTr("Debug"))
                                 keyChain.deleteKey(keychainName)
                                 uiController.logOut()
                                 Qt.quit()
@@ -554,7 +536,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 24
                     Layout.alignment: Qt.AlignVCenter
-                    text: "Account"
+                    text: qsTr("Account")
                     font.pixelSize: 24
                     color: Colors.def_color_text
                     verticalAlignment: Text.AlignVCenter
@@ -584,7 +566,7 @@ Item {
                 Layout.preferredWidth: 140
                 Layout.preferredHeight: 48
                 Layout.alignment: Qt.AlignHCenter
-                text: "Save"
+                text: qsTr("Save")
                 filled: true
                 property string new_user_name: usernameTf.text
                 enabled: uiController.loadUserName(raccoonController?.mainActor) !== new_user_name && new_user_name.length > 5
@@ -592,26 +574,26 @@ Item {
                     var message = ""
                     if (new_user_name.length === 0) {
                         const res = uiController.removeUsername()
-                        message = res ? "Username successfully removed" : "Error"
+                        message = res ? qsTr("Username successfully removed") : qsTr("Error")
                         notificationToolTip.showMessage(message)
                         return
                     }
 
                     if (new_user_name.length > 30) {
-                        message = "Username must be lower than 30"
+                        message = qsTr("Username must be lower than 30")
                         notificationToolTip.showMessage(message)
                         return
                     }
 
                     if (uiController.existsUsername(new_user_name)) {
-                        message = "Username already exists"
+                        message = qsTr("Username already exists")
                         notificationToolTip.showMessage(message)
                         return
                     }
 
                     const res = uiController.addUsername(new_user_name)
 
-                    message = res ? "Username saved successfully" : "Error"
+                    message = res ? qsTr("Username saved successfully") : qsTr("Error")
                     notificationToolTip.showMessage(message)
                     if(res)
                         stackview.pop()
@@ -629,7 +611,7 @@ Item {
                 Layout.preferredHeight: 22
                 spacing: 6
                 icon: IcoMoon.logout
-                text: "Logout"
+                text: qsTr("Logout")
                 onClicked: {
                     uiController.logOut()
                     uiController.setNeedWipe(true)
@@ -666,7 +648,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 24
                     Layout.alignment: Qt.AlignVCenter
-                    text: "Export profile"
+                    text: qsTr("Export profile")
                     font.pixelSize: 24
                     color: Colors.def_color_text
                     verticalAlignment: Text.AlignVCenter
@@ -680,7 +662,7 @@ Item {
                 anchors.centerIn: parent
                 clip: true
                 interactive: false
-                model: isNewProfile ? ["Export as File", "Export as Phrase", "Export as Hex"] : ["Export as File"]
+                model: isNewProfile ? [qsTr("Export as File"), qsTr("Export as Phrase"), qsTr("Export as Hex")] : [qsTr("Export as File")]
 
                 delegate: RaccoonButton {
                     height: 60
@@ -732,7 +714,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 24
                     Layout.alignment: Qt.AlignVCenter
-                    text: "Light Chain"
+                    text: qsTr("Light Chain")
                     font.pixelSize: 24
                     color: Colors.def_color_text
                     verticalAlignment: Text.AlignVCenter
@@ -752,7 +734,7 @@ Item {
                 DmsansText {
                     Layout.preferredHeight: 50
                     Layout.preferredWidth: 200
-                    text: "Available storage"
+                    text: qsTr("Available storage")
                     color: Colors.green
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
@@ -777,7 +759,7 @@ Item {
                 DmsansText {
                     Layout.preferredHeight: 50
                     Layout.preferredWidth: 200
-                    text: "Light Chain"
+                    text: qsTr("Light Chain")
                     color: Colors.def_color_text
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
@@ -799,7 +781,7 @@ Item {
                 Layout.preferredWidth: 140
                 Layout.preferredHeight: 48
                 Layout.alignment: Qt.AlignHCenter
-                text: "Save"
+                text: qsTr("Save")
                 filled: true
                 property bool originalIsLight: false
 
@@ -818,7 +800,7 @@ Item {
                     if(raccoonController.availableGB < raccoonController.fullDagModeMinSize && !cmbxLightSwitchControl.checked) {
                         cmbxLightSwitchControl.checked = true
                         console.log("Settings. Save blue button Not enough storage available.<br>Only Light Mode can be enabled")
-                        notificationToolTip.showMessage("Not enough storage available.<br>Only Light Mode can be enabled.")
+                        notificationToolTip.showMessage(qsTr("Not enough storage available.<br>Only Light Mode can be enabled."))
                         return;
                     }
 
@@ -826,8 +808,8 @@ Item {
                     const isOriginal = originalIsLight === cmbxLightSwitchControl.checked
                     originalIsLight = cmbxLightSwitchControl.checked
                     notificationToolTip.message = isOriginal ?
-                                "Changes have been reverted" :
-                                "Changes will take effect after restart"
+                                qsTr("Changes have been reverted") :
+                                qsTr("Changes will take effect after restart")
                     notificationToolTip.showMessage()
                     stackview.pop()
                 }
@@ -878,7 +860,7 @@ Item {
                     DmsansText {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 40
-                        text: "Connections: " + (uiController?.networkStatus ? uiController?.networkSockets : "no")
+                        text: qsTr("Connections: ") + (uiController?.networkStatus ? uiController?.networkSockets : qsTr("no"))
                         color: Colors.def_color_text
                         font.pixelSize: 16
                         verticalAlignment: Text.AlignVCenter
@@ -898,7 +880,7 @@ Item {
                         height: 24
                         width: 140
                         Layout.alignment: Qt.AlignVCenter
-                        text: "Autoupdate"
+                        text: qsTr("Autoupdate")
                         unchecked: Colors.wallet_withdraw_page.uncheckBackground
                         checked: UiSettings.debugMode
                         visible: UiSettings.debugMode
@@ -921,7 +903,7 @@ Item {
                         Layout.preferredWidth: 180
                         Layout.alignment: Qt.AlignVCenter
                         filled: true
-                        text: "Update connections"
+                        text: qsTr("Update connections")
                         visible: UiSettings.debugMode
                         onClicked: updateConnectionsList()
                     }
@@ -994,7 +976,7 @@ Item {
 
                         Text {
                             anchors.centerIn: parent
-                            text: "No connections available"
+                            text: qsTr("No connections available")
                             color: "white"
                             font.pixelSize: 16
                             visible: connectionsList.count === 0
@@ -1050,7 +1032,7 @@ Item {
                 DmsansText {
                     Layout.preferredHeight: 50
                     Layout.fillWidth: true
-                    text: "Use Face ID for login"
+                    text: qsTr("Use Face ID for login")
                     color: Colors.def_color_text
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
@@ -1073,7 +1055,7 @@ Item {
                 DmsansText {
                     Layout.preferredHeight: 50
                     Layout.fillWidth: true
-                    text: "Require Face ID for payments"
+                    text: qsTr("Require Face ID for payments")
                     color: Colors.def_color_text
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
@@ -1092,7 +1074,7 @@ Item {
                 Layout.preferredWidth: 140
                 Layout.preferredHeight: 48
                 Layout.alignment: Qt.AlignHCenter
-                text: "Save"
+                text: qsTr("Save")
                 filled: true
                 property bool originalIsLight: false
                 onClicked: {

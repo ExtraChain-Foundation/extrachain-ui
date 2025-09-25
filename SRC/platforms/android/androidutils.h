@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QObject>
 #include <QString>
 
@@ -31,4 +32,6 @@ public:
     static void cleanup();
     static void setupStatusBar();
     static int  getStatusBarHeight();
+
+    static bool installApk(const QString &filePath);
 };

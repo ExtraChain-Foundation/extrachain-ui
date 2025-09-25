@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include <QStandardPaths>
 #include <QThreadPool>
+#include <QTranslator>
 
 #include "chain/dag.h"
 #include "managers/extrachain_node.h"
@@ -258,11 +259,11 @@ QVariantList ClientController::networkConnections() {
 
 void ClientController::networkConnectionRemove(const QString &identifier) {
     qDebug().noquote() << "Remove connections by" << identifier;
-    m_node->network()->removeConnection(identifier);
+    m_node->network()->remove_connection(identifier);
 }
 
 bool ClientController::serverStatus(Network::Protocol protocol) const {
-    return m_node->network()->serverStatus(protocol);
+    return m_node->network()->server_status(protocol);
 }
 
 void ClientController::setShareUtils(const std::shared_ptr<ShareUtils> &value) {
@@ -497,7 +498,7 @@ void ClientController::userRegistrationCompletion(ActorId userId, bool isUser) {
         return;
 
     eLog("userRegistrationCompletion {} {}", userId, isUser);
-    currentActorId                = m_node->accountController()->system_actor().id();
+    currentActorId                = m_node->account_controller()->system_actor().id();
     QByteArray currentActorIdByte = currentActorId.toQByteArray();
     currentProfile.setUserId(currentActorIdByte);
     // wallet->setCurrentWallets({currentActorIdByte});
@@ -535,7 +536,7 @@ QVariantList ClientController::multipleProfiles() {
         hash = welcomePage->hash().toStdString();
     }
 
-    auto multiple_profiles = m_node->accountController()->multiple_profiles(hash);
+    auto multiple_profiles = m_node->account_controller()->multiple_profiles(hash);
 
     QVariantList qlist;
     for (const auto &actor_id : multiple_profiles) {
@@ -552,21 +553,21 @@ void ClientController::logInTo(const QString &actorId) {
     }
 
     auto actor_id = ActorId(actorId.toStdString());
-    bool result   = m_node->accountController()->load_profile(actor_id, hash, std::nullopt);
+    bool result   = m_node->account_controller()->load_profile(actor_id, hash, std::nullopt);
     loginHandler(result);
 }
 
 void ClientController::loginHandler(bool loginResult) {
     if (loginResult) {
-        auto           main   = m_node->accountController()->system_actor().id();
-        auto           actors = m_node->accountController()->getProfile(main).actors();
+        auto           main   = m_node->account_controller()->system_actor().id();
+        auto           actors = m_node->account_controller()->profile(main).actors();
         QByteArrayList idList;
         for (auto &actor : actors) {
             idList << actor.id().toQByteArray();
         }
         loginPrivateProfile(main.toQByteArray(), idList);
     } else {
-        if (AccountController::profilesList().size() != 0) {
+        if (AccountController::profiles_list().size() != 0) {
             eLog("Error: Incorrect login or password");
             emit loginError(0);
         } else {
@@ -581,7 +582,7 @@ void ClientController::loginPrivateProfile(QByteArray id, QByteArrayList idList)
     emit requestProfile(currentActorId.toQByteArray());
     // wallet->setCurrentWallets(idList);
     QTimer::singleShot(500, this, [this] {
-        m_node->network()->connectToNode(etUtils->serverIp(), Network::Protocol::WebSocket);
+        m_node->network()->connect_to_node(etUtils->serverIp(), Network::Protocol::WebSocket);
         // (etUtils->serverIp(), etUtils->networkProtocol());
     });
 
@@ -882,7 +883,7 @@ QVariantList ClientController::loadLikesTemp(QString userId, QString postId, boo
 }
 
 bool ClientController::isFirst(const QString &userId) {
-    auto firstId = m_node->actorIndex()->network_id();
+    auto firstId = m_node->actor_index()->network_id();
     return firstId.toQByteArray() == userId;
 }
 
@@ -920,7 +921,7 @@ QString ClientController::myUsername() {
 }
 
 int ClientController::editUsername(const QString &username) {
-    auto firstId = m_node->actorIndex()->network_id();
+    auto firstId = m_node->actor_index()->network_id();
     if (firstId.is_zero())
         return 1;
 
@@ -961,7 +962,7 @@ int ClientController::editUsername(const QString &username) {
 }
 
 QString ClientController::usernameById(const QString &userId) {
-    auto firstId = m_node->actorIndex()->network_id();
+    auto firstId = m_node->actor_index()->network_id();
     if (firstId.is_zero())
         return "null";
 
@@ -1149,16 +1150,16 @@ QString ClientController::fixFileName(const QString &fileName) {
 }
 
 QString ClientController::firstId() {
-    auto firstId = m_node->actorIndex()->network_id();
+    auto firstId = m_node->actor_index()->network_id();
     return firstId.is_zero() ? QString("-") : firstId.toQString();
 }
 
 qint64 ClientController::actorsCount() {
-    return m_node->actorIndex()->getRecords();
+    return m_node->actor_index()->records();
 }
 
 QString ClientController::localServerIp() {
-    return m_node->network()->localIp();
+    return m_node->network()->local_ip();
 }
 
 // int ClientController::exportFile(QString dfsPath, QString origName,
@@ -1403,6 +1404,54 @@ void ClientController::loadHash() {
     eLog("{}", m_autologinHash.hash());
 }
 
+void ClientController::changeTranslation(const QString &language) {
+    static QTranslator translator;
+
+    QString lang = language;
+    if (language.isEmpty()) {
+
+#ifdef Q_OS_MACOS
+        QStringList uiLangs = QLocale::system().uiLanguages();
+        eLog("[Translation] All UI languages: {}", uiLangs.join(", "));
+
+        QLocale locale = QLocale::system();
+        eLog("[Translation] System locale name: {}", locale.name());
+        eLog("[Translation] System locale language: {}", QLocale::languageToString(locale.language()));
+
+        if (!uiLangs.isEmpty()) {
+            QString firstLang = uiLangs.first().split('-').first();
+            eLog("[Translation] First UI language code: {}", firstLang);
+
+            if (firstLang == "uk" || firstLang == "ru") {
+                lang = firstLang;
+                eLog("[Translation] Using first supported language: {}", lang);
+            } else {
+                for (const QString &uiLang : uiLangs) {
+                    QString langCode = uiLang.split('-').first();
+                    if (langCode == "uk" || langCode == "ru") {
+                        lang = langCode;
+                        eLog("[Translation] Found supported language in list: {}", lang);
+                        break;
+                    }
+                }
+            }
+        }
+#else
+        QLocale locale = QLocale::system();
+        lang           = locale.name().left(2);
+#endif
+    }
+
+    eLog("[Translation] Change lang: {}", lang);
+    if ((lang == "uk" || lang == "ru") && translator.load(":/translations/RaccoonLine_" + lang + ".qm")) {
+        qApp->installTranslator(&translator);
+        eLog("[Translation] Loaded {}", lang);
+    } else {
+        qApp->removeTranslator(&translator);
+        eLog("[Translation] No translation");
+    }
+}
+
 QString ClientController::calcRoccSummary() {
     return "---";
     // auto last_saved = m_node->blockchain()->getBlockIndex().getLastSavedId();
@@ -1485,7 +1534,7 @@ void ClientController::setDfsLight(bool isLight) {
 
 QVariantList ClientController::loadUserNames() {
     QVariantList list;
-    auto         network_id = m_node->actorIndex()->network_id();
+    auto         network_id = m_node->actor_index()->network_id();
     if (network_id.is_zero()) {
         return list;
     }
@@ -1524,7 +1573,7 @@ QVariantList ClientController::loadUserNames() {
 }
 
 QString ClientController::loadUserName(QString actorId) {
-    auto network_id = m_node->actorIndex()->network_id();
+    auto network_id = m_node->actor_index()->network_id();
     if (network_id.is_zero()) {
         QFile network(".network_id");
         if (network.open(QFile::ReadOnly)) {
@@ -1570,7 +1619,7 @@ QString ClientController::loadUserName(QString actorId) {
     }
 
     if (actorId.isEmpty()) {
-        actorId = m_node->accountController()->currentProfile().main_id().toQString();
+        actorId = m_node->account_controller()->current_profile().main_id().toQString();
     }
 
     auto row = m_node->dfs()->get_vector_row(network_id, usernames_file_id, actorId.toStdString());
@@ -1582,7 +1631,7 @@ QString ClientController::loadUserName(QString actorId) {
 }
 
 bool ClientController::addUsername(QString username) {
-    auto network_id = m_node->actorIndex()->network_id();
+    auto network_id = m_node->actor_index()->network_id();
     if (network_id.is_zero()) {
         return false;
     }
@@ -1596,8 +1645,8 @@ bool ClientController::addUsername(QString username) {
 }
 
 bool ClientController::existsUsername(QString username) {
-    auto network_id = m_node->actorIndex()->network_id();
-    auto v = DfsVector::load(m_node, m_node->accountController()->system_actor(), network_id, usernames_file_id);
+    auto network_id = m_node->actor_index()->network_id();
+    auto v = DfsVector::load(m_node, m_node->account_controller()->system_actor(), network_id, usernames_file_id);
     if (!v.has_value()) {
         return false;
     }
@@ -1614,8 +1663,8 @@ bool ClientController::existsUsername(QString username) {
 }
 
 bool ClientController::removeUsername() {
-    auto network_id      = m_node->actorIndex()->network_id();
-    auto system_actor_id = m_node->accountController()->currentProfile().main_id();
+    auto network_id      = m_node->actor_index()->network_id();
+    auto system_actor_id = m_node->account_controller()->current_profile().main_id();
 
     auto res = m_node->dfs()->remove_vector_row(network_id, usernames_file_id, system_actor_id.to_string());
     return res;
@@ -1650,7 +1699,7 @@ void ClientController::loadSubscription() {
         }
     }
 
-    auto system_actor_id = m_node->accountController()->system_actor().id();
+    auto system_actor_id = m_node->account_controller()->system_actor().id();
     auto row             = m_node->dfs()->get_vector_row(raccoon_id, sub_file_id, system_actor_id.to_string());
 
     if (m_subscribed != row.has_value()) {
@@ -1680,7 +1729,7 @@ void ClientController::addSubscription(int type, bool auto_renew) {
 }
 
 QStringList ClientController::getPhrase() {
-    auto mnemonic = m_node->accountController()->seed_mnemonic();
+    auto mnemonic = m_node->account_controller()->seed_mnemonic();
 
     QStringList result;
     for (const auto &word : mnemonic) {
@@ -1690,27 +1739,27 @@ QStringList ClientController::getPhrase() {
 }
 
 bool ClientController::validatePhrase(const QString &phrase) {
-    return m_node->accountController()->validate_mnemonic(phrase.simplified().trimmed().toStdString());
+    return m_node->account_controller()->validate_mnemonic(phrase.simplified().trimmed().toStdString());
 }
 
 bool ClientController::importPhrase(const QString &login, const QString &password, const QString &phrase) {
     std::string mnemonic = phrase.trimmed().simplified().toStdString();
-    return m_node->accountController()->import_seed_phrase(login.toStdString(), password.toStdString(), mnemonic);
+    return m_node->account_controller()->import_seed_phrase(login.toStdString(), password.toStdString(), mnemonic);
 }
 
 bool ClientController::importHex(const QString &login, const QString &password, const QString &hex) {
-    return m_node->accountController()->import_seed_hex(login.toStdString(),
-                                                        password.toStdString(),
-                                                        hex.toStdString());
+    return m_node->account_controller()->import_seed_hex(login.toStdString(),
+                                                         password.toStdString(),
+                                                         hex.toStdString());
 }
 
 QString ClientController::importedHex(const QString &_) {
-    const std::string generatedHex = m_node->accountController()->seed_hex();
+    const std::string generatedHex = m_node->account_controller()->seed_hex();
     return QString::fromStdString(generatedHex);
 }
 
 bool ClientController::isNewProfile() {
-    return m_node->accountController()->profile_type() == ProfileType::New;
+    return m_node->account_controller()->profile_type() == ProfileType::New;
 }
 
 void ClientController::subscriptionAdded() {
@@ -1742,7 +1791,7 @@ void ClientController::setNode(ExtraChainNode *newNode) {
     m_node = newNode;
 
     auto setupUsernamesHandler = [this](ActorId owner_id, Dfs::DirRow dir_row, DbRow row) {
-        auto network_id = m_node->actorIndex()->network_id();
+        auto network_id = m_node->actor_index()->network_id();
         if (network_id.is_zero() || usernames_file_id.empty()) {
             return;
         }
@@ -1787,7 +1836,7 @@ void ClientController::addFiles(const QStringList &files,
         return;
 
     const QString &file         = files.first();
-    auto           mainId       = m_node->accountController()->currentProfile().main_id();
+    auto           mainId       = m_node->account_controller()->current_profile().main_id();
     auto           dataSecurity = Dfs::DataSecuritySelf { .my_actor = mainId };
 
     // Define file processing function

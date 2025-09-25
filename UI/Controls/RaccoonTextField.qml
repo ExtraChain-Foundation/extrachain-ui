@@ -38,6 +38,7 @@ Item {
         font.pointSize: 16
         selectByMouse: true
         background: Rectangle {
+            id: bg
             color: Colors.text_field_style.background
             radius: _radius
             border.color: Colors.text_field_style.border_color
@@ -116,19 +117,19 @@ Item {
     }
 
     Rectangle {
-        color: "transparent"
         anchors.verticalCenter: parent.top
         anchors.left: parent.left
         anchors.leftMargin: 16
         height: 16
         width: placeholder.paintedWidth + 8
+        color: "transparent"
         visible: placeholderText.length > 0
 
         Rectangle {
             y: parent.height/2
             width: parent.width
             height: parent.height/2
-            color: Colors.background
+            color: bg.color
         }
 
         DmsansText {

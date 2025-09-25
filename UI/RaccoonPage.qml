@@ -16,6 +16,7 @@ Rectangle {
     Canvas {
         id: mesh
         anchors.fill: parent
+        visible: false
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
@@ -75,31 +76,31 @@ Rectangle {
         }
     }
 
-    Item {
-        width: parent.width
-        height: parent.height
-        x: 120
-        y: 20
+    // Item {
+    //     width: parent.width
+    //     height: parent.height
+    //     x: 120
+    //     y: 20
 
-        Image {
-            anchors.centerIn: parent
-            source: Colors.isDarkTheme ?  "qrc:/new_design/UI/Images/new_design/dark_blue_shadow.svg" : "qrc:/new_design/UI/Images/new_design/light_blue_shadow.svg"
-        }
+    //     Image {
+    //         anchors.centerIn: parent
+    //         source: Colors.isDarkTheme ?  "qrc:/new_design/UI/Images/new_design/dark_blue_shadow.svg" : "qrc:/new_design/UI/Images/new_design/light_blue_shadow.svg"
+    //     }
 
-        SequentialAnimation on x {
-            running: activeAnimation
-            loops: Animation.Infinite
-            NumberAnimation { to: -120; duration: 5000; easing.type: Easing.InOutQuad }
-            NumberAnimation { to: 120; duration: 4000; easing.type: Easing.InOutQuad }
-        }
+    //     SequentialAnimation on x {
+    //         running: activeAnimation
+    //         loops: Animation.Infinite
+    //         NumberAnimation { to: -120; duration: 5000; easing.type: Easing.InOutQuad }
+    //         NumberAnimation { to: 120; duration: 4000; easing.type: Easing.InOutQuad }
+    //     }
 
-        SequentialAnimation on y {
-            loops: Animation.Infinite
-            running: activeAnimation
-            NumberAnimation { to: -20; duration: 6000; easing.type: Easing.InOutQuad }
-            NumberAnimation { to: 20; duration: 3000; easing.type: Easing.InOutQuad }
-        }
-    }
+    //     SequentialAnimation on y {
+    //         loops: Animation.Infinite
+    //         running: activeAnimation
+    //         NumberAnimation { to: -20; duration: 6000; easing.type: Easing.InOutQuad }
+    //         NumberAnimation { to: 20; duration: 3000; easing.type: Easing.InOutQuad }
+    //     }
+    // }
 
     Item {
         width: 500
@@ -107,7 +108,7 @@ Rectangle {
         x: (parent.width - (width/2))
         y: (parent.y - (height/2))
         rotation: -30
-        visible: !isMobile
+        visible: false//isDesktop
 
 
         Rectangle {

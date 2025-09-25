@@ -8,8 +8,8 @@ import "../../UI/Fonts"
 
 ComboBox {
     id: selectCoinTF
-    property string currentIcon//: model.get(selectCoinTF.currentIndex).icon
-    property string currentCoin//: model.get(selectCoinTF.currentIndex).coin
+    property string currentIcon
+    property string currentCoin
     property string placeholderText
 
     delegate: ItemDelegate {

@@ -48,6 +48,7 @@ private:
         "WINDOWS";
 #elif defined(Q_OS_ANDROID)
         "ANDROID";
+    QString savedApkPath;
 #elif defined(Q_OS_IOS)
             "IOS";
 #elif defined(Q_OS_MACOS)

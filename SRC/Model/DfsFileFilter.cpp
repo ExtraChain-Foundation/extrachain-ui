@@ -79,7 +79,7 @@ void DfsFileFilterModel::jumpToFolder(const QString &folder) {
             auto name = dirRow.name;
 
             if (dirRow.encryption) {
-                auto actor          = node->accountController()->currentProfile().get_actor(ActorId(currentDir));
+                auto actor          = node->account_controller()->current_profile().get_actor(ActorId(currentDir));
                 auto encrypted_name = Utils::from_base64(name);
                 if (actor.has_value() && encrypted_name.has_value()) {
                     auto res = actor->get().key().decrypt_self(ByteArray(encrypted_name.value()).toBytes());

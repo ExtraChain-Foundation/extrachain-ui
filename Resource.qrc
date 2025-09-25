@@ -7,22 +7,20 @@
         <file>UI/Utils.qml</file>
         <file>UI/Images/bg.svg</file>
         <file>UI/MessageWindow.qml</file>
+        <file>translations/RaccoonLine_uk.qm</file>
+        <file>translations/RaccoonLine_ru.qm</file>
+        <file>UI/Images/extrachain_lite.png</file>
     </qresource>
     <qresource prefix="/images">
-        <file>UI/Images/raccoon_title.png</file>
         <file>UI/Images/canada.png</file>
         <file>UI/Images/raccoon.png</file>
         <file>UI/Images/raccoonline.png</file>
         <file>UI/Images/file.png</file>
         <file>UI/Images/image.png</file>
         <file>UI/Images/fatal.png</file>
-        <file>UI/Images/raccoon_logo.png</file>
         <file>UI/Images/Header.svg</file>
         <file>UI/Images/file.svg</file>
         <file>UI/Images/Header.png</file>
-        <file>UI/Images/raccoon_3x.png</file>
-        <file>UI/Images/raccoon_mobile_2x.png</file>
-        <file>UI/Images/raccoon_mobile.svg</file>
         <file>UI/Images/bg.svg</file>
         <file>UI/Images/raccoon_text_and_icon_logo.svg</file>
         <file>UI/Images/mobile_top_header.svg</file>
@@ -36,6 +34,8 @@
         <file>UI/Fonts/Montserrat/static/Montserrat-Bold.ttf</file>
         <file>UI/Fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf</file>
         <file>UI/Fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf</file>
+        <file>UI/Fonts/SFProDisplay/SFPRODISPLAYMEDIUM.OTF</file>
+        <file>UI/Fonts/SFProDisplay/SFPRODISPLAYBOLD.OTF</file>
     </qresource>
     <qresource prefix="/coins">
         <file>UI/Images/coins/Currency=Zilliqa (ZIL).png</file>

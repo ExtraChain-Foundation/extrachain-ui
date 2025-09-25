@@ -15,7 +15,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: Colors.background
-        visible: root.sellected_window === MenuSelector.Settings || root.sellected_window === MenuSelector.Wallet
+        visible: currentPage === MenuSelector.Settings || currentPage === MenuSelector.Wallet
     }
 
     onVisibleChanged: {
@@ -202,7 +202,7 @@ Item {
 
                     onClicked: {
                         console.log("show notifications")
-                        root.sellected_window = MenuSelector.Settings
+                        currentPage = MenuSelector.Settings
                     }
                 }
             }
@@ -242,7 +242,7 @@ Item {
                 Layout.preferredHeight: 32
                 Layout.preferredWidth: 145
                 Layout.alignment: Qt.AlignVCenter
-                visible: !isMobile
+                visible: isDesktop
             }
         }
 
@@ -279,7 +279,7 @@ Item {
                 delegate: Rectangle {
                     id: planCard
                     width: root.isMobile ? planListView.width : cardWidth
-                    height: !isMobile ? ListView.view.height : compactMode ? 380 : 400
+                    height: isDesktop ? ListView.view.height : compactMode ? 380 : 400
                     radius: 14
                     gradient: Gradient {
                         GradientStop { color: !available || index === 0 ? Colors.grape_gray_color : Colors.subscription.plan_card_gradient_begin; position: 0.0 }
@@ -532,7 +532,7 @@ Item {
             id: bb
             Layout.preferredHeight: parent.height * 0.15
             Layout.fillWidth: true
-            visible: !isMobile
+            visible: isDesktop
 
             RowLayout {
                 anchors.centerIn: parent

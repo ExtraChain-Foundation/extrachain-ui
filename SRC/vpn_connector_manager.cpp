@@ -410,8 +410,8 @@ void VPNConnectorManager::send_vpn_status(bool                              stat
         current_type   = type;
     }
 
-    auto          system_id = m_node->accountController()->system_actor().id();
-    auto          country   = m_node->getInitPublicIPAndCountry().second.toStdString();
+    auto          system_id = m_node->account_controller()->system_actor().id();
+    auto          country   = m_node->init_public_ip_and_country().second.toStdString();
     CustomMessage customMessage;
     auto          country_message = VpnCountryMessage { .actor   = system_id,
                                                         .country = country.empty() ? "Other" : country,
@@ -452,7 +452,7 @@ void VPNConnectorManager::setShutdownAllSlotCallback(std::function<void(bool)> c
 }
 
 void VPNConnectorManager::send_vpns_request() {
-    if (m_node->accountController()->empty()) {
+    if (m_node->account_controller()->empty()) {
         return;
     }
 
@@ -484,10 +484,11 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                 // TODO: save ? inputMsg.publicIP;
                 eLog("[VPN] Response 1 1 1");
                 VPNMessage outputMsg;
-                outputMsg.is_wireguard  = inputMsg.is_wireguard;
-                outputMsg.initialSender = m_node->accountController()->currentProfile().system().id().to_string();
-                outputMsg.vpnCommand    = static_cast<int>(NetworkVPNCommand::CONNECTION);
-                outputMsg.vpnType       = static_cast<int>(NetworkVPNType::PROXY);
+                outputMsg.is_wireguard = inputMsg.is_wireguard;
+                outputMsg.initialSender =
+                    m_node->account_controller()->current_profile().system().id().to_string();
+                outputMsg.vpnCommand = static_cast<int>(NetworkVPNCommand::CONNECTION);
+                outputMsg.vpnType    = static_cast<int>(NetworkVPNType::PROXY);
                 outputMsg.allIPsToSet.emplace_back("100.1" + chainIndexStr + ".0.1");
                 outputMsg.publicKey        = vpnManagerWg->getPublicKeys()[0];
                 outputMsg.proxyCounter     = 1;
@@ -511,7 +512,7 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
 
                 CustomMessage custom_message;
                 custom_message.data = MessagePack::serialize(outputMsg);
-                auto mainActor      = m_node->accountController()->system_actor();
+                auto mainActor      = m_node->account_controller()->system_actor();
 
                 if (!identifierToSend.isEmpty()) {
                     m_tryingConnection = true;
@@ -540,10 +541,10 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                         eLog("[VPN] processHandshake, Creating NEW connection {}",
                              QString::fromStdString(inputMsg.publicIP));
                         // TODO: may connect to wrong server if IP is same
-                        m_node->network()->connectToNode(QString::fromStdString(inputMsg.publicIP),
-                                                         Network::Protocol::WebSocket,
-                                                         false,
-                                                         true);
+                        m_node->network()->connect_to_node(QString::fromStdString(inputMsg.publicIP),
+                                                           Network::Protocol::WebSocket,
+                                                           false,
+                                                           true);
 
                         m_waitNewSocketCommandStorage->emplace(
                             inputMsg.publicIP,
@@ -569,17 +570,18 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
             } else {
                 eLog("[VPN] Response 1 2");
                 VPNMessage outputMsg;
-                outputMsg.is_wireguard  = inputMsg.is_wireguard;
-                outputMsg.initialSender = m_node->accountController()->currentProfile().system().id().to_string();
-                outputMsg.allSenders    = inputMsg.allSenders;
+                outputMsg.is_wireguard = inputMsg.is_wireguard;
+                outputMsg.initialSender =
+                    m_node->account_controller()->current_profile().system().id().to_string();
+                outputMsg.allSenders = inputMsg.allSenders;
                 outputMsg.allSenders.emplace(outputMsg.initialSender);
                 outputMsg.initialSenderNetworkIdentifier = m_node->network_identifier();
                 outputMsg.vpnCommand                     = static_cast<int>(NetworkVPNCommand::HANDSHAKE);
                 outputMsg.uuid                           = inputMsg.uuid;
                 outputMsg.vpnType                        = inputMsg.vpnType;
                 outputMsg.resultChainIndex               = inputMsg.resultChainIndex;
-                outputMsg.publicIP                       = m_node->getInitPublicIPAndCountry().first.toStdString();
-                outputMsg.senderID = m_node->accountController()->system_actor().id().to_string();
+                outputMsg.publicIP = m_node->init_public_ip_and_country().first.toStdString();
+                outputMsg.senderID = m_node->account_controller()->system_actor().id().to_string();
 
                 eLog("[VPN] Response 1 2 1");
 
@@ -618,7 +620,7 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                                                                                MessageStatus::Response,
                                                                                responder);
                         eLog("[VPN] SENDED VPN handshake response {} {}",
-                             m_node->accountController()->system_actor().id().to_string(),
+                             m_node->account_controller()->system_actor().id().to_string(),
                              sendedMessageID);
 
                         break;
@@ -640,19 +642,19 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
 
             if (!checkHandshakeAccess(packageData.prev_identifier, 100)) {
                 eLog("[VPN] VPN Package ignored: no empty handshake slots for SERVER {} {}",
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      packageData.msg_body.message_id);
                 return;
             }
 
             if (inputMsg.blockedSenders.contains(
-                    m_node->accountController()->currentProfile().system().id().to_string())) {
+                    m_node->account_controller()->current_profile().system().id().to_string())) {
                 eLog("[VPN] VPN Package ignored. Actor blocked by user.");
                 return;
             }
 
             if (!inputMsg.countryEndpoint.empty()
-                && inputMsg.countryEndpoint != m_node->getInitPublicIPAndCountry().second.toStdString()) {
+                && inputMsg.countryEndpoint != m_node->init_public_ip_and_country().second.toStdString()) {
                 // eLog("{} {} {}",
                 //      "[VPN] VPN Package ignored: SERVER country ("
                 //          + m_node->getInitPublicIPAndCountry().second.toStdString() + ") not matched with - "
@@ -669,15 +671,16 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                 eLog("[VPN] Request server 3 1 1");
 
                 VPNMessage outputMsg;
-                outputMsg.is_wireguard  = inputMsg.is_wireguard;
-                outputMsg.initialSender = m_node->accountController()->currentProfile().system().id().to_string();
+                outputMsg.is_wireguard = inputMsg.is_wireguard;
+                outputMsg.initialSender =
+                    m_node->account_controller()->current_profile().system().id().to_string();
                 outputMsg.allSenders.emplace(outputMsg.initialSender);
                 outputMsg.initialSenderNetworkIdentifier = m_node->network_identifier();
                 outputMsg.vpnCommand                     = static_cast<int>(NetworkVPNCommand::HANDSHAKE);
                 outputMsg.vpnType                        = static_cast<int>(NetworkVPNType::SERVER);
                 outputMsg.uuid                           = inputMsg.uuid;
                 outputMsg.lookingForNodeID               = inputMsg.senderID;
-                outputMsg.publicIP                       = m_node->getInitPublicIPAndCountry().first.toStdString();
+                outputMsg.publicIP = m_node->init_public_ip_and_country().first.toStdString();
 
                 eLog("[VPN] Request server 3 1 2");
 
@@ -729,7 +732,7 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                         .is_wireguard       = inputMsg.is_wireguard });
             } else {
                 eLog("[VPN] VPN Package ignored: Server is impossible to create. {} {}",
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      packageData.msg_body.message_id);
             }
         } else if (inputVPNType == NetworkVPNType::PROXY) {
@@ -746,13 +749,13 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
 
             if (!checkHandshakeAccess(packageData.prev_identifier, 8)) {
                 eLog("[VPN] VPN Package ignored: no empty handshake slots for Proxy {} {}",
-                     m_node->accountController()->system_actor().id(),
+                     m_node->account_controller()->system_actor().id(),
                      packageData.msg_body.message_id);
                 return;
             }
 
             if (inputMsg.blockedSenders.contains(
-                    m_node->accountController()->currentProfile().system().id().to_string())) {
+                    m_node->account_controller()->current_profile().system().id().to_string())) {
                 eLog("[VPN] VPN Package ignored. Actor blocked by user.");
                 return;
             }
@@ -763,16 +766,17 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                 eLog("[VPN] Request proxy 2 1 1");
 
                 VPNMessage outputMsg;
-                outputMsg.is_wireguard  = inputMsg.is_wireguard;
-                outputMsg.initialSender = m_node->accountController()->currentProfile().system().id().to_string();
-                outputMsg.vpnCommand    = static_cast<int>(NetworkVPNCommand::HANDSHAKE);
-                outputMsg.uuid          = inputMsg.uuid;
+                outputMsg.is_wireguard = inputMsg.is_wireguard;
+                outputMsg.initialSender =
+                    m_node->account_controller()->current_profile().system().id().to_string();
+                outputMsg.vpnCommand                 = static_cast<int>(NetworkVPNCommand::HANDSHAKE);
+                outputMsg.uuid                       = inputMsg.uuid;
                 outputMsg.countryEndpoint            = inputMsg.countryEndpoint;
                 outputMsg.networkIdentifiersToIgnore = inputMsg.networkIdentifiersToIgnore;
                 outputMsg.networkIdentifiersToIgnore.emplace(
-                    m_node->accountController()->system_actor().id().to_string());
-                outputMsg.publicIP = m_node->getInitPublicIPAndCountry().first.toStdString();
-                outputMsg.senderID = m_node->accountController()->system_actor().id().to_string();
+                    m_node->account_controller()->system_actor().id().to_string());
+                outputMsg.publicIP = m_node->init_public_ip_and_country().first.toStdString();
+                outputMsg.senderID = m_node->account_controller()->system_actor().id().to_string();
 
                 std::set<int> blockedChainIndexes;
                 if (vpnManagerMain)
@@ -820,11 +824,11 @@ void VPNConnectorManager::processHandshake(const CustomMessage&         customPa
                                                                        MessageStatus::Request);
                 eLog("[VPN] Request proxy SEND Request {} {} {}",
                      outputMsg.vpnType,
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      sendedMessageID);
             } else {
                 eLog("[VPN] VPN Package ignored: Proxy is impossible to create. {} {}",
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      packageData.msg_body.message_id);
             }
         }
@@ -892,12 +896,12 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
 
                                                eLog("[VPN] Connected to vpn. Receiving public ip...");
                                                auto publicIpAndCountry =
-                                                   m_node->network()->getPublicIPAndCountry();
+                                                   m_node->network()->search_public_ip_and_country_();
 
                                                if (inputVPNType == NetworkVPNType::PROXY) {
                                                    QString proxyIp = QString::fromStdString(inputMsg.publicIP);
                                                    auto    publicIpAndCountryProxy =
-                                                       m_node->network()->getPublicIPAndCountry(proxyIp);
+                                                       m_node->network()->search_public_ip_and_country_(proxyIp);
                                                    emit m_node->vpnConnected(std::move(publicIpAndCountryProxy),
                                                                              true);
                                                }
@@ -940,13 +944,13 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                         std::cout << "[VPN] Response proxy 3" << std::endl;
                         VPNMessage outputMsg;
                         outputMsg.initialSender =
-                            m_node->accountController()->currentProfile().system().id().to_string();
+                            m_node->account_controller()->current_profile().system().id().to_string();
                         outputMsg.vpnCommand       = static_cast<int>(NetworkVPNCommand::CONNECTION);
                         outputMsg.publicKey        = publicKey;
                         outputMsg.vpnType          = static_cast<int>(NetworkVPNType::PROXY);
                         outputMsg.resultChainIndex = inputMsg.resultChainIndex;
                         outputMsg.uuid             = inputMsg.uuid;
-                        outputMsg.publicIP         = m_node->getInitPublicIPAndCountry().first.toStdString();
+                        outputMsg.publicIP         = m_node->init_public_ip_and_country().first.toStdString();
                         outputMsg.lookingForNodeID = it->requesterNodeID;
                         outputMsg.is_wireguard     = it->is_wireguard;
 
@@ -984,7 +988,7 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                                                                                      responder);
 
                             eLog("[VPN] Response proxy SEND connection response {} {}",
-                                 m_node->accountController()->system_actor().id().to_string(),
+                                 m_node->account_controller()->system_actor().id().to_string(),
                                  sended_message_id);
                             std::cout << "[VPN] Response proxy SEND connection response" << std::endl;
 
@@ -1104,7 +1108,7 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                     eLog("[VPN] Request server 2 1 1");
                     VPNMessage outputMsg;
                     outputMsg.initialSender =
-                        m_node->accountController()->currentProfile().system().id().to_string();
+                        m_node->account_controller()->current_profile().system().id().to_string();
                     outputMsg.vpnCommand       = static_cast<int>(NetworkVPNCommand::CONNECTION);
                     outputMsg.publicKey        = vpnManagerMain->getPublicKeys()[0];
                     outputMsg.vpnType          = static_cast<int>(NetworkVPNType::SERVER);
@@ -1118,7 +1122,7 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                     }
 
                     bool ipCountrySuccess = false;
-                    auto ipCountry        = m_node->network()->getPublicIPAndCountry();
+                    auto ipCountry        = m_node->network()->search_public_ip_and_country_();
                     if (!ipCountry.first.isEmpty()) {
                         outputMsg.publicIP = ipCountry.first.toStdString();
                         ipCountrySuccess   = true;
@@ -1157,7 +1161,7 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                                                                            responder);
 
                     eLog("[VPN] Request server SEND connection response {} {}",
-                         m_node->accountController()->system_actor().id().to_string(),
+                         m_node->account_controller()->system_actor().id().to_string(),
                          sendedMessageID);
 
                     {
@@ -1199,7 +1203,7 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
 
                     VPNMessage outputMsg;
                     outputMsg.initialSender =
-                        m_node->accountController()->currentProfile().system().id().to_string();
+                        m_node->account_controller()->current_profile().system().id().to_string();
                     outputMsg.vpnCommand  = static_cast<int>(NetworkVPNCommand::CONNECTION);
                     outputMsg.vpnType     = static_cast<int>(it.nextNodeIDType);
                     outputMsg.allIPsToSet = inputMsg.allIPsToSet;
@@ -1248,10 +1252,10 @@ void VPNConnectorManager::processConnection(const VPNMessage&            network
                             eLog("[VPN] processConnection, Creating NEW connection {}",
                                  QString::fromStdString(inputMsg.publicIP));
 
-                            m_node->network()->connectToNode(QString::fromStdString(inputMsg.publicIP),
-                                                             Network::Protocol::WebSocket,
-                                                             false,
-                                                             true);
+                            m_node->network()->connect_to_node(QString::fromStdString(inputMsg.publicIP),
+                                                               Network::Protocol::WebSocket,
+                                                               false,
+                                                               true);
 
                             m_waitNewSocketCommandStorage
                                 ->emplace(inputMsg.publicIP,
@@ -1296,7 +1300,7 @@ void VPNConnectorManager::processDisconnect(const VPNMessage&            network
         auto res = m_node->vpnConfigStorage.vpnUuidToVPNWorkers->find(inputMsg.uuid);
         if (res != m_node->vpnConfigStorage.vpnUuidToVPNWorkers->end()) {
             VPNMessage outputMsg       = inputMsg;
-            outputMsg.initialSender    = m_node->accountController()->currentProfile().system().id().to_string();
+            outputMsg.initialSender    = m_node->account_controller()->current_profile().system().id().to_string();
             outputMsg.lookingForNodeID = res->second.nextNodeID;
 
             // QString identifierToSend;
@@ -1336,7 +1340,7 @@ void VPNConnectorManager::processDisconnect(const VPNMessage&            network
 void VPNConnectorManager::networkCallbackSlot(const NetworkPackageStorage packageData,
                                               const CustomMessage         customPackage) {
     try {
-        if (m_node->isRaccoon) {
+        if (m_node->is_custom_app_) {
             auto vpnPackageExp = MessagePack::deserialize<VPNMessage>(customPackage.data);
 
             if (!vpnPackageExp.has_value()) {
@@ -1369,7 +1373,7 @@ void VPNConnectorManager::networkCallbackSlot(const NetworkPackageStorage packag
                     // eLog("[Vpn] {}", msg_country.value());
 #endif
 
-                    m_node->network()->sendBrodcastMessageFurther(packageData);
+                    m_node->network()->send_brodcast_message_further(packageData);
                     // vpn_servers[msg_country->country][msg_country->actor] = msg_country->status;
                     // if changed -> emit
 
@@ -1458,26 +1462,26 @@ void VPNConnectorManager::networkCallbackSlot(const NetworkPackageStorage packag
 
             if (packageData.msg_body.status == MessageStatus::Request
                 && vpnPackage.initialSender
-                       == m_node->accountController()->currentProfile().system().id().to_string()) {
+                       == m_node->account_controller()->current_profile().system().id().to_string()) {
                 eLog("[VPN] VPN Package ignored completly!");
                 return;
             }
 
             if (!vpnPackage.lookingForNodeID.empty()
-                && vpnPackage.lookingForNodeID != m_node->accountController()->system_actor().id().to_string()) {
+                && vpnPackage.lookingForNodeID != m_node->account_controller()->system_actor().id().to_string()) {
                 eLog("[VPN] VPN Package ignored: ActorID not contains in lookingForNodeID {} {}",
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      packageData.msg_body.message_id);
-                m_node->network()->sendBrodcastMessageFurther(packageData);
+                m_node->network()->send_brodcast_message_further(packageData);
 
                 return;
             }
             if (vpnPackage.networkIdentifiersToIgnore.contains(
-                    m_node->accountController()->system_actor().id().to_string())) {
+                    m_node->account_controller()->system_actor().id().to_string())) {
                 eLog("[VPN] VPN Package ignored: ActorID contains in networkIdentifiersToIgnore {} {}",
-                     m_node->accountController()->system_actor().id().to_string(),
+                     m_node->account_controller()->system_actor().id().to_string(),
                      packageData.msg_body.message_id);
-                m_node->network()->sendBrodcastMessageFurther(packageData);
+                m_node->network()->send_brodcast_message_further(packageData);
                 return;
             }
 
@@ -1486,7 +1490,7 @@ void VPNConnectorManager::networkCallbackSlot(const NetworkPackageStorage packag
                 if (packageData.msg_body.status == MessageStatus::Request) {
                     // eLog("[VPN] VPN Package send further before processing: {}",
                     // packageData.msg_body.message_id);
-                    m_node->network()->sendBrodcastMessageFurther(packageData);
+                    m_node->network()->send_brodcast_message_further(packageData);
                 }
                 processHandshake(customPackage, vpnPackage, packageData);
                 break;
@@ -1832,7 +1836,7 @@ bool VPNConnectorManager::setServer(const VPNMessage&                        net
 
                 send_vpn_status(true, vpnManagerMain->getVPNType());
 
-                m_node->dataMiningManager()->set_koef_to_koef(BigNumberFloat("1.75", NumeralBase::Dec));
+                m_node->data_mining_manager()->set_koef_to_koef(BigNumberFloat("1.75", NumeralBase::Dec));
                 eInfo("Exit Point connected: earning higher rewards");
                 return true;
             }
@@ -1979,7 +1983,7 @@ bool VPNConnectorManager::setProxy(const VPNMessage&                        netw
                 }
             }
 
-            m_node->dataMiningManager()->set_koef_to_koef(BigNumberFloat("1.25", NumeralBase::Dec));
+            m_node->data_mining_manager()->set_koef_to_koef(BigNumberFloat("1.25", NumeralBase::Dec));
             eInfo("Proxy connected: earning rewards");
             vpnHandhakeCacheInProccessLocked->erase(savedIt);
             if (canBeServerBeforeInit) {
@@ -2041,7 +2045,7 @@ void VPNConnectorManager::sendDisconnect(const std::string& uuid,
                                          const std::string& nextNodeID,
                                          const std::string& nextNodeNetworkIdentifier) {
     VPNMessage outputMsg;
-    outputMsg.initialSender    = m_node->accountController()->currentProfile().system().id().to_string();
+    outputMsg.initialSender    = m_node->account_controller()->current_profile().system().id().to_string();
     outputMsg.vpnCommand       = static_cast<int>(NetworkVPNCommand::DISCONNECT);
     outputMsg.uuid             = uuid;
     outputMsg.lookingForNodeID = nextNodeID;
@@ -2070,7 +2074,7 @@ void VPNConnectorManager::sendDisconnect(const std::string& uuid,
                                                                responder);
 
         eLog("[VPN] VPNDisconnect sended, messageID: {}", sendedMessageID);
-        m_node->dataMiningManager()->set_koef_to_koef(BigNumberFloat(1));
+        m_node->data_mining_manager()->set_koef_to_koef(BigNumberFloat(1));
         eInfo("VPN disconnected: standard rewards only");
     } else
         eLog("[VPN] VPNDisconnect send fail: empty identifier.");
@@ -2092,11 +2096,10 @@ void VPNConnectorManager::setConstantSocketByIdentifier(const std::string& ident
 QList<QString> VPNConnectorManager::calcIPRange(const QList<IPNetwork>& allowed_networking,
                                                 const QList<IPNetwork>& disallowed_networking) {
     QList<IPNetwork> addr;
-    // Проходим по всем разрешённым сетям
     for (const IPNetwork& i : allowed_networking) {
         int count = 0;
         for (const IPNetwork& j : disallowed_networking) {
-            // Если disallowed входит в allowed
+            // disallowed in allowed
             if (i.contains(j)) {
                 QList<IPNetwork> excluded = i.addressExclude(j);
                 for (const IPNetwork& allowedip : excluded)
@@ -2107,7 +2110,7 @@ QList<QString> VPNConnectorManager::calcIPRange(const QList<IPNetwork>& allowed_
         if (count == 0)
             addr.append(i);
     }
-    // Удаляем те сети, в которых присутствует какой-либо disallowed
+    // minus disallowed
     QList<IPNetwork> filtered;
     for (const IPNetwork& res : addr) {
         bool skip = false;

@@ -15,8 +15,8 @@ import "../"
 RaccoonPage {
     id: dfsRoot
     anchors.fill: parent
-    visible: root.sellected_window === MenuSelector.Dfs
-    meshVisible: appSettings.onboard_finished
+    visible: currentPage === MenuSelector.Dfs
+    meshVisible: false
 
     property bool isActiveMenuAdd: false
     property string currentActor: raccoonController?.mainActor || ""
@@ -74,93 +74,9 @@ RaccoonPage {
 
             ColumnLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width - (2 * (isMobile ? 9 : 17))
+                width: parent.width - (2 * (isMobile ? 2 : 4))
                 height: implicitHeight
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 56
-                    visible: isMobile
-
-                    Image {
-                        Layout.preferredHeight: 24
-                        Layout.preferredWidth: 157
-                        Layout.alignment: Qt.AlignVCenter
-                        antialiasing: true
-                        source: Colors.logo_and_text
-                    }
-
-                    Item {
-                        Layout.preferredHeight: 40
-                        Layout.fillWidth: true
-                    }
-
-                    Item {
-                        Layout.preferredHeight: 48
-                        Layout.preferredWidth: 104
-                        Layout.alignment: Qt.AlignVCenter
-
-                        MouseArea {
-                            anchors.left: parent.left
-                            anchors.right: parent.horizontalCenter
-                            height: parent.height
-
-                            Rectangle {
-                                height: parent.height
-                                width: height
-                                radius: height/2
-                                color: Colors.mobile_notification_settings_box
-
-                                IconText {
-                                    anchors.centerIn: parent
-                                    text: IcoMoon.bell
-                                    color: Colors.mobile_notification_settings_text
-                                    font.pixelSize: 22
-                                    opacity: parent.pressed ? 0.8 : 1.0
-                                }
-                            }
-
-                            onClicked: {
-                                console.log("show notifications")
-                                root.sellected_window = MenuSelector.Notification
-                            }
-                        }
-
-                        MouseArea {
-                            anchors.left: parent.horizontalCenter
-                            anchors.right: parent.right
-                            height: parent.height
-                            property int saved_previous_window
-
-                            Rectangle {
-                                height: parent.height
-                                width: height
-                                radius: height/2
-                                color: Colors.mobile_notification_settings_box
-
-                                IconText {
-                                    anchors.centerIn: parent
-                                    text: IcoMoon.settings
-                                    color: Colors.mobile_notification_settings_text
-                                    font.pixelSize: 22
-                                    opacity: parent.pressed ? 0.8 : 1.0
-                                }
-                            }
-
-                            onClicked: {
-                                console.log("show settings")
-
-                                saved_previous_window = root.sellected_window
-                                if(settingsPopup.visible) {
-                                    root.sellected_window = saved_previous_window
-                                } else {
-                                    saved_previous_window = root.sellected_window
-                                    root.sellected_window = MenuSelector.Settings
-                                }
-                            }
-                        }
-                    }
-                }
+                spacing: 10
 
                 Rectangle {
                     id: dataInfo
@@ -181,6 +97,7 @@ RaccoonPage {
                 Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 48
+                    visible: false//isDesktop
                 }
 
                 DmsansText {
@@ -212,14 +129,14 @@ RaccoonPage {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: filesView.currentIndex === index ? Colors.dfs_page.selected : "transparent"
+                            color: filesView.currentIndex === index ? Colors.wallet.background : "transparent"
                         }
 
                         onClicked: {
                             filesView.currentIndex = index
-                            if(!settingsFile.visible) {
-                                settingsFile.visible = true
-                            }
+                            // if(!settingsFile.visible) {
+                            //     settingsFile.visible = true
+                            // }
                         }
 
                         onPressAndHold: {
@@ -314,7 +231,7 @@ RaccoonPage {
                                 Layout.preferredWidth: Layout.preferredHeight
                                 Layout.alignment: Qt.AlignVCenter
                                 radius: 8
-                                color: Colors.dfs_page.image_container
+                                color: "transparent"//Colors.dfs_page.image_container
 
                                 Image {
                                     id: sourceImage
@@ -462,6 +379,7 @@ RaccoonPage {
             anchors.bottom: fileInfoBox.top
             anchors.bottomMargin: 8
             radius: 8
+            border.color: Colors.border_color
             color: Colors.background
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -481,7 +399,7 @@ RaccoonPage {
                         width: ListView.view.width
                         height: 48
                         radius: 8
-                        color: m.pressed ? Colors.dfs_page.column_menu_list_pressed : Colors.dfs_page.column_menu_list_unpressed
+                        color: !m.pressed ? Colors.wallet.background : Colors.dfs_page.column_menu_list_unpressed
 
                         Rectangle {
                             anchors.bottom: parent.bottom
@@ -557,12 +475,12 @@ RaccoonPage {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
             height: 64
-            color: Colors.dfs_page.file_infobox_background
+            color: Colors.wallet.background// Colors.dfs_page.file_infobox_background
             y: parent.pointY
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: isMobile ? 9 : 17
+                anchors.leftMargin: isMobile ? 2 : 4
                 anchors.rightMargin: anchors.leftMargin
 
                 IconText {
@@ -586,7 +504,7 @@ RaccoonPage {
                     Layout.preferredWidth: Layout.preferredHeight
                     Layout.alignment: Qt.AlignVCenter
                     radius: 8
-                    color: Colors.dfs_page.image_container
+                    color: "transparent"//Colors.dfs_page.image_container
 
                     Image {
                         anchors.fill: parent
@@ -664,32 +582,32 @@ RaccoonPage {
         }
     }
 
-    TextField {
+    RaccoonTextField {
         id: searchTF
         anchors.fill: parent
         parent: onboarding_current_page === Onboarding.Storage_Search ? searchTutorialItem : searchTFItem
         property bool inFolder: false
         placeholderText: "Search"
-        color: Colors.text_field_style.placeholder
-        placeholderTextColor: Colors.dfs_page.search_placeholder
+        // color: Colors.text_field_style.placeholder
+        // placeholderTextColor: Colors.dfs_page.search_placeholder
         font.family: Montserrat.dmsans
         font.pointSize: 16
         focus: false
-        background: Rectangle {
-            color: Colors.text_field_style.background
-            radius: 16
-            border.width: 1
-            border.color: Colors.dfs_page.search_border_color
+        // background: Rectangle {
+        //     color: Colors.text_field_style.background
+        //     radius: 16
+        //     border.width: 1
+        //     border.color: Colors.dfs_page.search_border_color
 
-            IconText {
-                anchors.verticalCenter: parent.verticalCenter
-                x: 12
-                text: IcoMoon.search
-                color: Colors.def_color_text
-                font.pixelSize: 18
-            }
-        }
-        leftPadding: 38
+        //     IconText {
+        //         anchors.verticalCenter: parent.verticalCenter
+        //         x: 12
+        //         text: IcoMoon.search
+        //         color: Colors.def_color_text
+        //         font.pixelSize: 18
+        //     }
+        // }
+        // leftPadding: 38
         onTextChanged: {
             searchTimer.restart()
         }
@@ -723,7 +641,7 @@ RaccoonPage {
 
     Rectangle {
         id: dataInfoTutorial
-        color: Colors.background
+        color: Colors.wallet.background
         anchors.fill: parent
         parent: onboarding_current_page === Onboarding.Storage_Space || onboarding_current_page === Onboarding.Storage_Upgrade ? dataInfoTutorialItem : dataInfo
         radius: 14
@@ -824,7 +742,7 @@ RaccoonPage {
                         onClicked: {
                             if(isOnboardingState)
                                 return
-                            root.sellected_window = MenuSelector.Wallet
+                            currentPage = MenuSelector.Wallet
                             walletPage.showSubscriptionPage()
                         }
                     }
@@ -1306,7 +1224,7 @@ RaccoonPage {
 
             // if (!root.cheatMode && !uiController.subscribed) {
             //     notificationToolTip.showMessage(qsTr("Please subscribe to gain access to the VPN service"), Tooltip.Message)
-            //     root.sellected_window = MenuSelector.Wallet
+            //     currentPage = MenuSelector.Wallet
             //     walletPage.showSubscriptionPage()
             //     return
             // }
@@ -1328,7 +1246,7 @@ RaccoonPage {
                                                                                                                                                                                              onboarding_current_page === Onboarding.Storage_View_Options ? itemOnboardingFile.bottom :
                                                                                                                                                                                                                                                            onboarding_current_page === Onboarding.Storage_Notification_and_Settings && isMobile ? dataInfoTutorialItem.top
                                                                                                                                                                                                                                                                                                                                                 : undefined
-        anchors.topMargin: onboarding_current_page === Onboarding.Storage_Upgrade && !isMobile ? 5
+        anchors.topMargin: onboarding_current_page === Onboarding.Storage_Upgrade && isDesktop ? 5
                                                                                                : onboarding_current_page === Onboarding.Storage_Notification_and_Settings && isMobile  ? -7 : 0
         anchors.bottom: onboarding_current_page === Onboarding.Storage_Notification_and_Settings ? newButton.top : undefined
         anchors.bottomMargin: 5
@@ -1381,7 +1299,7 @@ RaccoonPage {
         anchors.right: onborading_column.left
         y: parent.height - 120
         height: 1
-        visible: !isMobile && (onboarding_current_page === Onboarding.Storage_Notification_and_Settings)
+        visible: isDesktop && (onboarding_current_page === Onboarding.Storage_Notification_and_Settings)
 
         Row {
             spacing: 4
@@ -1400,7 +1318,6 @@ RaccoonPage {
 
     FileDialog {
         id: tempFileDialog
-        // fileMode: FileDialog.OpenFiles
 
         onAccepted: {
             var list = [];
@@ -1504,7 +1421,7 @@ RaccoonPage {
 
         if (!root.cheatMode && !uiController.subscribed) {
             notificationToolTip.showMessage(qsTr("Please subscribe to gain access to the VPN service"))
-            root.sellected_window = MenuSelector.Wallet
+            currentPage = MenuSelector.Wallet
             walletPage.showSubscriptionPage()
             return false
         }

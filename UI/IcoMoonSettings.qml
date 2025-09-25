@@ -8,6 +8,7 @@ QtObject {
         source: "qrc:/fonts/UI/Fonts/IcoMoon/fonts/icomoon.ttf"
     }
 
+    property string exc_logo:       String.fromCharCode(parseInt('e973', 16))
     property string face_id:        String.fromCharCode(parseInt('e971', 16))
     property string sad:            String.fromCharCode(parseInt('e970', 16))
     property string mining:         String.fromCharCode(parseInt('e96f', 16))

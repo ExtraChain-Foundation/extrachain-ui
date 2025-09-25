@@ -10,6 +10,8 @@
     #include <QGuiApplication>
     #include <QScreen>
     #include <QtCore/private/qandroidextras_p.h>
+    #include <QStandardPaths>
+    #include <QDir>
 #endif
 
 AndroidUtils::AndroidUtils(QObject *parent)
@@ -329,4 +331,30 @@ int AndroidUtils::getStatusBarHeight() {
 
 #endif
     return 0; // Return 0 if failed to get activity
+}
+
+bool AndroidUtils::installApk(const QString &filePath) {
+#ifdef Q_OS_ANDROID
+    QJniObject activity = QJniObject::callStaticObjectMethod("org/qtproject/qt/android/QtNative",
+                                                             "activity",
+                                                             "()Landroid/app/Activity;");
+
+    if (!activity.isValid()) {
+        qWarning() << "[AndroidUtils] Cannot get Android activity";
+        return false;
+    }
+
+    QJniObject::callStaticMethod<void>("com/raccoonline/vpnapp/UpdaterHelper",
+                                       "setContext",
+                                       "(Landroid/content/Context;)V",
+                                       activity.object());
+
+    QJniObject::callStaticMethod<void>("com/raccoonline/vpnapp/UpdaterHelper",
+                                       "installApk",
+                                       "(Ljava/lang/String;)V",
+                                       QJniObject::fromString(filePath).object());
+
+    return true;
+#endif
+    return false;
 }

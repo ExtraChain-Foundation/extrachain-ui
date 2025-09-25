@@ -12,10 +12,10 @@ import "../Fonts"
 Popup {
     id: settingsPopup
     
-    y: !isMobile ? parent.height - height -14 : 0
-    x: !isMobile ? parent.width - width -14 : 0
+    y: isDesktop ? parent.height - height -14 : 0
+    x: isDesktop ? parent.width - width -14 : 0
     height: isMobile ? parent.height : (parent.height * 0.8)
-    visible: root.sellected_window === MenuSelector.Settings && !isMobile
+    visible: currentPage === MenuSelector.Settings && isDesktop
     width: isMobile ? parent.width : Math.max(472, 320)
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     Overlay.modal: BlackRectangle {
@@ -40,7 +40,7 @@ Popup {
     contentItem: Item {
         Settings {
             anchors.fill: parent
-            visible: !isMobile
+            visible: isDesktop
         }
 
     }

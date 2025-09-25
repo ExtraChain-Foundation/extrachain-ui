@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
   registerMetaTypes();
 
-  app.setWindowIcon(QIcon(":/images/UI/Images/raccoon_logo.png"));
+  app.setWindowIcon(QIcon(":/UI/Images/extrachain_lite.png"));
   qmlRegisterSingletonType(QUrl("qrc:/UI/Colors.qml"), "ExtraChain", 1, 0,
                            "Colors");
   qmlRegisterSingletonType(QUrl("qrc:/UI/UiSettings.qml"), "ExtraChain", 1, 0,

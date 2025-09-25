@@ -8,22 +8,22 @@ Rectangle {
     id: topHeader
     anchors.horizontalCenter: parent.horizontalCenter
 
-    width: root.width - (!isMobile ? 24 : 0)
-    height: !isMobile ? 50 : (ios_platform ? 100 : 75)
-    radius: !isMobile ? height / 4 : 0
+    width: root.width - (isDesktop ? 24 : 0)
+    height: isDesktop ? 50 : (ios_platform ? 100 : 75)
+    radius: isDesktop ? height / 4 : 0
     clip: true
     color: Colors.background
-    y: !isMobile ? 8 : 0
+    y: isDesktop ? 8 : 0
     
     Image {
         id: headerImage
-        source: !isMobile  ? "qrc:/images/UI/Images/Header.svg" :
+        source: isDesktop  ? "qrc:/images/UI/Images/Header.svg" :
                             "qrc:/images/UI/Images/mobile_top_header.svg"
         width: parent.width
         height: parent.height
         fillMode: topHeader.width < 770 ? Image.Stretch : Image.PreserveAspectCrop
 
-        layer.enabled: !isMobile && !isSoftwareRendering
+        layer.enabled: isDesktop && !isSoftwareRendering
         layer.effect: OpacityMask {
             maskSource: Rectangle {
                 width: headerImage.width

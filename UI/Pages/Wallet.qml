@@ -13,7 +13,7 @@ RaccoonPage {
     id: walletPage
     anchors.fill: parent
     anchors.topMargin: Qt.platform.os === "osx" ? -safeAreaMarginTop + 6 : 0
-    visible: root.sellected_window === MenuSelector.Wallet && !subscription.visible
+    visible: currentPage === MenuSelector.Wallet && !subscription.visible
     property bool menuActive: false
     // property alias balanceButton: balanceButton
     readonly property int text_pixel_size: isMobile ? 12 : 14
@@ -83,7 +83,7 @@ RaccoonPage {
             Layout.preferredHeight: 56
             Layout.leftMargin: 10
             Layout.rightMargin: 10
-            visible: isMobile
+            visible: false//isMobile
             enabled: !isOnboardingState
 
             Image {
@@ -126,7 +126,7 @@ RaccoonPage {
 
                     onClicked: {
                         console.log("show notifications")
-                        root.sellected_window = MenuSelector.Notification
+                        currentPage = MenuSelector.Notification
                     }
                 }
 
@@ -152,7 +152,7 @@ RaccoonPage {
 
                     onClicked: {
                         console.log("show notifications")
-                        root.sellected_window = MenuSelector.Settings
+                        currentPage = MenuSelector.Settings
                     }
                 }
             }
@@ -284,7 +284,7 @@ RaccoonPage {
                                             DmsansText {
                                                 Layout.preferredWidth: paintedWidth
                                                 Layout.preferredHeight: paintedHeight
-                                                text: "Estimated balance"
+                                                text: qsTr("Estimated balance")
                                                 color: Colors.grape_gray_color
                                                 font.pixelSize: 14
                                             }
@@ -331,7 +331,7 @@ RaccoonPage {
                                             Item {
                                                 Layout.fillWidth: true
                                                 Layout.preferredHeight: 40
-                                                visible: !isMobile
+                                                visible: isDesktop
                                             }
                                         }
                                     }
@@ -351,7 +351,7 @@ RaccoonPage {
                                             DmsansText {
                                                 Layout.preferredWidth: paintedWidth
                                                 Layout.preferredHeight: paintedHeight
-                                                text: "Current wallet balance"
+                                                text: qsTr("Current wallet balance")
                                                 color: Colors.grape_gray_color
                                                 font.pixelSize: 14
                                             }
@@ -418,7 +418,7 @@ RaccoonPage {
                                             Item {
                                                 Layout.fillWidth: true
                                                 Layout.preferredHeight: 40
-                                                visible: !isMobile
+                                                visible: isDesktop
                                             }
                                         }
                                     }
@@ -426,7 +426,7 @@ RaccoonPage {
                             }
 
                             Item {
-                                visible: !isMobile
+                                visible: isDesktop
                                 anchors.fill: parent
 
                                 ColumnLayout {
@@ -450,7 +450,7 @@ RaccoonPage {
                                                 DmsansText {
                                                     Layout.preferredWidth: paintedWidth
                                                     Layout.preferredHeight: paintedHeight
-                                                    text: "Estimated balance"
+                                                    text: qsTr("Estimated balance")
                                                     color: Colors.grape_gray_color
                                                     font.pixelSize: 14
                                                 }
@@ -479,7 +479,7 @@ RaccoonPage {
                                                 Layout.preferredHeight: 40
                                                 Layout.fillWidth: true
                                                 Layout.alignment: Qt.AlignLeft
-                                                visible: !isMobile
+                                                visible: isDesktop
 
                                                 DmsansText {
                                                     Layout.preferredWidth: paintedWidth
@@ -496,7 +496,7 @@ RaccoonPage {
                                                 Item {
                                                     Layout.fillWidth: true
                                                     Layout.preferredHeight: 40
-                                                    visible: !isMobile
+                                                    visible: isDesktop
                                                 }
 
                                                 Item {
@@ -505,7 +505,7 @@ RaccoonPage {
                                                     Layout.minimumWidth: 85
                                                     Layout.preferredWidth: 300
                                                     Layout.maximumWidth: 330
-                                                    visible: !isMobile
+                                                    visible: isDesktop
                                                 }
                                             }
                                         }
@@ -523,7 +523,7 @@ RaccoonPage {
                                                 DmsansText {
                                                     Layout.preferredWidth: paintedWidth
                                                     Layout.preferredHeight: paintedHeight
-                                                    text: "Current wallet balance"
+                                                    text: qsTr("Current wallet balance")
                                                     color: Colors.grape_gray_color
                                                     font.pixelSize: 14
                                                 }
@@ -551,7 +551,7 @@ RaccoonPage {
                                                 Item {
                                                     Layout.fillWidth: true
                                                     Layout.preferredHeight: 40
-                                                    visible: !isMobile
+                                                    visible: isDesktop
                                                 }
                                             }
                                         }
@@ -605,7 +605,7 @@ RaccoonPage {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 72
-                                visible: !isMobile
+                                visible: isDesktop
                             }
 
                             WalletQuickButton {
@@ -615,7 +615,7 @@ RaccoonPage {
                                 Layout.minimumWidth: isMobile ? 80 : 80
                                 Layout.fillWidth: true
                                 _icon: IcoMoon.plus
-                                underText: root.width < 320 ? "Add new\nwallet" : "Add new wallet"
+                                underText: root.width < 320 ? qsTr("Add new\nwallet") : qsTr("Add new wallet")
                                 enabled: !walletUIController?.syncing || false
                                 onClick: {
                                     console.log(`Pressed `, underText)
@@ -633,7 +633,7 @@ RaccoonPage {
                                 enabled: (!walletUIController?.syncing || false) && false
                                 onClick: {
                                     console.log(`Pressed `, underText)
-                                    notificationToolTip.showMessage("This feature is coming soon.")
+                                    notificationToolTip.showMessage(qsTr("This feature is coming soon."))
                                 }
                             }
 
@@ -644,7 +644,7 @@ RaccoonPage {
                                 Layout.minimumWidth: isMobile ? 80 : 204
                                 Layout.fillWidth: true
                                 _icon: IcoMoon.settings
-                                underText: "Manage\nsubscription"
+                                underText: qsTr("Manage\nsubscription")
                                 enabled: !walletUIController?.syncing || false
                                 onClick: {
                                     console.log(`Pressed `, underText)
@@ -655,7 +655,7 @@ RaccoonPage {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 72
-                                visible: !isMobile
+                                visible: isDesktop
                             }
                         }
                     }
@@ -708,7 +708,7 @@ RaccoonPage {
                                 DmsansText {
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: 32
-                                    text: "Name"
+                                    text: qsTr("Name")
                                     font.pixelSize: 14
                                     color: Colors.def_color_text
                                     horizontalAlignment: Text.AlignLeft
@@ -719,7 +719,7 @@ RaccoonPage {
                                     Layout.preferredWidth: listWallet._baseWidthColumn
                                     Layout.preferredHeight: 20
                                     horizontalAlignment: Text.AlignRight
-                                    text: "Coin Price"
+                                    text: qsTr("Coin Price")
                                     color: Colors.def_color_text
                                     visible: false
                                 }
@@ -728,7 +728,7 @@ RaccoonPage {
                                     Layout.preferredWidth: listWallet._baseWidthColumn
                                     Layout.preferredHeight: 20
                                     horizontalAlignment: Text.AlignRight
-                                    text: "Balance"
+                                    text: qsTr("Balance")
                                     color: Colors.def_color_text
                                 }
 
@@ -736,7 +736,7 @@ RaccoonPage {
                                     Layout.preferredWidth: listWallet._baseWidthColumn
                                     Layout.preferredHeight: 20
                                     horizontalAlignment: Text.AlignRight
-                                    text: "Value"
+                                    text: qsTr("Value")
                                     visible: false
                                     color: Colors.def_color_text
                                 }
@@ -745,7 +745,7 @@ RaccoonPage {
                                     Layout.preferredWidth: listWallet._baseWidthColumn
                                     Layout.preferredHeight: 20
                                     horizontalAlignment: Text.AlignRight
-                                    text: "24H change"
+                                    text: qsTr("24H change")
                                     visible: false
                                     color: Colors.def_color_text
                                 }
@@ -780,7 +780,7 @@ RaccoonPage {
                                     Layout.preferredHeight: 22
                                     Layout.alignment: Qt.AlignVCenter
                                     font.family: IcoMoon.iconmoon
-                                    text: IcoMoon.raccoon
+                                    text: IcoMoon.exc_logo
                                     font.pixelSize: 24
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
@@ -990,15 +990,11 @@ RaccoonPage {
                                     name: "mobile_state"
                                     when: isMobile
                                     PropertyChanges { target: balanceText; parent: balanceItemMobile }
-                                    // PropertyChanges { target: coinPriceText; parent: priceItemMobile }
-                                    // PropertyChanges { target: valueText; parent: valueItemMobile }
                                 },
                                 State {
                                     name: "desktop_state"
-                                    when: !isMobile
+                                    when: isDesktop
                                     PropertyChanges { target: balanceText; parent: balanceItemDesktop }
-                                    // PropertyChanges { target: coinPriceText; parent: coinPriceItemDesktop }
-                                    // PropertyChanges { target: valueText; parent: valueItemDesktop }
                                 }
                             ]
                         }
@@ -1010,7 +1006,7 @@ RaccoonPage {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: clTansactions.implicitHeight + 48
-                    color: Colors.background
+                    color: Colors.wallet.background
                     radius: 14
                     border.width: 1
                     border.color: Colors.border_color
@@ -1034,7 +1030,7 @@ RaccoonPage {
                         RaccoonCheckBox {
                             id: hideMiningrewardCheckBox
                             anchors.fill: parent
-                            text: "Hide mining reward"
+                            text: qsTr("Hide mining reward")
                             font.pixelSize: 18
                             font.bold: true
                             onCheckedChanged: {
@@ -1065,7 +1061,7 @@ RaccoonPage {
                             DmsansText {
                                 Layout.preferredWidth: paintedWidth
                                 Layout.preferredHeight: 40
-                                text: transactionsBox._hasTxs ? "Recent transactions" : "No transactions"
+                                text: transactionsBox._hasTxs ? qsTr("Recent transactions") : qsTr("No transactions")
                                 color: Colors.def_color_text
                                 font.pixelSize: 18
                                 font.bold: true
@@ -1101,7 +1097,7 @@ RaccoonPage {
                             visible: !isOnboardingState ? transactionsBox._hasTxs && !loaderWithdrawal.visible : true
                             enabled: !isOnboardingState
                             header: Item {
-                                visible: !isMobile
+                                visible: isDesktop
                                 width: ListView.view.width
                                 height: visible ? 30 : 0
                                 RowLayout {
@@ -1111,7 +1107,7 @@ RaccoonPage {
                                         Layout.fillWidth: true
                                         Layout.fillHeight: true
                                         leftPadding: 35
-                                        text: "Name"
+                                        text: qsTr("Name")
                                         color: Colors.grape_gray_color
                                         font.pixelSize: 14
                                         elide: Text.ElideRight
@@ -1120,7 +1116,7 @@ RaccoonPage {
                                     DmsansText {
                                         Layout.preferredWidth: parent.width * 0.1
                                         Layout.fillHeight: true
-                                        text: "Value"
+                                        text: qsTr("Value")
                                         color: Colors.grape_gray_color
                                         font.pixelSize: 14
                                         horizontalAlignment: Text.AlignRight
@@ -1130,7 +1126,7 @@ RaccoonPage {
                                     DmsansText {
                                         Layout.preferredWidth: parent.width * 0.15
                                         Layout.fillHeight: true
-                                        text: "Status"
+                                        text: qsTr("Status")
                                         color: Colors.grape_gray_color
                                         font.pixelSize: 14
                                         horizontalAlignment: Text.AlignRight
@@ -1140,7 +1136,7 @@ RaccoonPage {
                                     DmsansText {
                                         Layout.preferredWidth: 100
                                         Layout.fillHeight: true
-                                        text: "Date and time"
+                                        text: qsTr("Date and time")
                                         color: Colors.grape_gray_color
                                         font.pixelSize: 14
                                         horizontalAlignment: Text.AlignRight
@@ -1181,7 +1177,7 @@ RaccoonPage {
                                         Layout.preferredHeight: 22
                                         Layout.alignment: Qt.AlignVCenter
                                         font.family: IcoMoon.iconmoon
-                                        text: IcoMoon.raccoon
+                                        text: IcoMoon.exc_logo
                                         font.pixelSize: 16
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignHCenter
@@ -1196,7 +1192,7 @@ RaccoonPage {
                                         DmsansText {
                                             Layout.fillWidth: true
                                             Layout.preferredHeight: paintedHeight
-                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? "Mining reward" : "Raccoon", securityState)
+                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? qsTr("Mining reward") : qsTr("Raccoon"), securityState)
                                             color: Colors.def_color_text
                                             elide: Text.ElideRight
                                             font.pixelSize: 16
@@ -1259,14 +1255,14 @@ RaccoonPage {
                                 RowLayout {
                                     anchors.fill: parent
                                     spacing: 5
-                                    visible: !isMobile
+                                    visible: isDesktop
 
                                     Text{
                                         Layout.preferredWidth: 30
                                         Layout.preferredHeight: 22
                                         Layout.alignment: Qt.AlignVCenter
                                         font.family: IcoMoon.iconmoon
-                                        text: IcoMoon.raccoon
+                                        text: IcoMoon.exc_logo
                                         font.pixelSize: 16
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignHCenter
@@ -1279,7 +1275,7 @@ RaccoonPage {
                                         DmsansText {
                                             Layout.fillWidth: true
                                             Layout.fillHeight: true
-                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? "Mining reward" : "Raccoon", securityState)
+                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? qsTr("Mining reward") : qsTr("ExtraChain"), securityState)
                                             font.pixelSize: 16
                                             color: Colors.def_color_text
                                             elide: Text.ElideRight
@@ -1319,7 +1315,7 @@ RaccoonPage {
                                         Layout.minimumWidth: parent.width * 0.15
                                         Layout.preferredHeight: paintedHeight
                                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                                        text: Utils.mask(isOnboardingState ? "Sended" : statusTx, securityState)
+                                        text: Utils.mask(isOnboardingState ? qsTr("Sended") : statusTx, securityState)
                                         color: Colors.def_color_text
                                         horizontalAlignment: Text.AlignRight
                                         font.pixelSize: 14
@@ -1460,8 +1456,8 @@ RaccoonPage {
     }
 
     states: [
-        State { when:  isMobile; PropertyChanges { target: rlDepositWithdraw; parent: mobileDepositAndWithdrawItem  }},
-        State { when: !isMobile; PropertyChanges { target: rlDepositWithdraw; parent: desktopDepositAndWithdrawItem }}
+        State { when: isMobile; PropertyChanges  { target: rlDepositWithdraw; parent: mobileDepositAndWithdrawItem  }},
+        State { when: isDesktop; PropertyChanges { target: rlDepositWithdraw; parent: desktopDepositAndWithdrawItem }}
     ]
 
     ColumnLayout {
@@ -1502,7 +1498,7 @@ RaccoonPage {
                 anchors.centerIn: parent
                 width: parent.width - 80
                 height: paintedHeight
-                text: "My wallets"
+                text: qsTr("My wallets")
                 color: Colors.def_color_text
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -1513,7 +1509,7 @@ RaccoonPage {
                 anchors.right: parent.right
                 height: parent.height
                 width: paintedWidth + 20
-                text: editWalletState ? "Done" : "Edit"
+                text: editWalletState ? qsTr("Done") : qsTr("Edit")
                 color: editWalletState ? Colors.mining_text_color : Colors.def_color_text
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -1558,7 +1554,7 @@ RaccoonPage {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 18
                             color: Colors.grape_gray_color
-                            text: "Net worth"
+                            text: qsTr("Net worth")
                             verticalAlignment: Text.AlignVCenter
                         }
 
@@ -1581,9 +1577,9 @@ RaccoonPage {
                         anchors.right: parent.right
                         anchors.rightMargin: 18
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "Add new wallet"
+                        text: qsTr("Add new wallet")
                         filled: true
-                        visible: !isMobile
+                        visible: isDesktop
                         onClicked: {
                             if(securityState) {
                                 notificationToolTip.showMessage(securityModeText, Tooltip.Settings)
@@ -1619,7 +1615,7 @@ RaccoonPage {
                     delegate: Rectangle {
                         width: ListView.view.width
                         height: 64
-                        color: index === selectWalletList.currentIndex ? Colors.wallet.selected_wallet : Colors.wallet.not_selected_wallet
+                        color: index === selectWalletList.currentIndex ? Colors.notification.selected : Colors.notification.unselected//Colors.wallet.selected_wallet : Colors.wallet.not_selected_wallet
 
                         MouseArea {
                             id: mouseWalletItemDelegate
@@ -1654,7 +1650,8 @@ RaccoonPage {
                                 Layout.preferredHeight: 40
                                 Layout.preferredWidth: Layout.preferredHeight
                                 radius: height/2
-                                color: Colors.wallet.choose_wallet_background
+                                color: index === selectWalletList.currentIndex ? Colors.notification.placeholder_icon_selected
+                                       : Colors.notification.placeholder_icon_unselected //Colors.wallet.choose_wallet_background
 
                                 DmsansText {
                                     anchors.centerIn: parent
@@ -1673,7 +1670,7 @@ RaccoonPage {
                                 DmsansText {
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: paintedHeight
-                                    text: Utils.mask(model.name ? model.name : "No name", securityState)
+                                    text: Utils.mask(model.name ? model.name : qsTr("No name"), securityState)
                                     color: Colors.def_color_text
                                     font.pixelSize: 16
                                     font.bold: true
@@ -1706,7 +1703,6 @@ RaccoonPage {
                                 Layout.preferredWidth: 30
                                 Layout.alignment: Qt.AlignVCenter
                                 icon: IcoMoon.menu
-                                // visible: editWalletState
                                 koef_icon_size: 1.0
                                 onClicked: {
                                     console.log("Begin edit wallet")
@@ -1754,7 +1750,7 @@ RaccoonPage {
             Layout.leftMargin: 10
             Layout.rightMargin: 10
             filled: true
-            text: "Add new wallet"
+            text: qsTr("Add new wallet")
             visible: isMobile
             onClicked: {
                 if(securityState) {
@@ -1797,7 +1793,7 @@ RaccoonPage {
                 font.pixelSize: 12
                 leftPadding: 11
                 elide: Text.ElideRight
-                text: "Wallets"
+                text: qsTr("Wallets")
                 color: Colors.wallet.select_wallet_button
             }
             IconText {
@@ -1888,7 +1884,7 @@ RaccoonPage {
             visible: onboarding_current_page === Onboarding.Wallet_Estimate_Balance || onboarding_current_page === Onboarding.Wallet_Select
             model: visible ? 7 : 0
             Rectangle {
-                x:  onboarding_current_page === Onboarding.Wallet_Estimate_Balance && !isMobile ? 50 :
+                x:  onboarding_current_page === Onboarding.Wallet_Estimate_Balance && isDesktop ? 50 :
                                                                                                   onboarding_current_page === Onboarding.Wallet_Estimate_Balance && isMobile ? 170 :
                                                                                                                                                                                onboarding_current_page === Onboarding.Wallet_Select && isMobile ? 170 : 280
                 width: 2
@@ -1960,7 +1956,7 @@ RaccoonPage {
                         Layout.preferredHeight: 22
                         Layout.fillWidth: true
                         color: Colors.def_color_text
-                        text: "Copy address"
+                        text: qsTr("Copy address")
                         font.pixelSize: 16
                     }
                 }
@@ -1999,7 +1995,7 @@ RaccoonPage {
                         Layout.preferredHeight: 22
                         Layout.fillWidth: true
                         color: Colors.def_color_text
-                        text: "Rename wallet"
+                        text: qsTr("Rename wallet")
                         font.pixelSize: 16
                     }
                 }
@@ -2034,7 +2030,7 @@ RaccoonPage {
                         Layout.preferredHeight: 22
                         Layout.fillWidth: true
                         color: Colors.def_color_text
-                        text: "Export private key"
+                        text: qsTr("Export private key")
                         font.pixelSize: 16
                     }
                 }
@@ -2064,7 +2060,7 @@ RaccoonPage {
                         Layout.preferredHeight: 22
                         Layout.fillWidth: true
                         color: Colors.def_color_text
-                        text: "Export recovery phrase"
+                        text: qsTr("Export recovery phrase")
                         font.pixelSize: 16
                     }
                 }
@@ -2093,7 +2089,7 @@ RaccoonPage {
                         Layout.preferredHeight: 22
                         Layout.fillWidth: true
                         color: Colors.red
-                        text: "Delete"
+                        text: qsTr("Delete")
                         font.pixelSize: 16
                     }
                 }
@@ -2177,7 +2173,7 @@ RaccoonPage {
                         Layout.fillWidth: true
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        text: "Transfer details"
+                        text: qsTr("Transfer details")
                         font.pixelSize: 18
                         font.bold: true
                         color: Colors.def_color_text
@@ -2198,7 +2194,7 @@ RaccoonPage {
                         Layout.fillWidth: true
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Sender"
+                        text: qsTr("Sender")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2220,7 +2216,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress(txDetailedPopup.sender)
-                                notificationToolTip.showMessage("Sender address was copied to clipboard", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Sender address was copied to clipboard"), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2235,7 +2231,7 @@ RaccoonPage {
                         Layout.fillWidth: true
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Participant"
+                        text: qsTr("Participant")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2257,7 +2253,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress(txDetailedPopup.participant)
-                                notificationToolTip.showMessage("Participant address was copied to clipboard", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Participant address was copied to clipboard"), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2273,7 +2269,7 @@ RaccoonPage {
                         Layout.maximumWidth: clDetailedTx.width * 0.6
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Amount"
+                        text: qsTr("Amount")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2293,7 +2289,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress(txDetailedPopup.amount)
-                                notificationToolTip.showMessage("Transaction amount was copied to the clipboard.", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Transaction amount was copied to the clipboard."), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2311,7 +2307,7 @@ RaccoonPage {
                         Layout.maximumWidth: clDetailedTx.width * 0.6
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Section"
+                        text: qsTr("Section")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2332,7 +2328,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress(txDetailedPopup.section)
-                                notificationToolTip.showMessage("Hash transaction was copied to clipboard", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Hash transaction was copied to clipboard"), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2349,7 +2345,7 @@ RaccoonPage {
                         Layout.maximumWidth: clDetailedTx.width * 0.6
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Type"
+                        text: qsTr("Type")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2399,7 +2395,7 @@ RaccoonPage {
                         Layout.maximumWidth: clDetailedTx.width * 0.6
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Hash"
+                        text: qsTr("Hash")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2420,7 +2416,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress(txDetailedPopup.hash)
-                                notificationToolTip.showMessage("Hash transaction was copied to clipboard", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Hash transaction was copied to clipboard"), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2435,7 +2431,7 @@ RaccoonPage {
                         Layout.fillWidth: true
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignLeft
-                        text: "Date and time"
+                        text: qsTr("Date and time")
                         font.pixelSize: 14
                         font.bold: true
                         color: Colors.def_color_text
@@ -2456,7 +2452,7 @@ RaccoonPage {
                             anchors.fill: parent
                             onClicked: {
                                 walletUIController.copyWalletAddress((new Date(Number(txDetailedPopup.date_time))).toLocaleString(Qt.locale(), "dd.MM.yy HH:mm:ss"))
-                                notificationToolTip.showMessage("Transaction date and time were copied to the clipboard.", Tooltip.CopiedAddress)
+                                notificationToolTip.showMessage(qsTr("Transaction date and time were copied to the clipboard."), Tooltip.CopiedAddress)
                             }
                         }
                     }
@@ -2524,7 +2520,7 @@ RaccoonPage {
                     Layout.fillWidth: true
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "Rename wallet"
+                    text: qsTr("Rename wallet")
                     font.pixelSize: 18
                     font.bold: true
                     color: Colors.def_color_text
@@ -2561,7 +2557,7 @@ RaccoonPage {
 
                         DmsansText {
                             anchors.centerIn: parent
-                            text: "Cancel"
+                            text: qsTr("Cancel")
                             color: Colors.def_color_text
                             font.pixelSize: 16
                             font.bold: true
@@ -2590,7 +2586,7 @@ RaccoonPage {
                         }
                         DmsansText {
                             anchors.centerIn: parent
-                            text: "OK"
+                            text: qsTr("OK")
                             color: Colors.green
                             font.pixelSize: 16
                             font.bold: true
@@ -2660,28 +2656,28 @@ RaccoonPage {
         target: raccoonController
 
         function onDagTxApproved(hash_tx) {
-            if(root.sellected_window === MenuSelector.Wallet) {
+            if(currentPage === MenuSelector.Wallet) {
                 if(loaderWithdrawal.visible) {
-                    notificationToolTip.showMessage("Transaction " + hash_tx + " sent for approval.")
+                    notificationToolTip.showMessage(qsTr("Transaction ") + hash_tx + qsTr(" sent for approval."))
                 } else {
                     loaderWithdrawal.sourceComponent = componentTxStatus
                     loaderWithdrawal.visible = true
                 }
             } else {
-                notificationToolTip.showMessage("Transaction " + hash_tx + " sent for approval.")
+                notificationToolTip.showMessage(qsTr("Transaction ") + hash_tx + qsTr(" sent for approval."))
             }
         }
 
         function onDagTxNotApproved(hash_tx) {
-            if(root.sellected_window === MenuSelector.Wallet) {
+            if(currentPage === MenuSelector.Wallet) {
                 if(loaderWithdrawal.visible) {
-                    notificationToolTip.showMessage("Transaction " + hash_tx + " has not approval.")
+                    notificationToolTip.showMessage(qsTr("Transaction ") + hash_tx + qsTr(" has not approval."))
                 } else {
                     loaderWithdrawal.sourceComponent = componentTxStatusFailed
                     loaderWithdrawal.visible = true
                 }
             } else {
-                notificationToolTip.showMessage("Transaction " + hash_tx + " has not approval.")
+                notificationToolTip.showMessage(qsTr("Transaction ") + hash_tx + qsTr(" has not approval."))
             }
         }
     }
@@ -2690,7 +2686,7 @@ RaccoonPage {
         target: loaderWithdrawal.item
 
         function onNext() {
-            notificationToolTip.showMessage("Transaction sent for approval.")
+            notificationToolTip.showMessage(qsTr("Transaction sent for approval."))
         }
 
         function onNextWallet(name_wallet, coin_name) {

@@ -79,8 +79,10 @@ public:
     void    setAuthHash(const QString &newAuthHash);
     void    loadHash();
 
+    Q_INVOKABLE void changeTranslation(const QString &language);
+
     Q_INVOKABLE bool isProfileEmpty() {
-        return AccountController::profilesList().empty();
+        return AccountController::profiles_list().empty();
     }
 
     Q_INVOKABLE QString calcRoccSummary();

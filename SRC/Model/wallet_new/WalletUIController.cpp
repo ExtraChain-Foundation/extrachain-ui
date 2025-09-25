@@ -76,14 +76,14 @@ WalletUIController::WalletUIController(ExtraChainNode *nde, QObject *parent)
     connect(node, &ExtraChainNode::dagSyncProgress, this, &WalletUIController::syncProgress);
     connect(node, &ExtraChainNode::dagControlProgress, this, &WalletUIController::syncProgress);
 
-    connect(node->actorIndex(), &ActorIndex::firstSyncStarted, [this] {
+    connect(node->actor_index(), &ActorIndex::firstSyncStarted, [this] {
         this->m_syncing = true;
         emit syncingChanged();
     });
 
     // connect(node.blockchain(), &Blockchain::syncEnd, this, &WalletUIController::syncEnded);
     connect(node, &ExtraChainNode::dagStatus, this, &WalletUIController::syncStatus);
-    connect(node->accountController(), &AccountController::dogenerated, this, &WalletUIController::startControl);
+    connect(node->account_controller(), &AccountController::dogenerated, this, &WalletUIController::startControl);
     connect(node, &ExtraChainNode::dagTxSended, this, [=, this](SectionId section_id, std::string hash) {
         if (!node->dag()->sended_transactions().contains(hash)) {
             eTemp("[Ttt] No tx {} {}", section_id, hash);
@@ -230,7 +230,7 @@ void WalletUIController::response(ActorId actor_id, TokenId token, int offset, s
         map["amount"]     = tx.transaction.amount().to_string(NumeralBase::Dec).c_str();
         map["is_deposit"] = tx.operation == TransactionAmountOperation::Plus;
         map["typeTx"]     = std::to_underlying(tx.transaction.type());
-        map["hash"]       = QString::fromStdString(tx.transaction.hash());
+        map["hash"]       = QString::fromStdString(tx.hash);
         map["section"]    = QString::fromStdString(tx.transaction.section().to_string());
         auto rows         = dbConnector->select("SELECT status FROM CacheStatusTransactions WHERE hash=\'"
                                         + tx.transaction.hash() + "\'");
@@ -318,7 +318,7 @@ QString WalletUIController::progress() const {
 QVariantMap WalletUIController::calcBalance() {
     QVariantMap    map;
     BigNumberFloat allBalance;
-    const auto     actors = node->accountController()->accounts_ids();
+    const auto     actors = node->account_controller()->accounts_ids();
 
     auto balances = node->dag()->calculate_actors_balance(actors);
 
@@ -344,7 +344,7 @@ QVariantMap WalletUIController::calcBalance() {
 }
 
 void WalletUIController::startControl() {
-    auto &profile  = node->accountController()->currentProfile();
+    auto &profile  = node->account_controller()->current_profile();
     auto  names    = profile.wallet_names();
     auto  balances = calcBalance();
 
@@ -398,21 +398,19 @@ void WalletUIController::newTx(const Transaction &transaction, StatusTrx::Status
         auto    amount = normalizeAmount(QString::fromStdString(transaction.amount().to_string(NumeralBase::Dec)));
 
         if (transaction.type() == TransactionType::Repeatable) {
-            msg = QString("Subscription activated!");
+            msg = tr("Subscription activated!");
         } else if (transaction.type() == TransactionType::Reward
                    || transaction.type() == TransactionType::Conversion) {
-            msg = QString("You have received %1 mining reward coins").arg(amount);
+            msg = tr("You have received %1 mining reward coins").arg(amount);
             emit notificationTx(transaction, Notification::NotifyType::Reward);
         } else if (actor_id == transaction.receiver()) {
-            msg = QString("You have received %1 coins from user %2")
-                      .arg(amount)
-                      .arg(transaction.sender().toQString());
+            msg = tr("You have received %1 coins from user %2").arg(amount).arg(transaction.sender().toQString());
             emit notificationTx(transaction, Notification::NotifyType::Deposit);
         } else if (actor_id == transaction.sender()) {
-            msg = QString("You have sent %1 coins to user %2").arg(amount).arg(transaction.receiver().toQString());
+            msg = tr("You have sent %1 coins to user %2").arg(amount).arg(transaction.receiver().toQString());
             emit notificationTx(transaction, Notification::NotifyType::Withdrawal);
         } else if (transaction.receiver() == ActorId()) {
-            msg = QString("You have received %1 coins").arg(amount);
+            msg = tr("You have received %1 coins").arg(amount);
             emit notificationTx(transaction, Notification::NotifyType::Deposit);
         }
 

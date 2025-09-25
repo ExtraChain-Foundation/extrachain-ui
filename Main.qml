@@ -31,17 +31,15 @@ ApplicationWindow {
     Material.theme: appSettings.isDarkTheme ? Material.Dark : Material.Light
     onHeightChanged: console.log("h:", height)
 
-    property int sellected_window: isMessenger ? MenuSelector.Messenger : MenuSelector.Dfs
+    property int currentPage: isMessenger ? MenuSelector.Messenger : MenuSelector.Wallet
     property int onboarding_current_page: Onboarding.Wallet_Access
-    onSellected_windowChanged: {
-        if(loader_Item.item.subscription_page.visible) {
-            loader_Item.item.subscription_page.visible = false
-        }
+    onCurrentPageChanged: {
+        console.log("current_page", currentPage)
     }    
 
     property alias appSettings: appSettings
     property bool isMobile: ios_platform || (android_platform && !isTablet) || root.width < 450
-    property bool isDesktop: ["windows", "linux", "osx", "macos"].includes(Qt.platform.os)
+    property bool isDesktop: ["windows", "linux", "osx", "macos"].includes(Qt.platform.os) && !isMobile
     property bool ios_platform: Qt.platform.os === "ios"
     property bool android_platform: Qt.platform.os === "android"
     property int keyboardHeight: ios_platform  ? 0 : Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio
@@ -68,7 +66,7 @@ ApplicationWindow {
     }
 
     onIsMobileChanged: {
-        if (!isMobile && editWalletPopup.visible) {
+        if (isDesktop && editWalletPopup.visible) {
             editWalletPopup.visible = false
         }
 
@@ -80,18 +78,18 @@ ApplicationWindow {
             notificationPopup.close()
         }
 
-        if (!isMobile && sellected_window === MenuSelector.Notification) {
+        if (isDesktop && currentPage === MenuSelector.Notification) {
             notificationPopup.visible = true
         }
 
-        if (!isMobile && sellected_window === MenuSelector.Settings) {
+        if (isDesktop && currentPage === MenuSelector.Settings) {
             settingsPopup.visible = true
         }
     }
 
     property bool forceClose
     onClosing: function(close) {
-        // if (isMobile && sellected_window === MenuSelector.Messenger && messengerPage.swipeView.currentIndex !== 0) {
+        // if (isMobile && currentPage === MenuSelector.Messenger && messengerPage.swipeView.currentIndex !== 0) {
         //     messengerPage.swipeView.currentIndex = 0
         //     close.accepted = false
         //     return
@@ -248,11 +246,6 @@ ApplicationWindow {
         property alias width: root.width
         property alias height: root.height
         property alias visibility: root.visibility
-        property int sellectedWindow: root.sellected_window
-
-        Component.onCompleted: {
-            root.sellected_window = sellectedWindow
-        }
     }
 
     Updater {
@@ -262,7 +255,7 @@ ApplicationWindow {
     RaccoonMessageBox {
         id: messageBox
         title: "ExtraChain"
-        info_text: "Are you sure you want to exit?"
+        info_text: qsTr("Are you sure you want to exit?")
         use_check_box: false
 
         onAgree: {
@@ -287,8 +280,8 @@ ApplicationWindow {
     RaccoonOkMessageBox {
         id: messageFromVpnBox
         title: "ExtraChain"
-        info_text: "Access to the required permissions was not granted.<br>
-                    The application cannot continue and will be closed."
+        info_text: qsTr("Access to the required permissions was not granted.<br>
+                    The application cannot continue and will be closed.")
         use_check_box: false
 
         onAgree: {

@@ -37,7 +37,7 @@ ChatModel::ChatModel(VariantModel *parent)
 MessengerController::MessengerController(ExtraChainNode *nde, QObject *parent)
     : QObject(parent)
     , node(nde) {
-    auto         all_actors = node->actorIndex()->allActors();
+    auto         all_actors = node->actor_index()->read_all_actors_ids();
     QVariantList list;
     for (int i = 0; i < all_actors.size(); i++) {
         // if (all_actors.at(i) == node.accountController()->system_actor().id()) {
@@ -50,7 +50,7 @@ MessengerController::MessengerController(ExtraChainNode *nde, QObject *parent)
 
     setUserModel(new UserModel());
     userModel()->appends(list);
-    connect(node->actorIndex(), &ActorIndex::actorSaved, userModel(), &UserModel::newActor);
+    connect(node->actor_index(), &ActorIndex::actorSaved, userModel(), &UserModel::newActor);
 
     setChatListModel(new ChatListModel());
 
@@ -154,7 +154,7 @@ QVariantMap MessengerController::chatToMap(const Chat::Chat &chat) {
         }
     }
 
-    return { { "myself", node->accountController()->currentProfile().main_id().toQString() },
+    return { { "myself", node->account_controller()->current_profile().main_id().toQString() },
              { "another", chat.chat.peer_id.has_value() ? chat.chat.peer_id->toQString() : "" },
              { "fileActorId", chat.owner_id.toQString() },
              { "fileId", QString::fromStdString(chat.file_id) },
@@ -165,7 +165,7 @@ QVariantMap MessengerController::chatToMap(const Chat::Chat &chat) {
 }
 
 void MessengerController::updateChatListModel() {
-    if (node->accountController()->empty()) {
+    if (node->account_controller()->empty()) {
         return;
     }
 
@@ -267,7 +267,7 @@ void MessengerController::addMessage(const Chat::Message &message) {
     }
 
     auto map = QVariantMap { { "messageId", QString::fromStdString(message.id) },
-                             { "owner", message.actor == node->accountController()->currentProfile().main_id() },
+                             { "owner", message.actor == node->account_controller()->current_profile().main_id() },
                              { "type", message.message.type.has_value() ? int(message.message.type.value()) : 0 },
                              { "timestamp", qulonglong(message.timestamp) },
                              { "message", mapMessage } };
@@ -390,7 +390,7 @@ bool MessengerController::createChat(QString actorWith) {
 
     auto chat_manager = node->chat_manager();
 
-    auto system_id = node->accountController()->currentProfile().system_id();
+    auto system_id = node->account_controller()->current_profile().system_id();
     if (actorWith.toStdString() == system_id.to_string()) {
         qDebug() << "[Chat] Creation: actorWith equal system_id";
         return false;
@@ -402,7 +402,7 @@ bool MessengerController::createChat(QString actorWith) {
     }
 
     auto actor_with = ActorId(actorWith.toStdString());
-    auto main_id    = node->accountController()->currentProfile().main_id();
+    auto main_id    = node->account_controller()->current_profile().main_id();
     auto chat =
         (actor_with == main_id) ? chat_manager->create_myself() : chat_manager->create_dialogue(actor_with);
 
@@ -668,7 +668,7 @@ void MessengerController::addFiles(const QStringList &files,
         return;
 
     const QString &file   = files.first();
-    auto           mainId = node->accountController()->currentProfile().main_id();
+    auto           mainId = node->account_controller()->current_profile().main_id();
     auto           chat   = this->node->chat_manager()->get_chat(ActorId(_current_owner_id.toStdString()),
                                                      _current_file_id.toStdString());
 
@@ -822,7 +822,6 @@ void MessengerController::getIndexByMessageId(const QString &messageId) {
 static const char *characters =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~";
 
-// Цілочисельне піднесення до степеня
 static int intPow(int base, int exp) {
     int result = 1;
     while (exp-- > 0)

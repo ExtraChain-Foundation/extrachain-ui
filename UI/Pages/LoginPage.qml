@@ -175,7 +175,7 @@ RaccoonPage {
         target: uiController
         function onLogout() {
             loginPage.visible = true
-            root.sellected_window = MenuSelector.Vpn
+            currentPage = MenuSelector.Vpn
         }
     }
 
@@ -1604,9 +1604,9 @@ Only use this on a private device you trust."
 
         Image {
             anchors.centerIn: parent
-            height: 58
-            width: 86
-            source: "qrc:/images/UI/Images/raccoonline.png"
+            height: 128
+            width: 128
+            source: "qrc:/UI/Images/extrachain_lite.png"
             antialiasing: true
         }
     }

@@ -18,7 +18,7 @@ public:
 
         outputFile = new QFile(saveFilePath);
         if (!outputFile->open(QIODevice::WriteOnly)) {
-            emit error(tr("Невозможно создать файл для сохранения"));
+            emit error(tr("Can't create file"));
             delete outputFile;
             outputFile = nullptr;
             return;

@@ -199,7 +199,7 @@ inline int runRaccoon(int argc, char *argv[]) {
   }
 #endif
 
-  app.setWindowIcon(QIcon(":/images/UI/Images/raccoon_logo.png"));
+  app.setWindowIcon(QIcon(":/UI/Images/extrachain_lite.png"));
   qmlRegisterSingletonType(QUrl("qrc:/UI/Colors.qml"), "ExtraChain", 1, 0,
                            "Colors");
   qmlRegisterSingletonType(QUrl("qrc:/UI/UiSettings.qml"), "ExtraChain", 1, 0,
@@ -267,7 +267,7 @@ inline int runRaccoon(int argc, char *argv[]) {
   bool appOpened = false;
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-  static QLockFile lockFile(".RaccoonLine.lock");
+  static QLockFile lockFile(".ExtraChain.lock");
   if (!lockFile.tryLock(100)) {
     appOpened = true;
   }
@@ -370,13 +370,12 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   const char *arch = "Unknown";
 #endif
 
-  eInfo("RaccoonLine VPN version: {} ({})", raccoon_version, arch);
   eInfo("ExtraChain Core version: {}\n", extrachain_version);
 
   QCoreApplication app(argc, argv);
-  app.setApplicationName("RaccoonLine Console");
-  app.setOrganizationName("RACCOON TECHNOLOGY LTD");
-  app.setOrganizationDomain("https://raccoonline.com/");
+  app.setApplicationName("ExtraChain Console");
+  app.setOrganizationName("EXTRACHAIN TECHNOLOGY LTD");
+  app.setOrganizationDomain("https://extrachain.com/");
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
   // RaccoonLinux::processInterface();
@@ -396,7 +395,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   registerMetaTypes();
 
   QCommandLineParser parser;
-  parser.setApplicationDescription("Raccoon Console Client");
+  parser.setApplicationDescription("Extrachain Console Client");
   parser.addHelpOption();
   parser.addVersionOption();
 
@@ -553,7 +552,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
 
   auto filesToDelete = std::make_shared<QStringList>();
   ExtraChainNodeWrapper *nodeWrapper =
-      new ExtraChainNodeWrapper(&app, false, false, true);
+      new ExtraChainNodeWrapper(&app, false, true);
   nodeWrapper->Init();
 
   auto dagModeStr = parser.value(dagMode);
@@ -693,7 +692,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   (tx.token() != ActorId("468faf2f1be6504a9a26f7f027f7e43380b0d77d")) continue;
 
               for (const ActorId& accountId :
-  nodeWrapper->node->accountController()->accountsIds()) { if (tx.receiver() ==
+  nodeWrapper->node->account_controller()->accountsIds()) { if (tx.receiver() ==
   accountId) eInfo("Received {} ROCC",
   tx.amount().to_string(NumeralBase::Dec).substr(0, 6));
               }
@@ -702,7 +701,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   });
   */
 
-  bool loginResult = nodeWrapper->node->accountController()->count() > 0;
+  bool loginResult = nodeWrapper->node->account_controller()->count() > 0;
   std::string loginHash;
   // AutologinHash autologinHash;
   // if (1AutologinHash::isAvailable() && autologinHash.load())
@@ -717,7 +716,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
     raccoon_actor =
         raccoon_actor.fromJson(QByteArray::fromStdString(predefine_raccoon_id));
 
-    nodeWrapper->node->accountController()->create_profile(
+    nodeWrapper->node->account_controller()->create_profile(
         loginHash, ActorType::User, raccoon_actor);
     eInfo("Created profile with your login and password");
     loginResult = true;
@@ -758,14 +757,14 @@ inline int runConsoleRaccoon(int argc, char *argv[],
         }
 
         bool validate =
-            nodeWrapper->node->accountController()->validate_mnemonic(
+            nodeWrapper->node->account_controller()->validate_mnemonic(
                 importData.toStdString());
         if (!validate) {
           eInfo("Incorrect phrase");
         }
 
         eInfo("Importing seed phrase...");
-        success = nodeWrapper->node->accountController()->import_seed_phrase(
+        success = nodeWrapper->node->account_controller()->import_seed_phrase(
             login.toStdString(), password.toStdString(),
             importData.toStdString());
 
@@ -779,7 +778,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
         }
 
         eInfo("Importing hex seed...");
-        success = nodeWrapper->node->accountController()->import_seed_hex(
+        success = nodeWrapper->node->account_controller()->import_seed_hex(
             login.toStdString(), password.toStdString(),
             importData.toStdString());
 
@@ -798,11 +797,11 @@ inline int runConsoleRaccoon(int argc, char *argv[],
 
     password.clear();
 
-    if (nodeWrapper->node->accountController()->count() == 0) {
+    if (nodeWrapper->node->account_controller()->count() == 0) {
       loginResult = nodeWrapper->node->login(loginHash).has_value();
       if (!loginResult) {
         if (!parser.isSet(registration) &&
-            AccountController::profilesList().size() != 0) {
+            AccountController::profiles_list().size() != 0) {
           eInfo("Error: Incorrect login or password");
           std::exit(-1);
         } else {
@@ -816,15 +815,16 @@ inline int runConsoleRaccoon(int argc, char *argv[],
             std::exit(0);
           }
 #endif
-          nodeWrapper->node->accountController()->create_profile(
+          nodeWrapper->node->account_controller()->create_profile(
               loginHash, ActorType::User);
 
           fmt::println(
               "Mnemonic phrase: {}",
-              fmt::join(nodeWrapper->node->accountController()->seed_mnemonic(),
-                        " "));
+              fmt::join(
+                  nodeWrapper->node->account_controller()->seed_mnemonic(),
+                  " "));
           fmt::println("Hex (encrypted with login and password): {}",
-                       nodeWrapper->node->accountController()->seed_hex());
+                       nodeWrapper->node->account_controller()->seed_hex());
 
           loginResult = true;
         }
@@ -842,40 +842,11 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   if (loginResult) {
     auto network = nodeWrapper->node->network();
 
-#ifndef RACCOON_DISABLE_VPN
-    network->setNetworkVPNHash();
-    auto hash = network->getNetworkVPNHash();
-
-    auto vpnModeStr = parser.value(vpnMode);
-
 #ifdef RACCOON_CLIENT_CONSOLE
     auto permission =
         (vpnModeStr == "exit-point")
             ? raccoon::vpn::VPNManager::VPNPermission::PROXY_SERVER
             : raccoon::vpn::VPNManager::VPNPermission::PROXY;
-#else
-    auto permission =
-        (vpnModeStr == "proxy")
-            ? raccoon::vpn::VPNManager::VPNPermission::PROXY
-            : raccoon::vpn::VPNManager::VPNPermission::PROXY_SERVER;
-#endif
-
-    if (!Utils::is_external_ip(network->localIp()) /*&& not_upnp*/) {
-      QString mode_name =
-          (permission == raccoon::vpn::VPNManager::VPNPermission::PROXY_SERVER)
-              ? "server"
-              : "proxy";
-      permission = raccoon::vpn::VPNManager::VPNPermission::CLIENT;
-      eInfo("Warning: Private IP {} detected, VPN {} disabled (requires public "
-            "IP)",
-            network->localIp(), mode_name);
-    } else {
-#ifdef RACCOON_CLIENT_CONSOLE
-      if (vpnModeStr == "exit-point") {
-        eInfo("Enable VPN Exit Point");
-      }
-#endif
-    }
 #endif
 
     if (parser.isSet(connectToNode)) {
@@ -885,10 +856,10 @@ inline int runConsoleRaccoon(int argc, char *argv[],
     if (parser.isSet(showPhraseOption) || parser.isSet(showHexOption)) {
       fmt::println(
           "Mnemonic phrase: {}",
-          fmt::join(nodeWrapper->node->accountController()->seed_mnemonic(),
+          fmt::join(nodeWrapper->node->account_controller()->seed_mnemonic(),
                     " "));
       fmt::println("Hex (encrypted with login and password): {}",
-                   nodeWrapper->node->accountController()->seed_hex());
+                   nodeWrapper->node->account_controller()->seed_hex());
     }
 
     network->connect_network();
@@ -909,11 +880,11 @@ inline int runConsoleRaccoon(int argc, char *argv[],
           create = true;
 
           QTimer::singleShot(1000, [&nodeWrapper] {
-            auto owner = nodeWrapper->node->accountController()
-                             ->currentProfile()
+            auto owner = nodeWrapper->node->account_controller()
+                             ->current_profile()
                              .system()
                              .id();
-            auto tokenManager = nodeWrapper->node->tokenManager();
+            auto tokenManager = nodeWrapper->node->token_manager();
 
             auto tokenDataExpected = tokenManager->create_token(
                 owner, Token::rocc_token, Token::rocc_symbol,
@@ -976,7 +947,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
           return;
         }
 
-        auto actors = nodeWrapper->node->accountController()->accounts_ids();
+        auto actors = nodeWrapper->node->account_controller()->accounts_ids();
 
         TransactionAmountOperation operation = TransactionAmountOperation::Plus;
         for (const auto &actor : actors) {

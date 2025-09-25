@@ -14,12 +14,18 @@
 #include "raccoon_version.h"
 #include "utils/exc_utils.h"
 
-#ifndef RACCOON_CLIENT_CONSOLE
+#ifndef RACCOON_CONSOLE
 #include "SRC/ClientController.h"
 #endif
 
 #if !defined(Q_OS_DEBUG) && defined(Q_OS_MACOS)
 #include "MacOs/MacosUtils.h"
+#endif
+
+#ifdef Q_OS_ANDROID
+#include <QStandardPaths>
+
+#include "SRC/platforms/android/androidutils.h"
 #endif
 
 Updater::Updater(ClientController *clientController)
@@ -98,9 +104,9 @@ void Updater::downloadUpdate(const std::string &version) {
 
   const char *appName =
 #ifdef RACCOON_CLIENT_CONSOLE
-      "ExtraChain_Console";
+      "RaccoonLine_Console";
 #else
-      "ExtraChain";
+      "Extrachain";
 #endif
 
   QString url =
@@ -114,7 +120,14 @@ void Updater::downloadUpdate(const std::string &version) {
 #else
   this->downloadFile(url, "RaccoonLine_Update.tar.gz");
 #endif
+#endif
 
+#ifdef Q_OS_ANDROID
+  QString apkFile = QString("android-build-RaccoonLine-release-signed-%1.apk")
+                        .arg(QString::fromStdString(version));
+  QString url = QString("https://raccoonline.com/api/assets/apps/") + apkFile;
+
+  this->downloadFile(url, apkFile);
 #endif
 }
 
@@ -129,12 +142,7 @@ void Updater::update() {
   return;
 #endif
 
-#ifdef Q_OS_WINDOWS
-  eInfo("[Updater] Downloading update...");
-  this->downloadUpdate(onlineVersion);
-#endif
-
-#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX) || defined(Q_OS_ANDROID)
   eInfo("[Updater] Downloading update...");
   this->downloadUpdate(onlineVersion);
 #endif
@@ -159,7 +167,7 @@ void Updater::install() {
     QStringList tarArgs;
     tarArgs << "-xzf" << updaterPath;
 
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef RACCOON_CONSOLE
     tarArgs << "-C" << binPath;
 #else
     tarArgs << "-C" << QDir(binPath).absoluteFilePath("..");
@@ -173,6 +181,12 @@ void Updater::install() {
     eInfo("Done. Please, restart");
     QFile::remove(updaterPath);
     std::exit(0);
+  }
+#endif
+
+#ifdef Q_OS_ANDROID
+  if (!savedApkPath.isEmpty() && QFile::exists(savedApkPath)) {
+    AndroidUtils::installApk(savedApkPath);
   }
 #endif
 }
@@ -211,17 +225,24 @@ void Updater::patchUpdate() {
 
 void Updater::downloadFile(const QString &url, const QString &fileName) {
   QObject *helper = new QObject();
-
   QNetworkRequest request(url);
   QNetworkReply *reply = networkManager->get(request);
 
+#ifdef Q_OS_ANDROID
+  QString androidPath =
+      QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  QDir().mkpath(androidPath);
+  savedApkPath = androidPath + "/" + fileName;
+  QFile *file = new QFile(savedApkPath);
+#else
   QFile *file = new QFile(fileName);
+#endif
+
   if (!file->open(QIODevice::WriteOnly)) {
     reply->deleteLater();
     delete file;
     delete helper;
-
-#ifndef RACCOON_CLIENT_CONSOLE
+#ifndef RACCOON_CONSOLE
     emit clientController->updaterDownloadFinished(false);
 #endif
     return;
@@ -229,33 +250,32 @@ void Updater::downloadFile(const QString &url, const QString &fileName) {
 
   ClientController *controller = clientController;
 
-#ifndef RACCOON_CLIENT_CONSOLE
+#ifndef RACCOON_CONSOLE
   QObject::connect(reply, &QNetworkReply::downloadProgress, controller,
                    &ClientController::updaterDownloadProgress);
 #endif
 
-  QObject::connect(reply, &QNetworkReply::readyRead, helper, [reply, file]() {
+  QObject::connect(reply, &QNetworkReply::readyRead, helper, [=]() {
     file->write(reply->readAll());
     file->flush();
   });
 
-  QObject::connect(reply, &QNetworkReply::finished, helper,
-                   [reply, file, controller, helper]() {
-                     bool success = (reply->error() == QNetworkReply::NoError);
+  QObject::connect(reply, &QNetworkReply::finished, helper, [=]() {
+    bool success = (reply->error() == QNetworkReply::NoError);
 
-                     if (success) {
-                       file->write(reply->readAll());
-                     }
+    if (success) {
+      file->write(reply->readAll());
+    }
 
-                     file->close();
-                     delete file;
-                     reply->deleteLater();
-                     delete helper;
+    file->close();
+    delete file;
+    reply->deleteLater();
+    delete helper;
 
-#ifndef RACCOON_CLIENT_CONSOLE
-                     emit controller->updaterDownloadFinished(success);
+#ifndef RACCOON_CONSOLE
+    emit controller->updaterDownloadFinished(success);
 #endif
-                   });
+  });
 }
 
 bool Updater::downloadFileSync(const QString &url, const QString &fileName) {

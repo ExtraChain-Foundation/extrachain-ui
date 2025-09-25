@@ -10,9 +10,9 @@ import "../"
 
 Rectangle {
     id: notificationPage
-    visible: root.sellected_window === MenuSelector.Notification && isMobile
+    visible: currentPage === MenuSelector.Notification && isMobile
     anchors.fill: parent
-    color: Colors.notificationPopup.background
+    color: "transparent"//Colors.notificationPopup.background
 
     property int detail_type
     property string detail_amount
@@ -28,7 +28,7 @@ Rectangle {
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         height: visible ? 56 : 0
-        visible: isMobile
+        visible: false//isMobile
 
         Image {
             Layout.preferredHeight: 24
@@ -68,33 +68,33 @@ Rectangle {
                         text: IcoMoon.bell
                         color: Colors.notification.icon
                         font.pixelSize: 22
-                        opacity: parent.pressed ? 0.8 : 1.0
+                        opacity: maNotifications.pressed ? 0.8 : 1.0
                     }
                 }
 
                 Connections {
                     target: root
-                    onSellected_windowChanged: {
-                        if(root.sellected_window !== MenuSelector.Notification) {
-                            maNotifications.saved_previous_window = root.sellected_window
+                    onCurrentPageChanged: {
+                        if(currentPage !== MenuSelector.Notification) {
+                            maNotifications.saved_previous_window = currentPage
                         }
                     }
                 }
 
                 onClicked: {
-                    if(root.sellected_window === MenuSelector.Notification) {
+                    if(currentPage === MenuSelector.Notification) {
                         if(saved_previous_window === MenuSelector.Vpn)
-                            root.sellected_window = MenuSelector.Vpn
+                            currentPage = MenuSelector.Vpn
                         else if(saved_previous_window === MenuSelector.Wallet)
-                            root.sellected_window = MenuSelector.Wallet
+                            currentPage = MenuSelector.Wallet
                         else if(saved_previous_window === MenuSelector.Locations)
-                            root.sellected_window = MenuSelector.Locations
+                            currentPage = MenuSelector.Locations
                         else if(saved_previous_window === MenuSelector.Notification)
-                            root.sellected_window = MenuSelector.Notification
+                            currentPage = MenuSelector.Notification
                         else if(saved_previous_window === MenuSelector.Dfs)
-                            root.sellected_window = MenuSelector.Dfs
+                            currentPage = MenuSelector.Dfs
                         else
-                            root.sellected_window = MenuSelector.Vpn
+                            currentPage = MenuSelector.Vpn
                     }
                 }
             }
@@ -121,7 +121,7 @@ Rectangle {
                 }
 
                 onClicked: {
-                    root.sellected_window = MenuSelector.Settings
+                    currentPage = MenuSelector.Settings
                 }
             }
         }
@@ -134,6 +134,7 @@ Rectangle {
         anchors.leftMargin: isMobile ? 10 : 18
         anchors.rightMargin: isMobile ? 10 : 18
         initialItem: mainView
+        clip: true
     }
 
     Component {
@@ -152,7 +153,7 @@ Rectangle {
                 icon: IcoMoon.close
                 koef_icon_size: 1.0
                 rotation: 90
-                visible: !isMobile
+                visible: isDesktop
 
                 onClicked: {
                     notificationPopup.close()
@@ -164,27 +165,9 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.rightMargin: isMobile ? 10 : 18
                 Layout.leftMargin: isMobile ? 10 : 18
-
                 Layout.preferredHeight: 24
                 Layout.maximumHeight: 24
-
-                Item {
-                    Layout.preferredHeight: 24
-                    Layout.preferredWidth: 24
-                    visible: isMobile
-
-                    SquareButton {
-                        anchors.fill: parent
-                        style: Colors.wallet_withdraw_page.button_back_style
-                        icon: IcoMoon.down
-                        koef_icon_size: 1.0
-                        rotation: 90
-
-                        onClicked: {
-                            maNotifications.clicked(maNotifications)
-                        }
-                    }
-                }
+                visible: isDesktop
 
                 DmsansText {
                     Layout.fillWidth: true
@@ -203,9 +186,9 @@ Rectangle {
             RaccoonTextField {
                 id: searchTf
                 Layout.fillWidth: true
-                Layout.leftMargin: isMobile ? 10 : 18
-                Layout.rightMargin: isMobile ? 10 : 18
-                Layout.preferredHeight: isMobile ? 48 : 40
+                Layout.leftMargin: isMobile ? 4 : 10
+                Layout.rightMargin: isMobile ? 4 : 10
+                Layout.preferredHeight: 40
                 placeholderText: "Search"
                 useSearchIcon: true
                 visible: false//listNotifications.model.count > 0
@@ -252,7 +235,7 @@ Rectangle {
                 model: notificationController
                 clip: true
                 visible: count > 0
-                spacing: 10
+                spacing: 2
                 delegate: Item {
                     id: delegate
                     width: ListView.view.width
@@ -326,7 +309,7 @@ Rectangle {
                                     DmsansText {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: paintedHeight
-                                        color: Colors.grape_gray_color
+                                        color: Colors.notification.time
                                         text: (() => {
                                                    switch(model.type) {
                                                        case 0: return "Deposited"

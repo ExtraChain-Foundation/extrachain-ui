@@ -52,7 +52,7 @@ void ConsoleCommandProcessor::processInputCommand(const std::string& input) {
 }
 
 void ConsoleCommandProcessor::showWalletsList(const std::string& input) {
-    const auto& actors   = node.accountController()->accounts_ids();
+    const auto& actors   = node.account_controller()->accounts_ids();
     const auto& balances = node.dag()->calculate_actors_balance(actors);
     if (balances.empty()) {
         for (const auto& actor : actors) {
@@ -111,7 +111,7 @@ void ConsoleCommandProcessor::sendDfsAdd(const std::string& input) {
     const std::string& file_path = arguments.at(0);
     const std::string& file_name = getFileName(file_path);
 
-    auto mainId       = node.accountController()->currentProfile().main_id();
+    auto mainId       = node.account_controller()->current_profile().main_id();
     auto dataSecurity = Dfs::DataSecuritySelf { .my_actor = mainId };
 
     const auto& result =
@@ -132,7 +132,7 @@ void ConsoleCommandProcessor::sendDfsRemove(const std::string& input) {
         return;
     }
     const std::string& file_id = arguments.at(0);
-    const auto& result = node.dfs()->remove_stored_file(node.accountController()->system_actor().id(), file_id);
+    const auto& result = node.dfs()->remove_stored_file(node.account_controller()->system_actor().id(), file_id);
 
     if (!result) {
         eInfo("Failed to remove file: {}", file_id);
@@ -146,7 +146,7 @@ void ConsoleCommandProcessor::sendWalletTransfer(const std::string& input) {
     if (arguments.empty()) {
         return;
     }
-    const auto& result = node.createTransactionFrom(ActorId { arguments.at(0) },
+    const auto& result = node.create_transaction_from(ActorId { arguments.at(0) },
                                                     ActorId { arguments.at(1) },
                                                     BigNumberFloat { arguments.at(2) },
                                                     ActorId("468faf2f1be6504a9a26f7f027f7e43380b0d77d"));
@@ -163,7 +163,7 @@ void ConsoleCommandProcessor::sendWalletAdd(const std::string& input) {
     if (input == "wallet add") // Check if Wallet Name was NOT provided
     {
         const auto& result =
-            node.accountController()->createWallet(node.accountController()->system_actor().id(), "");
+            node.account_controller()->create_wallet(node.account_controller()->system_actor().id(), "");
         eInfo("Wallet created successfully.\nAddress: {}", result.id().to_string());
         return;
     }
@@ -173,7 +173,7 @@ void ConsoleCommandProcessor::sendWalletAdd(const std::string& input) {
         return;
     }
     const auto& result =
-        node.accountController()->createWallet(node.accountController()->system_actor().id(), arguments.at(0));
+        node.account_controller()->create_wallet(node.account_controller()->system_actor().id(), arguments.at(0));
     eInfo("Wallet created successfully.\nAddress: {}\nName: {}", result.id().to_string(), arguments.at(0));
 }
 
@@ -183,7 +183,7 @@ void ConsoleCommandProcessor::sendWalletRename(const std::string& input) {
         return;
     }
 
-    bool res = node.accountController()->rename_wallet(ActorId {}, ActorId { arguments.at(0) }, arguments.at(1));
+    bool res = node.account_controller()->rename_wallet(ActorId {}, ActorId { arguments.at(0) }, arguments.at(1));
 
     if (res) {
         eInfo("Wallet renamed successfully");
@@ -220,21 +220,21 @@ void ConsoleCommandProcessor::exportProfileFile(const std::string& input) {
 }
 
 void ConsoleCommandProcessor::exportProfilePhrase(const std::string& input) {
-    if (node.accountController()->profile_type() == ProfileType::Old) {
+    if (node.account_controller()->profile_type() == ProfileType::Old) {
         eInfo("Please, use export file <file>");
         return;
     }
 
-    eInfo("Mnemonic phrase: {}", fmt::join(node.accountController()->seed_mnemonic(), " "));
+    eInfo("Mnemonic phrase: {}", fmt::join(node.account_controller()->seed_mnemonic(), " "));
 }
 
 void ConsoleCommandProcessor::exportProfileHex(const std::string& input) {
-    if (node.accountController()->profile_type() == ProfileType::Old) {
+    if (node.account_controller()->profile_type() == ProfileType::Old) {
         eInfo("Please, use export file <file>");
         return;
     }
 
-    eInfo("Hex (encrypted with login and password): {}", node.accountController()->seed_hex());
+    eInfo("Hex (encrypted with login and password): {}", node.account_controller()->seed_hex());
 }
 
 std::vector<std::string> ConsoleCommandProcessor::getExpectedArgument(const std::string& input,

@@ -14,7 +14,7 @@ Rectangle {
     border.color: Colors.notificationPopup.border
     visible: false
     anchors.horizontalCenter: parent.horizontalCenter
-    y: !isMobile ? 0 : (root.height - 108 - height - (android_platform ? navigationHeight : 0))
+    y: isDesktop ? 0 : (root.height - 108 - height - (android_platform ? navigationHeight : 0))
 
 
     property string message: ""
@@ -118,7 +118,7 @@ Rectangle {
         target: root
 
         function onSecurityStateChanged() {
-            const message = "Stealth mode has been " + (securityState ? "enabled." : "disabled.")
+            const message = qsTr("Stealth mode has been ") + (securityState ? qsTr("enabled.") : qsTr("disabled."))
             showMessage(message)
         }
     }
@@ -127,8 +127,8 @@ Rectangle {
         target: filePicker
 
         function onCopied() {
-            notificationToolTip.message = "File exported"
-            showMessage("File exported", Tooltip.Withdraw)
+            notificationToolTip.message = qsTr("File exported")
+            showMessage(qsTr("File exported"), Tooltip.Withdraw)
         }
 
         function onMessage(message) {

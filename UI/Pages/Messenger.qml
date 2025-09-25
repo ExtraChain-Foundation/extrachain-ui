@@ -16,7 +16,7 @@ import "../Delegates"
 Item {
     id: messengerRoot
     anchors.fill: parent
-    visible: root.sellected_window === MenuSelector.Messenger
+    visible: root.currentPage === MenuSelector.Messenger
 
     readonly property string _time_format: "hh:mm"
     readonly property int _list_delegate_row_left_margin: 5
@@ -71,7 +71,7 @@ Item {
             hideMenu()
         }
 
-        function onSellected_windowChanged() {
+        function onCurrentPageChanged() {
             hideMenu()
         }
     }
@@ -1630,7 +1630,7 @@ Item {
         use_check_box: false
 
         onAgree: {
-            root.sellected_window = MenuSelector.Settings
+            currentPage = MenuSelector.Settings
             settingsPage.openUsernamePage()
         }
     }

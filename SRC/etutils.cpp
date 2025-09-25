@@ -293,7 +293,7 @@ Profile EtUtils::makeProfile() {
 }
 
 int EtUtils::privateProfileExist() {
-    return AccountController::profilesList().size() != 0;
+    return AccountController::profiles_list().size() != 0;
 }
 
 QString EtUtils::country(int id) {

@@ -108,7 +108,7 @@ QList<float> StatusBarHelper::getSystemWindowInsets() {
 
         env->ReleaseFloatArrayElements(array, values, 0);
     } else {
-        // Fallback для старых версий
+        // Fallback for old versions
         insets.append(0.0f);                     // left
         insets.append(getStatusBarHeight());     // top
         insets.append(0.0f);                     // right

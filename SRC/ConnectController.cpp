@@ -58,8 +58,8 @@ void ConnectController::setVPNConnectorManager(VPNConnectorManager *vpnConnector
         // _chainList->removeLastChainItem();
         // _chainList->removeLastChainItem();
         _chainList->removeToOne();
-        setCurrentConnectedIpAddress(node->getInitPublicIPAndCountry().first);
-        setCurrentCountry(node->getInitPublicIPAndCountry().second);
+        setCurrentConnectedIpAddress(node->init_public_ip_and_country().first);
+        setCurrentCountry(node->init_public_ip_and_country().second);
         emit chainListChanged();
         setConnectTextButton("Quick connect");
 
@@ -92,9 +92,9 @@ void ConnectController::sendVPNCommand(bool is_random) {
     outputMsg.countryEndpoint = is_random ? "RANDOM" : m_currentCountrySelected.toStdString();
     outputMsg.uuid            = QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString();
     outputMsg.proxyCounter    = 1;
-    outputMsg.publicIP        = node->getInitPublicIPAndCountry().first.toStdString();
-    outputMsg.networkIdentifiersToIgnore.emplace(node->accountController()->system_actor().id().to_string());
-    outputMsg.senderID = node->accountController()->system_actor().id().to_string();
+    outputMsg.publicIP        = node->init_public_ip_and_country().first.toStdString();
+    outputMsg.networkIdentifiersToIgnore.emplace(node->account_controller()->system_actor().id().to_string());
+    outputMsg.senderID = node->account_controller()->system_actor().id().to_string();
 
     {
         auto tryingConnectionAllSendersLocked = *m_vpnConnectorManager->tryingConnectionAllSenders;
@@ -104,7 +104,7 @@ void ConnectController::sendVPNCommand(bool is_random) {
     node->vpnConfigStorage.vpnIsClient = true;
     eInfo("ConnectController::connectToVpnServer, send VPN Handshake for \"{}\" with senderID: {}",
           outputMsg.countryEndpoint,
-          node->accountController()->system_actor().id().to_string());
+          node->account_controller()->system_actor().id().to_string());
     eInfo("[VPN] network identifier: {}", node->network_identifier());
 
     CustomMessage customMessage;
@@ -162,8 +162,8 @@ void ConnectController::disconnectVpnOnlyUI() {
     // _chainList->removeLastChainItem();
     // _chainList->removeLastChainItem();
     _chainList->removeToOne();
-    setCurrentConnectedIpAddress(node->getInitPublicIPAndCountry().first);
-    setCurrentCountry(node->getInitPublicIPAndCountry().second);
+    setCurrentConnectedIpAddress(node->init_public_ip_and_country().first);
+    setCurrentCountry(node->init_public_ip_and_country().second);
     emit chainListChanged();
     setConnectTextButton("Quick connect");
 
@@ -321,10 +321,10 @@ void ConnectController::setSignUpStage(bool newSignUpStage) {
 void ConnectController::SetExtrachainNode(ExtraChainNode *node) {
     this->node = node;
 
-    setCurrentConnectedIpAddress(this->node->getInitPublicIPAndCountry().first);
-    setCurrentCountry(this->node->getInitPublicIPAndCountry().second);
-    _chainList->addChainItem(this->node->getInitPublicIPAndCountry().second,
-                             this->node->getInitPublicIPAndCountry().first);
+    setCurrentConnectedIpAddress(this->node->init_public_ip_and_country().first);
+    setCurrentCountry(this->node->init_public_ip_and_country().second);
+    _chainList->addChainItem(this->node->init_public_ip_and_country().second,
+                             this->node->init_public_ip_and_country().first);
     setEnableConnectButton(false);
 }
 

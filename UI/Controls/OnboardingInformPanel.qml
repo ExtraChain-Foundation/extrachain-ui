@@ -91,7 +91,7 @@ Rectangle {
                 width: paintedWidth
                 height: 40
                 color: Colors.onboarding.step_text
-                text: "Step " + onbordindControl.index_page +" of " + onbordindControl.count_steps
+                text: qsTr("Step ") + onbordindControl.index_page +qsTr(" of ") + onbordindControl.count_steps
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 14
                 font.weight: 500
@@ -103,21 +103,21 @@ Rectangle {
                 width: 107
                 height: 40
                 filled: true
-                text: onboarding_current_page !== Onboarding.Wallet_Select ? "Next" : "Complete"
+                text: onboarding_current_page !== Onboarding.Wallet_Select ? qsTr("Next") : qsTr("Complete")
                 _label.font.weight: 500
                 onClicked: {
                     if(onboarding_current_page === Onboarding.Storage_Space -1) {
-                        sellected_window = MenuSelector.Dfs
+                        currentPage = MenuSelector.Dfs
                     }
 
                     if(onboarding_current_page === Onboarding.Wallet_Estimate_Balance -1) {
-                        sellected_window = MenuSelector.Wallet
+                        currentPage = MenuSelector.Wallet
                     }
 
-                    if(text === "Complete") {
+                    if(text === qsTr("Complete")) {
                         onboarding_current_page = Onboarding.Finished
                         appSettings.onboard_finished = true
-                        sellected_window = MenuSelector.Vpn
+                        currentPage = MenuSelector.Vpn
                         appSettings.onboard_current_index_page = onboarding_current_page
                     } else {
                         onboarding_current_page++;
@@ -130,39 +130,39 @@ Rectangle {
 
     function title() {
         switch(onboarding_current_page) {
-        case Onboarding.Vpn_Tab_To_Connect: return "Tap to connect<br>securely to the VPN";
-        case Onboarding.Vpn_Connection_Status: return "Connection Status";
-        case Onboarding.Vpn_Location_Select: return "Location Select<br>& Connection Info";
-        case Onboarding.Mining_Info: return "Mining Info";
-        case Onboarding.Wallet_Access : return "Wallet Access";
-        case Onboarding.Notifications_And_Settings: return "Notifications & Settings";
-        case Onboarding.Storage_Space: return "Your remaining storage space<br>is shown here";
-        case Onboarding.Storage_Upgrade: return "You can increase your<br>storage space here";
-        case Onboarding.Storage_Search: return "Search for files by name";
-        case Onboarding.Storage_View_Options: return "Tap and hold to view options";
-        case Onboarding.Storage_Notification_and_Settings: return "Notifications & Settings"
-        case Onboarding.Wallet_Estimate_Balance: return "Your estimated balance"
-        case Onboarding.Wallet_Transaction_List: return " Your recent transactions<br>appear here"
-        case Onboarding.Wallet_Select: return "Tap to create another wallet<br><br>"
+        case Onboarding.Vpn_Tab_To_Connect: return qsTr("Tap to connect<br>securely to the VPN")
+        case Onboarding.Vpn_Connection_Status: return qsTr("Connection Status")
+        case Onboarding.Vpn_Location_Select: return qsTr("Location Select<br>& Connection Info")
+        case Onboarding.Mining_Info: return qsTr("Mining Info")
+        case Onboarding.Wallet_Access : return qsTr("Wallet Access")
+        case Onboarding.Notifications_And_Settings: return qsTr("Notifications & Settings")
+        case Onboarding.Storage_Space: return qsTr("Your remaining storage space<br>is shown here")
+        case Onboarding.Storage_Upgrade: return qsTr("You can increase your<br>storage space here")
+        case Onboarding.Storage_Search: return qsTr("Search for files by name")
+        case Onboarding.Storage_View_Options: return qsTr("Tap and hold to view options")
+        case Onboarding.Storage_Notification_and_Settings: return qsTr("Notifications & Settings")
+        case Onboarding.Wallet_Estimate_Balance: return qsTr("Your estimated balance")
+        case Onboarding.Wallet_Transaction_List: return qsTr("Your recent transactions<br>appear here")
+        case Onboarding.Wallet_Select: return qsTr("Tap to create another wallet<br><br>")
         }
     }
 
     function description() {
         switch(onboarding_current_page) {
-        case Onboarding.Vpn_Tab_To_Connect: return "Protect your data in one click";
-        case Onboarding.Vpn_Connection_Status: return "Check if you’re securely connected or<br>not. Stay aware of your VPN protection";
-        case Onboarding.Vpn_Location_Select: return "To proceed, please select a location from<br>the list of available options";
-        case Onboarding.Mining_Info: return "Earn tokens while staying connected.<br>Passive rewards with every session";
-        case Onboarding.Wallet_Access : return "Track your balance and earnings.<br>Everything you’ve mined in one place";
-        case Onboarding.Notifications_And_Settings: return "Manage alerts and preferences here.<br>Set it once, enjoy forever.";
-        case Onboarding.Storage_Space: return "";
-        case Onboarding.Storage_Upgrade: return "";
-        case Onboarding.Storage_Search: return "";
-        case Onboarding.Storage_View_Options: return "";
-        case Onboarding.Storage_Notification_and_Settings: return "Manage alerts and preferences here.<br>Set it once, enjoy forever.";
-        case Onboarding.Wallet_Estimate_Balance: return "The value of crypto assets<br>changes dynamically"
+        case Onboarding.Vpn_Tab_To_Connect: return qsTr("Protect your data in one click")
+        case Onboarding.Vpn_Connection_Status: return qsTr("Check if you’re securely connected or<br>not. Stay aware of your VPN protection")
+        case Onboarding.Vpn_Location_Select: return qsTr("To proceed, please select a location from<br>the list of available options")
+        case Onboarding.Mining_Info: return qsTr("Earn tokens while staying connected.<br>Passive rewards with every session")
+        case Onboarding.Wallet_Access : return qsTr("Track your balance and earnings.<br>Everything you’ve mined in one place")
+        case Onboarding.Notifications_And_Settings: return qsTr("Manage alerts and preferences here.<br>Set it once, enjoy forever.")
+        case Onboarding.Storage_Space: return ""
+        case Onboarding.Storage_Upgrade: return ""
+        case Onboarding.Storage_Search: return ""
+        case Onboarding.Storage_View_Options: return ""
+        case Onboarding.Storage_Notification_and_Settings: return qsTr("Manage alerts and preferences here.<br>Set it once, enjoy forever.")
+        case Onboarding.Wallet_Estimate_Balance: return qsTr("The value of crypto assets<br>changes dynamically")
         case Onboarding.Wallet_Transaction_List: return ""
-        case Onboarding.Wallet_Select: return "SOL Balances, Change active<br>wallet"
+        case Onboarding.Wallet_Select: return qsTr("SOL Balances, Change active<br>wallet")
         }
     }
 }

@@ -14,7 +14,8 @@ Rectangle {
 
     anchors.fill: parent
     // color: Colors.background
-    color: Colors.background
+    color: Colors.deposit.background
+    // border.color: Colors.border_color
     border.color: Colors.border_color
     border.width: isMobile ? 0 : 1
     radius: 8
@@ -29,12 +30,12 @@ Rectangle {
     readonly property double percentFee: 0.5
     readonly property string _receive_address: withdrawalToTF.text
     property string availableBalance: Number(walletUIController?.estimatedBalance).toFixed(3)
-    property int _height_element: isMobile ? 60 : 48
+    property int _height_element: 48
     signal next()
 
     Connections {
         target: root
-        function onSellected_windowChanged() {
+        function onCurrentPageChanged() {
             loaderWithdrawal.visible = false
         }
     }
@@ -67,7 +68,7 @@ Rectangle {
             BackButton {
                 Layout.preferredWidth: 174
                 Layout.preferredHeight: 46
-                text: "Back to My wallet"
+                text: qsTr("Back to My wallet")
                 onClickedBack: loaderWithdrawal.visible = false
             }
 
@@ -79,7 +80,7 @@ Rectangle {
                 currentIcon: coinList.get(selectCoinTF.currentIndex).icon
                 currentCoin: coinList.get(selectCoinTF.currentIndex).coin
                 currentIndex: 0
-                placeholderText: "Select coin"
+                placeholderText: qsTr("Select coin")
                 visible: false
             }
 
@@ -87,7 +88,7 @@ Rectangle {
                 id: withdrawalToTF
                 Layout.fillWidth: true
                 Layout.preferredHeight: _height_element
-                placeholderText: "Withdraw to"
+                placeholderText: qsTr("Withdraw to")
                 validator: RegularExpressionValidator {
                     regularExpression: /^[a-zA-Z0-9]{40}$/
                 }
@@ -104,7 +105,7 @@ Rectangle {
                 Layout.preferredHeight: _height_element
                 useButtonMax: true
                 coin_name: current_coin
-                placeholderText: "Amount"
+                placeholderText: qsTr("Amount")
                 validator: RegularExpressionValidator {
                     regularExpression: /^((0|[1-9][0-9]*))([.,][0-9]{1,3})?$/
                 }
@@ -121,7 +122,7 @@ Rectangle {
 
                 onMax: {
                     console.log("pressed max", availableBalance)
-                    text = parseInt(availableBalance)
+                    text = parseFloat(availableBalance)
                 }
             }
 
@@ -151,7 +152,7 @@ Rectangle {
                                 Layout.preferredHeight: 46
                                 color: Colors.def_color_text
                                 verticalAlignment: Text.AlignVCenter
-                                text: "Available"
+                                text: qsTr("Available")
                                 font.pixelSize: 16
                                 font.bold: true
                             }
@@ -179,12 +180,6 @@ Rectangle {
                         width: ListView.view.width
                         height: 46
                         onClicked: {
-                            console.log("clicked")
-                            // if(control.checked) {
-                            //     walletList.currentIndex = -1
-                            //     return;
-                            // }
-
                             walletList.currentIndex = index
                             _wallet_address = wallet_id
                             availableBalance = Number(balance).toFixed(3)
@@ -201,7 +196,6 @@ Rectangle {
                                 Layout.preferredHeight: 20
                                 Layout.preferredWidth: 20
                                 Layout.maximumWidth: 20
-                                unchecked: Colors.wallet_withdraw_page.uncheckBackground
                                 checked: walletList.currentIndex === index
                                 checkable: false
                                 enabled: false
@@ -245,6 +239,7 @@ Rectangle {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight:68
+                radius: 8
                 color: Colors.withdraw.wallet_list_background
 
                 ColumnLayout {
@@ -261,7 +256,7 @@ Rectangle {
                         DmsansText {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 20
-                            text: "Receive amount"
+                            text: qsTr("Receive amount")
                             color: Colors.withdraw.text
                             font.pixelSize: 16
                         }
@@ -270,7 +265,7 @@ Rectangle {
                             id: receiveAmountText
                             Layout.preferredWidth: paintedWidth
                             Layout.preferredHeight: 20
-                            text:  "0 ROCC"
+                            text:  "0 ExC"
                             color: Colors.withdraw.text
                             font.pixelSize: 16
                         }
@@ -283,7 +278,7 @@ Rectangle {
                         DmsansText {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 20
-                            text: "Network fee"
+                            text: qsTr("Network fee")
                             color: Colors.grape_gray_color
                             font.pixelSize: 12
                         }
@@ -291,7 +286,7 @@ Rectangle {
                         DmsansText {
                             Layout.preferredWidth: paintedWidth
                             Layout.preferredHeight: 20
-                            text: "0 ROCC"
+                            text: "0 ExC"
                             color: Colors.grape_gray_color
                             font.pixelSize: 12
                         }
@@ -378,8 +373,6 @@ Rectangle {
                   "<br>_wallet_address: " + _wallet_address +
                   "<br>_receive_address: " + _receive_address
 
-
-        // console.log(str)
         tempDebug.text = str
 
         return  _wallet_address != _receive_address
@@ -394,7 +387,7 @@ Rectangle {
     }
 
     function calcFee(value) {
-        return value;//((value*percentFee)/100)
+        return value;
     }
 
     function calc(value) {
@@ -403,7 +396,7 @@ Rectangle {
 
     function calcReceive() {
         if(_wallet_address === withdrawalToTF.text) {
-            notificationToolTip.showMessage("You’re trying to send funds to the same wallet")
+            notificationToolTip.showMessage(qsTr("You’re trying to send funds to the same wallet"))
             return;
         }
 
@@ -420,7 +413,7 @@ Rectangle {
             receiveAmountText.text = 0
             return 0;
         }
-        var calcReceiveValue = (ab - amount)// - parseFloat(feeTx.text))
+        var calcReceiveValue = (ab - amount)
         if(Number.isNaN(calcReceiveValue)) {
             receiveAmountText.text = 0
             return 0
@@ -428,15 +421,9 @@ Rectangle {
 
         if(calcReceiveValue < 0) {
             receiveAmountText.text = parseFloat(calcReceiveValue.toFixed(3))
-            // receiveAmountTxt.text = "Insufficient funds"
             amountTF.error_border_width = 1
             return
         }
-
-        // if(receiveAmountTxt.text != '') {
-        //     receiveAmountTxt.text = "Receive amount"
-        //     amountTF.error_border_width = 0
-        // }
 
         console.log("[amount]", amount)
         receiveAmountText.text = amount + " ExC"

@@ -35,7 +35,7 @@ endif()
 
 set(QT_COMPONENTS Core Network)
 if(NOT RACCOON_CONSOLE)
-    list(APPEND QT_COMPONENTS Concurrent Quick Core5Compat Gui WebSockets LabsQmlModels Network Svg QuickControls2)
+    list(APPEND QT_COMPONENTS Concurrent Quick Core5Compat Gui WebSockets LabsQmlModels Network Svg QuickControls2 LinguistTools)
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS ${QT_COMPONENTS})
@@ -82,7 +82,7 @@ endif()
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(USE_QZXING ON)
+set(USE_QZXING OFF)
 
 if(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     add_definitions(-DRACCOON_RELEASE_WITH_DEBUG_INFO)
@@ -152,8 +152,6 @@ endif()
 
 # Define source files
 set(BASE_SOURCES
-    SRC/vpn_connector_manager.cpp
-    SRC/vpn_connector_manager.h
     SRC/Helper.h
     SRC/HelperMacOs.h
     SRC/helper_linux.cpp
@@ -287,6 +285,52 @@ if(NOT RACCOON_CONSOLE)
         ${QML_SCAN_OPTION}
     )
 endif()
+
+set(TRANSLATION_SOURCES
+      Main.qml
+      UI/Colors.qml
+      UI/MessageWindow.qml
+      ${UI_PAGES}
+      ${UI_ADDITIONAL_COMPONENTS}
+      ${UI_CONTROLS}
+      ${UI_FONTS}
+      ${PAGES}
+      ${TEXT_COMPONENTS}
+      ${POPUPS}
+      ${CONTROL_COMPONENTS}
+      ${DELEGATE_COMPONENTS}
+      ${OTHER_UI_ELEMENTS}
+      ${UI_WALLET_PAGES}
+      ${UI_WALLET_CREATE}
+  )
+
+qt_add_translations(${PROJECT_NAME}
+  TS_FILES
+      translations/${PROJECT_NAME}_uk.ts
+      translations/${PROJECT_NAME}_ru.ts
+  SOURCES
+      Main.qml
+      UI/Colors.qml
+      UI/MessageWindow.qml
+      ${TRANSLATION_SOURCES}
+  LUPDATE_OPTIONS -no-obsolete
+  LRELEASE_OPTIONS -compress
+  QM_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/translations
+)
+
+if(TARGET ${PROJECT_NAME}_lupdate)
+    set_property(TARGET ${PROJECT_NAME}_lupdate PROPERTY FOLDER "Translations")
+endif()
+
+if(TARGET ${PROJECT_NAME}_lrelease)
+    set_property(TARGET ${PROJECT_NAME}_lrelease PROPERTY FOLDER "Translations")
+endif()
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY QT_EXCLUDE_SOURCES_FROM_TRANSLATION
+    "${CMAKE_SOURCE_DIR}/../extrachain-3rdparty"
+    "${CMAKE_SOURCE_DIR}/build"
+)
+
 
 # Include directories
 if(NOT RACCOON_DISABLE_VPN)
