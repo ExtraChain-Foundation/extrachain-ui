@@ -66,7 +66,7 @@ ColumnLayout {
         Layout.preferredHeight: visible ? 48 : 0
     }
 
-    RaccoonTextField {
+    ExTextField {
         id: exportProfileTf
         Layout.fillWidth: true
         Layout.preferredHeight: visible ? 48 : 0
@@ -154,7 +154,7 @@ ColumnLayout {
         visible: exportDialog.is_new_version
     }
     
-    RaccoonCheckBox {
+    ExCheckBox {
         id: protectCheckBox
         Layout.fillWidth: true
         Layout.preferredHeight: visible ? 50 : 0
@@ -163,7 +163,7 @@ ColumnLayout {
         visible: exportDialog.type === 0 || exportDialog.type === 2
     }
 
-    RaccoonCheckBox {
+    ExCheckBox {
         id: protectCheckBox2
         Layout.fillWidth: true
         Layout.preferredHeight: visible ? 50 : 0
@@ -172,7 +172,7 @@ ColumnLayout {
         visible: exportDialog.type === 0
     }
     
-    RaccoonCheckBox {
+    ExCheckBox {
         id: phase1
         Layout.preferredHeight: 30
         Layout.fillWidth: true
@@ -187,7 +187,7 @@ ColumnLayout {
         visible: exportDialog.is_new_version
     }
     
-    RaccoonCheckBox {
+    ExCheckBox {
         id: phase2
         Layout.preferredHeight: 30
         Layout.fillWidth: true
@@ -255,11 +255,11 @@ ColumnLayout {
         function exportProfile() {
             if (ios_platform) {
                 let nameFile = nameExportedFileName(settingsPage.export_file_name)
-                let data = raccoonController.exportedData()
+                let data = extraChainController.exportedData()
                 filePicker.pickFolderAndSaveFile(nameFile, data)
             } else if (android_platform) {
                 let nameFile = nameExportedFileName(settingsPage.export_file_name)
-                raccoonController.exportProfile("tmp", nameFile)
+                extraChainController.exportProfile("tmp", nameFile)
             } else {
                 tempFolderDialog.currentFolder = QtCore.StandardPaths.standardLocations(QtCore.StandardPaths.HomeLocation)[0]
                 tempFolderDialog.open()
@@ -279,7 +279,7 @@ ColumnLayout {
                 }
                 
                 let nameFile = exportProfileButton.nameExportedFileName(exportProfileTf.text)
-                raccoonController.exportProfile(path, nameFile)
+                extraChainController.exportProfile(path, nameFile)
                 exportDialog.close()
             }
         }
@@ -288,10 +288,10 @@ ColumnLayout {
             if(!exportDialog.is_new_version) {
                 var nameFile = exportProfileButton.nameExportedFileName(exportProfileTf.text)
                 if (ios_platform) {
-                    let data = raccoonController.exportedData()
+                    let data = extraChainController.exportedData()
                     filePicker.pickFolderAndSaveFile(nameFile, data)
                 } else if (android_platform) {
-                    raccoonController.exportProfile("tmp", nameFile)
+                    extraChainController.exportProfile("tmp", nameFile)
                 } else {
                     tempFolderDialog.currentFolder =  QtCore.StandardPaths.standardLocations(QtCore.StandardPaths.HomeLocation)[0]
                     tempFolderDialog.open()

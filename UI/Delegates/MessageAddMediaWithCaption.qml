@@ -166,7 +166,7 @@ Popup {
                 }
             }
             
-            RaccoonButton {
+            ExButton {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 Layout.minimumHeight: 50

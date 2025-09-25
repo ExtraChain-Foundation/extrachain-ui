@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.raccoonline.vpnapp" android:installLocation="auto" android:versionCode="40" android:versionName="0.5.0.5" xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.extrachain.vpnapp" android:installLocation="auto" android:versionCode="40" android:versionName="0.5.0.5" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk android:minSdkVersion="28"/>
 
     <queries>
         <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="http" />
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="http"/>
         </intent>
         <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
         </intent>
     </queries>
 
@@ -27,7 +27,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_VPN"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED"/>
@@ -52,23 +52,13 @@
             <meta-data android:name="android.app.extract_android_style" android:value="minimal"/>
         </activity>
 
-<provider
-    android:name="androidx.core.content.FileProvider"
-    android:authorities="com.raccoonline.vpnapp.fileprovider"
-    android:exported="false"
-    android:grantUriPermissions="true">
-    <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/file_paths" />
+<provider android:name="androidx.core.content.FileProvider" android:authorities="com.raccoonline.vpnapp.fileprovider" android:exported="false" android:grantUriPermissions="true">
+    <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
 </provider>
 
 
         <!-- VPN Service Declaration -->
-        <service
-            android:name="com.raccoonline.vpnapp.VpnServiceWrapper"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="false"
-            android:foregroundServiceType="connectedDevice">
+        <service android:name="com.raccoonline.vpnapp.VpnServiceWrapper" android:permission="android.permission.BIND_VPN_SERVICE" android:exported="false" android:foregroundServiceType="connectedDevice">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>
             </intent-filter>

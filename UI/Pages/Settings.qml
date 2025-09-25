@@ -15,7 +15,7 @@ Item {
     anchors.fill: parent
 
     readonly property double minDiskSpaceForFullModeRequired: 2.0
-    property string availableGB: raccoonController.availableGB
+    property string availableGB: extraChainController.availableGB
     property bool is_new_version: false
     property bool cheatMode
     property bool canUpdate
@@ -25,12 +25,12 @@ Item {
     }
 
     function checkAvailableFullMode() {
-        raccoonController.availableFullModeInit()
-        availableGB = raccoonController.availableGB
-        if((raccoonController.availableGB < minDiskSpaceForFullModeRequired) && !warningMessageBox.visible && appSettings.showMessageSwitchToLightMode) {
+        extraChainController.availableFullModeInit()
+        availableGB = extraChainController.availableGB
+        if((extraChainController.availableGB < minDiskSpaceForFullModeRequired) && !warningMessageBox.visible && appSettings.showMessageSwitchToLightMode) {
             console.log("In full mode")
             console.log("need show mesage about ff")
-            warningMessageBox.title = "  RaccoonLine"
+            warningMessageBox.title = "  ExtraChain"
             warningMessageBox.info_text = "You have less than 2 GB of free memory remaining.<br>To receive full rewards, more memory is required.<br>Otherwise, the app will switch to Light Chain Mode."
             warningMessageBox.use_check_box = true
             warningMessageBox.check_box_text = "Do not display this message again"
@@ -294,7 +294,7 @@ Item {
                             text: qsTr("Light Chain")
                             icon: IcoMoon.light_chain
                             onClicked: {
-                                raccoonController.availableFullModeInit()
+                                extraChainController.availableFullModeInit()
                                 stackview.push(lightChainComponent)
                             }
                         }
@@ -549,11 +549,11 @@ Item {
                 Layout.preferredHeight: 34
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: usernameTf
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                text: uiController.loadUserName(raccoonController?.mainActor)
+                text: uiController.loadUserName(extraChainController?.mainActor)
                 font.pixelSize: 16
             }
 
@@ -569,7 +569,7 @@ Item {
                 text: qsTr("Save")
                 filled: true
                 property string new_user_name: usernameTf.text
-                enabled: uiController.loadUserName(raccoonController?.mainActor) !== new_user_name && new_user_name.length > 5
+                enabled: uiController.loadUserName(extraChainController?.mainActor) !== new_user_name && new_user_name.length > 5
                 onClicked: {
                     var message = ""
                     if (new_user_name.length === 0) {
@@ -606,7 +606,7 @@ Item {
             }
 
 
-            RaccoonIconTextButton {
+            ExIconTextButton {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredHeight: 22
                 spacing: 6
@@ -664,7 +664,7 @@ Item {
                 interactive: false
                 model: isNewProfile ? [qsTr("Export as File"), qsTr("Export as Phrase"), qsTr("Export as Hex")] : [qsTr("Export as File")]
 
-                delegate: RaccoonButton {
+                delegate: ExButton {
                     height: 60
                     width: 170
                     text: modelData
@@ -690,7 +690,7 @@ Item {
             anchors.fill: parent
 
             onVisibleChanged: {
-                raccoonController.availableFullModeInit()
+                extraChainController.availableFullModeInit()
             }
 
             RowLayout {
@@ -770,7 +770,7 @@ Item {
                     Layout.preferredWidth:  50
                     Layout.alignment: Qt.AlignVCenter
 
-                    RaccoonSwitch {
+                    ExSwitch {
                         id: cmbxLightSwitchControl
                         anchors.centerIn: parent
                     }
@@ -788,7 +788,7 @@ Item {
                 Component.onCompleted: {
                     cmbxLightSwitchControl.checked = uiController?.isBlockchainLight() || false
 
-                    if(raccoonController.availableGB < raccoonController.fullDagModeMinSize && !cmbxLightSwitchControl.checked) {
+                    if(extraChainController.availableGB < extraChainController.fullDagModeMinSize && !cmbxLightSwitchControl.checked) {
                         cmbxLightSwitchControl.checked = true
                     }
                     originalIsLight = cmbxLightSwitchControl.checked
@@ -796,8 +796,8 @@ Item {
 
                 enabled: cmbxLightSwitchControl.checked !== originalIsLight
                 onClicked: {
-                    console.log("Settings. Save blue button. Params: ", raccoonController.availableGB, raccoonController.fullModeMinGb, !cmbxLightSwitchControl.checked)
-                    if(raccoonController.availableGB < raccoonController.fullDagModeMinSize && !cmbxLightSwitchControl.checked) {
+                    console.log("Settings. Save blue button. Params: ", extraChainController.availableGB, extraChainController.fullModeMinGb, !cmbxLightSwitchControl.checked)
+                    if(extraChainController.availableGB < extraChainController.fullDagModeMinSize && !cmbxLightSwitchControl.checked) {
                         cmbxLightSwitchControl.checked = true
                         console.log("Settings. Save blue button Not enough storage available.<br>Only Light Mode can be enabled")
                         notificationToolTip.showMessage(qsTr("Not enough storage available.<br>Only Light Mode can be enabled."))
@@ -873,7 +873,7 @@ Item {
                     Layout.leftMargin: 15
                     Layout.rightMargin: 15
 
-                    RaccoonCheckBox {
+                    ExCheckBox {
                         id: autoupdateCB
                         Layout.preferredHeight: 40
                         Layout.preferredWidth: 140
@@ -1038,7 +1038,7 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                 }
 
-                RaccoonSwitch {
+                ExSwitch {
                     id: loginFaceIDSwitch
                     Layout.preferredWidth: 48
                     Layout.preferredHeight: 26
@@ -1061,7 +1061,7 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                 }
 
-                RaccoonSwitch {
+                ExSwitch {
                     id: paymentFaceIDSwitch
                     Layout.preferredWidth: 48
                     Layout.preferredHeight: 26
@@ -1200,7 +1200,7 @@ Item {
                 opacity: switchSettingsMouse.pressed ? 0.7 : 1.0
             }
 
-            RaccoonSwitch {
+            ExSwitch {
                 id: cmbxLightSwitchControl
                 Layout.preferredWidth: 48
                 Layout.preferredHeight: 26

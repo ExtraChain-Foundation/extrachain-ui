@@ -72,7 +72,7 @@ Rectangle {
                 onClickedBack: loaderWithdrawal.visible = false
             }
 
-            RaccoonCoinComboBox {
+            ExCoinComboBox {
                 id: selectCoinTF
                 Layout.fillWidth: true
                 Layout.preferredHeight: _height_element
@@ -84,7 +84,7 @@ Rectangle {
                 visible: false
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: withdrawalToTF
                 Layout.fillWidth: true
                 Layout.preferredHeight: _height_element
@@ -99,7 +99,7 @@ Rectangle {
                 }
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: amountTF
                 Layout.fillWidth: true
                 Layout.preferredHeight: _height_element
@@ -191,7 +191,7 @@ Rectangle {
                             anchors.fill: parent
                             spacing: 4
 
-                            RaccoonCheckBox {
+                            ExCheckBox {
                                 id: control
                                 Layout.preferredHeight: 20
                                 Layout.preferredWidth: 20
@@ -322,7 +322,7 @@ Rectangle {
                         console.log("You want send coins to", _receive_address)
                         console.log("amount", _amount)
                         if(ios_platform && appSettings.iosFaceIdPayment && faceIdAvailable) {
-                            raccoonController.verifyWithFaceID();
+                            extraChainController.verifyWithFaceID();
                         } else {
                             send()
                         }
@@ -333,7 +333,7 @@ Rectangle {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
         function onIosFaceAuth(result) {
             if(result && withdrawRoot.visible) {
                 send()
@@ -342,7 +342,7 @@ Rectangle {
     }
 
     function send() {
-        raccoonController.sendTx(_wallet_address, _receive_address, _coin, _amount)
+        extraChainController.sendTx(_wallet_address, _receive_address, _coin, _amount)
         clean()
         next()
     }

@@ -45,7 +45,7 @@ Rectangle {
                 elide: Text.ElideRight
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: nameTokenTF
                 anchors.centerIn: parent
                 height: 40
@@ -76,7 +76,7 @@ Rectangle {
                 elide: Text.ElideRight
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: symbolTokenTF
                 anchors.centerIn: parent
                 height: 40
@@ -110,7 +110,7 @@ Rectangle {
                 elide: Text.ElideRight
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: countTokensTF
                 anchors.centerIn: parent
                 height: 40
@@ -172,7 +172,7 @@ Rectangle {
                         anchors.fill: parent
                         spacing: 4
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: control
                             Layout.preferredHeight: 22
                             Layout.preferredWidth: 22
@@ -225,7 +225,7 @@ Rectangle {
             }
         }
 
-        RaccoonButton {
+        ExButton {
             id: generateTokenColorButton
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredHeight: 46
@@ -242,7 +242,7 @@ Rectangle {
             }
         }
 
-        RaccoonButton {
+        ExButton {
             id: generateToken
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredHeight: 46
@@ -264,7 +264,7 @@ Rectangle {
                 console.log("Count token - ", tokenCount)
                 console.log("Color token ", tokenColor)
                 console.log("Color token ", tokenSymbol)
-                raccoonController.createToken(tokenCount, tokenName, tokenSymbol, rulling_address, tokenColor)
+                extraChainController.createToken(tokenCount, tokenName, tokenSymbol, rulling_address, tokenColor)
             }
         }
     }
@@ -293,7 +293,7 @@ Rectangle {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function onAddedToken() {
             loaderWithdrawal.visible = false

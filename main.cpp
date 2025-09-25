@@ -2,7 +2,7 @@
 
 #ifndef RACCOON_CONSOLE
 #include "SRC/ClientController.h"
-#include "SRC/RaccoonController.h"
+#include "SRC/ExtraChainController.h"
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <qguiapplication.h>
@@ -80,9 +80,9 @@ int main(int argc, char *argv[]) {
   RaccoonFilePicker filePicker;
   engine.rootContext()->setContextProperty("filePicker", &filePicker);
 
-  std::unique_ptr<RaccoonController> roc =
-      std::make_unique<RaccoonController>(&engine);
-  engine.rootContext()->setContextProperty("raccoonController", roc.get());
+  std::unique_ptr<ExtraChainController> roc =
+      std::make_unique<ExtraChainController>(&engine);
+  engine.rootContext()->setContextProperty("extraChainController", roc.get());
 
   const QUrl mainQmlUrl("qrc:/Main.qml");
   QObject::connect(

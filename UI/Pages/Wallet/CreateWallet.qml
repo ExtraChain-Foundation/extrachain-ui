@@ -7,7 +7,7 @@ import "../../Controls"
 import "../../Fonts"
 import "../.."
 
-RaccoonPage {
+ExPage {
     id: createWalletRoot
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -56,7 +56,7 @@ RaccoonPage {
         //     color: Colors.createWalletPage.text
         // }
 
-        RaccoonTextField {
+        ExTextField {
             id: nameWalletTF
             Layout.preferredHeight: visible ? 40 : 0
             Layout.preferredWidth: 360
@@ -80,7 +80,7 @@ RaccoonPage {
             }
         }
 
-        RaccoonCoinComboBox {
+        ExCoinComboBox {
             id: selectCoinCB
             Layout.preferredHeight: 50
             Layout.alignment: Qt.AlignLeft
@@ -107,7 +107,7 @@ RaccoonPage {
             onClicked: {
                 console.log("pressed create.")
                 var nameWallet = nameWalletTF.text
-                raccoonController.addNewWallet(nameWallet)
+                extraChainController.addNewWallet(nameWallet)
             }
         }
     }

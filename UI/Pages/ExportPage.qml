@@ -11,7 +11,7 @@ import "../Controls"
 import "../Fonts"
 import "../"
 
-RaccoonPage {
+ExPage {
     id: exportPage
     visible: false
     readonly property alias export_file_name: namefileTF.text
@@ -40,7 +40,7 @@ RaccoonPage {
             font.bold: true
         }
 
-        RaccoonTextField {
+        ExTextField {
             id: namefileTF
             Layout.preferredHeight: 50
             Layout.fillWidth: true
@@ -104,11 +104,11 @@ RaccoonPage {
     function exportProfile() {
         if (ios_platform) {
             let nameFile = nameExportedFileName(export_file_name)
-            let data = raccoonController.exportedData()
+            let data = extraChainController.exportedData()
             filePicker.pickFolderAndSaveFile(nameFile, data)
         } else if (android_platform) {
             let nameFile = nameExportedFileName(export_file_name)
-            raccoonController.exportProfile("tmp", "ExtraChain"/*nameFile*/)
+            extraChainController.exportProfile("tmp", "ExtraChain"/*nameFile*/)
         } else {
             tempFolderDialog.currentFolder = StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
             tempFolderDialog.open()
@@ -127,7 +127,7 @@ RaccoonPage {
             }
 
             let nameFile = nameExportedFileName(export_file_name)
-            raccoonController.exportProfile(path, nameFile)
+            extraChainController.exportProfile(path, nameFile)
         }
     }
 }

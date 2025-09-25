@@ -84,7 +84,7 @@ Rectangle {
             MonserratText {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                text: messengerRoot.reply_state ? "Reply to " + (menu.owner ? uiController.loadUserName(raccoonController?.mainActor) : userInfo.text) : "Edit message"
+                text: messengerRoot.reply_state ? "Reply to " + (menu.owner ? uiController.loadUserName(extraChainController?.mainActor) : userInfo.text) : "Edit message"
                 font.bold: true
                 color: Colors.button_square_send_message_style.color_icon
             }

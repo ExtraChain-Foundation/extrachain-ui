@@ -17,7 +17,7 @@ Rectangle {
     property bool miningActive: uiController?.networkStatus
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function onDagControlStarted() {
             informText.text = qsTr("Generating controls for AcyclicChain...")
@@ -139,7 +139,7 @@ Rectangle {
             Layout.preferredWidth: 22
             Layout.preferredHeight: 16
             Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/images/UI/Images/raccoonline.png"
+            source: "qrc:/UI/Images/extrachain_lite.png"
             visible: !Colors.isDarkTheme
         }
 

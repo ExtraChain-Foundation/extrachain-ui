@@ -33,7 +33,7 @@ Item {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function dagSyncFinish() {
             txtDownloading.text = qsTr("Finishing AcyclicChain...")

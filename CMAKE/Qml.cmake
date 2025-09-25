@@ -2,25 +2,25 @@ message(STATUS "Begin add qml files.")
 
 set(UI_CONTROLS
     UI/Controls/NotificationToolTip.qml
-    UI/Controls/RaccoonButton.qml
-    UI/Controls/RaccoonIconButton.qml
+    UI/Controls/ExButton.qml
+    UI/Controls/ExIconButton.qml
     UI/Controls/MonserratText.qml
     UI/Controls/DmsansText.qml
-    UI/Controls/RaccoonTextField.qml
-    UI/Controls/RaccoonCheckBox.qml
-    UI/Controls/RaccoonCoinComboBox.qml
+    UI/Controls/ExTextField.qml
+    UI/Controls/ExCheckBox.qml
+    UI/Controls/ExCoinComboBox.qml
     UI/Controls/SquareButton.qml
     UI/Controls/BackButton.qml
     UI/Controls/DevActivator.qml
-    UI/Controls/RaccoonMessageBox.qml
-    UI/Controls/RaccoonOkMessageBox.qml
-    UI/Controls/RaccoonSwitch.qml
+    UI/Controls/ExMessageBox.qml
+    UI/Controls/ExOkMessageBox.qml
+    UI/Controls/ExSwitch.qml
     UI/Controls/QualitySignal.qml
     UI/Controls/BlueButton.qml
     UI/Controls/WalletQuickButton.qml
     UI/Controls/DeepIndigoButton.qml
     UI/Controls/WalletEditMobileMenu.qml
-    UI/Controls/RaccoonIconTextButton.qml
+    UI/Controls/ExIconTextButton.qml
     UI/Controls/OnboardingInformPanel.qml
     UI/Controls/BlackRectangle.qml
 )
@@ -39,7 +39,7 @@ set(UI_PAGES
     UI/Pages/Subscription.qml
     UI/Pages/Messenger.qml
     UI/Pages/ExportPage.qml
-    UI/RaccoonPage.qml
+    UI/ExPage.qml
     UI/Pages/SettingsPopup.qml
     UI/Pages/NotificationPopup.qml
     UI/Pages/Notification.qml

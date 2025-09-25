@@ -183,7 +183,7 @@ Rectangle {
                 }
             }
 
-            RaccoonTextField {
+            ExTextField {
                 id: searchTf
                 Layout.fillWidth: true
                 Layout.leftMargin: isMobile ? 4 : 10

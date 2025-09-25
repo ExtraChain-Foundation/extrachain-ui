@@ -11,7 +11,7 @@
 #include <QProcess>
 #include <QSettings>
 
-#include "raccoon_version.h"
+#include "extrachain_version.h"
 #include "utils/exc_utils.h"
 
 #ifndef RACCOON_CONSOLE
@@ -35,7 +35,7 @@ Updater::Updater(ClientController *clientController)
 Updater::~Updater() = default;
 
 std::pair<bool, std::string> Updater::checkForUpdates() {
-  QFile::remove("RaccoonLine_Updater.exe");
+  QFile::remove("ExtraChain_Updater.exe");
 #ifdef QT_DEBUG
   return {false, ""};
 #endif
@@ -51,7 +51,7 @@ std::pair<bool, std::string> Updater::checkForUpdates() {
     return {false, ""};
   }
 
-  bool compare = compareVersions(raccoon_version, onlineVersion);
+  bool compare = compareVersions(extrachain_version, onlineVersion);
   return {compare, onlineVersion};
 }
 
@@ -88,8 +88,7 @@ bool Updater::getLatestVersion() {
 void Updater::downloadUpdate(const std::string &version) {
 #ifdef Q_OS_WINDOWS
   QString url =
-      QString(
-          "https://raccoonline.com/api/assets/apps/RaccoonLine_Setup_%1.exe")
+      QString("https://extrachain.com/api/assets/apps/ExtraChain_Setup_%1.exe")
           .arg(QString::fromStdString(version));
 
   this->downloadFile(url, "RaccoonLine_Updater.exe");
@@ -103,8 +102,8 @@ void Updater::downloadUpdate(const std::string &version) {
 #endif
 
   const char *appName =
-#ifdef RACCOON_CLIENT_CONSOLE
-      "RaccoonLine_Console";
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
+      "ExtraChain_Console";
 #else
       "Extrachain";
 #endif
@@ -116,16 +115,16 @@ void Updater::downloadUpdate(const std::string &version) {
           .arg(arch);
 
 #ifdef RACCOON_CLIENT_CONSOLE
-  this->downloadFileSync(url, "RaccoonLine_Update.tar.gz");
+  this->downloadFileSync(url, "ExtraChain_Update.tar.gz");
 #else
-  this->downloadFile(url, "RaccoonLine_Update.tar.gz");
+  this->downloadFile(url, "ExtraChain_Update.tar.gz");
 #endif
 #endif
 
 #ifdef Q_OS_ANDROID
-  QString apkFile = QString("android-build-RaccoonLine-release-signed-%1.apk")
+  QString apkFile = QString("android-build-ExtraChain-release-signed-%1.apk")
                         .arg(QString::fromStdString(version));
-  QString url = QString("https://raccoonline.com/api/assets/apps/") + apkFile;
+  QString url = QString("https://extrachain.com/api/assets/apps/") + apkFile;
 
   this->downloadFile(url, apkFile);
 #endif
@@ -150,18 +149,18 @@ void Updater::update() {
 
 void Updater::install() {
 #ifdef Q_OS_WINDOWS
-  QString updaterPath = QDir::currentPath() + "/RaccoonLine_Updater.exe";
+  QString updaterPath = QDir::currentPath() + "/ExtraChain_Updater.exe";
   QFile updaterFile(updaterPath);
 
   if (updaterFile.exists() && updaterFile.size() != 0) {
-    QProcess::startDetached("RaccoonLine_Updater.exe");
+    QProcess::startDetached("ExtraChain_Updater.exe");
     std::exit(0);
   }
 #endif
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
   QString binPath = QCoreApplication::applicationDirPath();
-  QString updaterPath = QDir::currentPath() + "/RaccoonLine_Update.tar.gz";
+  QString updaterPath = QDir::currentPath() + "/ExtraChain_Update.tar.gz";
   if (QFile::exists(updaterPath)) {
     eInfo("Extract archive...");
     QStringList tarArgs;
@@ -193,10 +192,10 @@ void Updater::install() {
 
 void Updater::patchUpdate() {
   QSettings settings;
-  QString savedVersion = settings.value("RaccoonVersionPatch").toString();
+  QString savedVersion = settings.value("ExtraChainVersionPatch").toString();
 
   if (savedVersion.isEmpty() ||
-      compareVersions(savedVersion.toStdString(), raccoon_version)) {
+      compareVersions(savedVersion.toStdString(), extrachain_version)) {
     eLog("[Updater] Patch version... {}", os);
 
     QString url = "https://raccoonline.com/api/" + clientType +
@@ -210,8 +209,8 @@ void Updater::patchUpdate() {
         eLog("[Updater] Data updated successfully");
 
         QSettings settings;
-        settings.setValue("RaccoonVersionPatch",
-                          QString::fromStdString(raccoon_version));
+        settings.setValue("ExtraChainVersionPatch",
+                          QString::fromStdString(extrachain_version));
         settings.sync();
       } else {
         eLog("[Updater] Failed to update data: {}", reply->errorString());

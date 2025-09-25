@@ -43,7 +43,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need your location for continuous location tracking.</string>
 	<key>CFBundleDisplayName</key>
-	<string>RaccoonLine</string>
+        <string>ExtraChain</string>
 	<key>CFBundleIconFile</key>
 	<string>${MACOSX_BUNDLE_ICON_FILE}</string>
 	<key>CFBundleIconName</key>
@@ -64,11 +64,11 @@
 		<true/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>RaccoonLine</string>
+        <string>ExtraChain</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to the camera to use QR.</string>
 	<key>NSMediaLibraryUsageDescription</key>
-	<string>RaccoonLine</string>
+        <string>ExtraChain</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>maps</string>

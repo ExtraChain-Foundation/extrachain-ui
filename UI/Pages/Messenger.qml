@@ -215,7 +215,7 @@ Item {
                 width: parent.width
                 height: root.isMobile ? 40 : 44
 
-                RaccoonTextField {
+                ExTextField {
                     id: textField
                     width: parent.width
                     height: parent.height - 4
@@ -365,7 +365,7 @@ Item {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
                             font.pixelSize: 14
-                            text: raccoonController?.mainActor === modelData.actorId ? "Create mirror self-chat" : modelData.username
+                            text: extraChainController?.mainActor === modelData.actorId ? "Create mirror self-chat" : modelData.username
                             color: Colors.country_list_old.country_name
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: 5
@@ -1590,7 +1590,7 @@ Item {
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: create_chat_message_box
 
         property int current_index_of_users_list: -1
@@ -1623,7 +1623,7 @@ Item {
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: change_username_box
         title: "Create chat"
         info_text: "Your username is empty. Please go to settings and set a username. Would you like to go there now?"
@@ -1713,7 +1713,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: root.isMobile ? 40 : 50
 
-                RaccoonTextField {
+                ExTextField {
                     id: searchGifTextField
                     width: parent.width - 4
                     height: isMobile ? 40 : 42

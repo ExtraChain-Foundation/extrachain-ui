@@ -8,7 +8,7 @@ import "../Fonts"
 import "../Controls"
 import "../"
 
-RaccoonPage {
+ExPage {
     id: loginPage
     anchors.fill: parent
     color: Colors.background
@@ -100,13 +100,13 @@ RaccoonPage {
             }
 
             if(ios_platform && appSettings.iosFaceIdLogin) {
-                raccoonController.verifyWithFaceID()
+                extraChainController.verifyWithFaceID()
             } else {
                 loginPage.visible = false
                 uiController.loadSubscription()
                 uiController.loadUserName("")
                 tempMsgLoad.start()
-                raccoonController.fillMainActorData()
+                extraChainController.fillMainActorData()
                 keychainHash = ""
             }
         }
@@ -180,7 +180,7 @@ RaccoonPage {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
         function onIosFaceAuth(result) {
             console.log("result faceid", result)
             if(result && loginPage.visible) {
@@ -188,7 +188,7 @@ RaccoonPage {
                 uiController.loadSubscription()
                 uiController.loadUserName("")
                 tempMsgLoad.start()
-                raccoonController.fillMainActorData()
+                extraChainController.fillMainActorData()
                 keychainHash = ""
             }
         }
@@ -197,7 +197,7 @@ RaccoonPage {
     Component {
         id: component_Rectangle
 
-        RaccoonPage {
+        ExPage {
             color: Colors.background
             property alias loginTF: inner_loginTF
             property alias passwordTF: inner_passwordTF
@@ -222,7 +222,7 @@ RaccoonPage {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredHeight: 58
                     Layout.preferredWidth: 86
-                    source: "qrc:/images/UI/Images/raccoonline.png"
+                    source: "qrc:/UI/Images/extrachain_lite.png"
                     antialiasing: true
 
                     MouseArea {
@@ -233,7 +233,7 @@ RaccoonPage {
                     }
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: inner_loginTF
                     Layout.preferredHeight: 40
                     Layout.preferredWidth: cl.width
@@ -249,7 +249,7 @@ RaccoonPage {
                     }
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: inner_passwordTF
                     Layout.preferredWidth: cl.width
                     Layout.preferredHeight: 40
@@ -264,7 +264,7 @@ RaccoonPage {
                     }
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: inner_confirmPasswordTF
                     Layout.preferredWidth: cl.width
                     Layout.preferredHeight: 40
@@ -279,7 +279,7 @@ RaccoonPage {
                     }
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: inner_ipTextField
                     Layout.preferredHeight: 40
                     placeholderText: "First node"
@@ -507,7 +507,7 @@ RaccoonPage {
     Component {
         id: component_importKeystore
 
-        RaccoonPage {
+        ExPage {
             anchors.topMargin: Qt.platform.os === "osx" ? -root.SafeArea.margins.top : 0
 
             states: [
@@ -589,7 +589,7 @@ RaccoonPage {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredHeight: 58
                     Layout.preferredWidth: 86
-                    source: "qrc:/images/UI/Images/raccoonline.png"
+                    source: "qrc:/UI/Images/extrachain_lite.png"
                     antialiasing: true
                 }
 
@@ -615,7 +615,7 @@ RaccoonPage {
                             passwordEcrypt.text = ""
                             pathToFencFileTF.text = ""
                         }
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             anchors.fill: parent
                             text: modelData
                             checked: typeRecoveryList.currentIndex === index
@@ -630,7 +630,7 @@ RaccoonPage {
                     spacing: root.isMobile ? 0 : 10
                     visible: !type_recovery_by_phase
 
-                    RaccoonTextField {
+                    ExTextField {
                         id: pathToFencFileTF
                         Layout.preferredHeight: 40
                         Layout.fillWidth: true
@@ -801,7 +801,7 @@ RaccoonPage {
                                  || (!type_recovery_by_phase && pathToFencFileTF.text.length > 0)
                     }
 
-                    RaccoonTextField {
+                    ExTextField {
                         id: loginEcrypt
                         Layout.preferredHeight: visible ? 40 : 0
                         Layout.fillWidth: true
@@ -813,7 +813,7 @@ RaccoonPage {
                     }
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: passwordEcrypt
                     Layout.preferredHeight: visible ? 40 : 0
                     Layout.fillWidth: true
@@ -917,7 +917,7 @@ RaccoonPage {
                 }
 
                 Connections {
-                    target: raccoonController
+                    target: extraChainController
 
                     function onExportImportKeystore(newMessage) {
                         pathToFencFileTF.text = ""
@@ -971,7 +971,7 @@ RaccoonPage {
     Component {
         id: component_multiple
 
-        RaccoonPage {
+        ExPage {
             anchors.topMargin: Qt.platform.os === "osx" ? -root.SafeArea.margins.top : 0
 
             color: Colors.background
@@ -1037,7 +1037,7 @@ RaccoonPage {
             Item {
                 id: firstPage
 
-                RaccoonPage {
+                ExPage {
                     anchors.fill: parent
                     BackButton {
                         id: backToWallet
@@ -1081,7 +1081,7 @@ RaccoonPage {
                             Layout.fillWidth: true
                         }
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: confirmationChackBox
                             Layout.preferredHeight: 30
                             Layout.fillWidth: true
@@ -1094,7 +1094,7 @@ RaccoonPage {
                             Layout.fillWidth: true
                         }
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: autologinCheckBox
                             Layout.preferredHeight: 30
                             Layout.fillWidth: true
@@ -1143,7 +1143,7 @@ RaccoonPage {
 
             Item {
                 id: secondPage
-                RaccoonPage {
+                ExPage {
                     anchors.fill: parent
                     BackButton {
                         x: root.isMobile ? 10 : 50
@@ -1311,7 +1311,7 @@ Write it down and store it in a secure place — preferably offline and out of s
                             Layout.fillWidth: true
                         }
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: phase1
                             Layout.preferredHeight: 30
                             Layout.fillWidth: true
@@ -1324,7 +1324,7 @@ Write it down and store it in a secure place — preferably offline and out of s
                             Layout.fillWidth: true
                         }
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: phase2
                             Layout.preferredHeight: 30
                             Layout.fillWidth: true
@@ -1355,7 +1355,7 @@ Write it down and store it in a secure place — preferably offline and out of s
                                 console.log("User agree")
                                 autologin = autologinCheckBox.checked
                                 view.decrementCurrentIndex()
-                                raccoonController.sighUp(registration_current_ip, registration_current_login, registration_current_password, registration_current_confirm_password)
+                                extraChainController.sighUp(registration_current_ip, registration_current_login, registration_current_password, registration_current_confirm_password)
                                 repeaterMnemonicPhase.model = []
                                 // showExportPage()
                             }
@@ -1384,7 +1384,7 @@ Write it down and store it in a secure place — preferably offline and out of s
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
         function onDecryptedKeystore(hashash) {
             console.log("decrypted store");
             if(!hashash){
@@ -1397,7 +1397,7 @@ Write it down and store it in a secure place — preferably offline and out of s
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: messageBox
         title: "Registration"
         info_text: "By creating an account, you acknowledge that:
@@ -1424,7 +1424,7 @@ Write it down and store it in a secure place — preferably offline and out of s
             settingsWindow.sellectedWindow = 0
             welcomePage.startReg(login, password)
             // console.log("User login", login, password)
-            raccoonController.sighUp(ip, login, password, confirmPassword)
+            extraChainController.sighUp(ip, login, password, confirmPassword)
             showExportPage()
         }
 
@@ -1433,7 +1433,7 @@ Write it down and store it in a secure place — preferably offline and out of s
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: importKeystoreMessageBox
         title: "Import keystore"
         info_text: "You can import an existing profile. Would you like to start the import?"
@@ -1443,7 +1443,7 @@ Write it down and store it in a secure place — preferably offline and out of s
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: autologinBox
         title: "Sigh-in"
         info_text: "If you enable this option, the app will remember your login credentials and sign you in automatically the next time you open it.
@@ -1472,7 +1472,7 @@ Only use this on a private device you trust."
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: autologinAfterImportBox
         title: "Sigh-in"
         info_text: "Allow automatic sign-in on next use?"
@@ -1498,24 +1498,24 @@ Only use this on a private device you trust."
         function continueImport() {
             if(ios_platform) {
                 console.log("login:", autologinAfterImportBox.login, "password:", autologinAfterImportBox.password)
-                raccoonController.importProfileForIos(ios_data, autologinAfterImportBox.login, autologinAfterImportBox.login)
+                extraChainController.importProfileForIos(ios_data, autologinAfterImportBox.login, autologinAfterImportBox.login)
             } else {
                 console.log("login:", autologinAfterImportBox.login, "password:", autologinAfterImportBox.password)
                 welcomePage.email = autologinAfterImportBox.login
                 welcomePage.password = autologinAfterImportBox.password
                 settingsWindow.sellectedWindow = 0
-                var hash = raccoonController.importProfile(pathToImportFile, autologinAfterImportBox.login, autologinAfterImportBox.password)
+                var hash = extraChainController.importProfile(pathToImportFile, autologinAfterImportBox.login, autologinAfterImportBox.password)
             }
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: errorMessegeBox
         title: "Error Sigh-in"
         use_check_box: false
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: requestLoginAndPassword
         title: "Import phrase"
         info_text: "Enter any login credentials — no verification required."
@@ -1553,7 +1553,7 @@ Only use this on a private device you trust."
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
         function onShowMessageErrorBox(title, message) {
             errorBox.title = title
             errorBox.info_text = message
@@ -1577,19 +1577,19 @@ Only use this on a private device you trust."
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: errorBox
         use_check_box: false
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: multipleProfileInfoBox
         use_check_box: false
         title: "Please select a profile."
         info_text: "The entered login and password correspond to multiple profiles. Please select the appropriate one from the list."
     }
 
-    RaccoonPage {
+    ExPage {
         id: waiter
         anchors.fill: parent
         anchors.topMargin: Qt.platform.os === "osx" ? -root.SafeArea.margins.top : 0

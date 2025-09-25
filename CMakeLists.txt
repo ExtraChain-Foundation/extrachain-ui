@@ -159,7 +159,7 @@ set(BASE_SOURCES
     SRC/file_downloader.h
     SRC/updater.h
     SRC/updater.cpp
-    raccoon_version.h
+    extrachain_version.h
     SRC/consolecommandprocessor.h
     SRC/consolecommandprocessor.cpp
     main.cpp
@@ -196,8 +196,8 @@ set(GUI_SOURCES
     SRC/profile.h
     SRC/profiledata.cpp
     SRC/profiledata.h
-    SRC/RaccoonController.cpp
-    SRC/RaccoonController.h
+    SRC/ExtraChainController.cpp
+    SRC/ExtraChainController.h
     SRC/ShareUtils.cpp
     SRC/ShareUtils.hpp
     SRC/VpnConnectionChainList.cpp

@@ -95,7 +95,7 @@ Rectangle {
                 id: actor
                 anchors.centerIn: parent
                 color: 'black';
-                text: raccoonController?.mainActor || ""
+                text: extraChainController?.mainActor || ""
                 font.pixelSize: root.isMobile ? 12 : 14
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter

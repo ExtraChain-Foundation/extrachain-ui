@@ -1,4 +1,4 @@
-#include "RaccoonController.h"
+#include "ExtraChainController.h"
 
 #include <QtConcurrent>
 
@@ -13,10 +13,9 @@
 #include "network/network_manager.h"
 
 #include "extrachain_version.h"
-#include "raccoon_version.h"
 // #include "managers/import_export_keystore.h"
 
-RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
+ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
     : _engine(engine) {
 
   engine->rootContext()->setContextProperty(
@@ -98,7 +97,7 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
   Logger::start_file("extrachain");
 #endif
 
-  eLog("RaccoonLine {}, core {}", raccoon_version, extrachain_version);
+  eLog("RaccoonLine {}, core {}", extrachain_version, extrachain_version);
 
   bool networkStatus = true;
 #ifdef Q_OS_WIN
@@ -124,8 +123,8 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
   rootContext->setContextProperty("walletModel", wuc.wallets());
   rootContext->setContextProperty("walletTxsModel", wuc.txs());
   rootContext->setContextProperty("arch", QSysInfo::buildCpuArchitecture());
-  rootContext->setContextProperty("raccoonVersion",
-                                  QString::fromStdString(raccoon_version));
+  rootContext->setContextProperty("extrachainVersion",
+                                  QString::fromStdString(extrachain_version));
   rootContext->setContextProperty("serverIpDefault",
                                   EtUtils::defaultServerIp());
 
@@ -144,7 +143,7 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
 #ifdef Q_OS_IOS
   iosUtils = new ApplePlatformUtils(this);
   connect(iosUtils, &ApplePlatformUtils::resultFaceId, this,
-          &RaccoonController::iosFaceAuth);
+          &ExtraChainController::iosFaceAuth);
 #endif
 
   connect(
@@ -197,7 +196,7 @@ RaccoonController::RaccoonController(QQmlApplicationEngine *engine)
   nodeWrapper->Init(true);
 }
 
-RaccoonController::~RaccoonController() {
+ExtraChainController::~ExtraChainController() {
   // if (!nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId.empty()) {
   //     for (auto &it : nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId)
   //     {
@@ -224,9 +223,9 @@ RaccoonController::~RaccoonController() {
   }
 }
 
-void RaccoonController::sighUp(const QString ip, const QString login,
-                               const QString &password,
-                               const QString &confirmPassword) {
+void ExtraChainController::sighUp(const QString ip, const QString login,
+                                  const QString &password,
+                                  const QString &confirmPassword) {
   // eLog("sighUp: \nip:  {} \nlogin:  {} \npassword:  {} \nconfirm password:
   // {}",
   //      ip,
@@ -240,12 +239,12 @@ void RaccoonController::sighUp(const QString ip, const QString login,
   // setMainActor(node->accountController()->mainActor()->id().toString());
 }
 
-Network::Protocol RaccoonController::getNetworkProtocol() {
+Network::Protocol ExtraChainController::getNetworkProtocol() {
   return Network::Protocol::WebSocket;
 }
 
-void RaccoonController::importProfile(const QString &pathToFile, QString login,
-                                      QString password) {
+void ExtraChainController::importProfile(const QString &pathToFile,
+                                         QString login, QString password) {
   eLog("{} {}", pathToFile, password);
 
   if (login.isEmpty() && password.isEmpty()) {
@@ -303,9 +302,9 @@ void RaccoonController::importProfile(const QString &pathToFile, QString login,
   }
 }
 
-void RaccoonController::importProfileForIos(const QString fileContent,
-                                            const QString login,
-                                            const QString password) {
+void ExtraChainController::importProfileForIos(const QString fileContent,
+                                               const QString login,
+                                               const QString password) {
   if (!fileContent.isEmpty()) {
     QString cleanedContent = fileContent;
     int firstQuote = cleanedContent.indexOf("\"");
@@ -357,8 +356,8 @@ void RaccoonController::importProfileForIos(const QString fileContent,
   }
 }
 
-void RaccoonController::exportProfile(const QString &folderExport,
-                                      const QString &nameFileExport) {
+void ExtraChainController::exportProfile(const QString &folderExport,
+                                         const QString &nameFileExport) {
   if (folderExport.isEmpty() || nameFileExport.isEmpty()) {
     eWarning("[ProfileExport] Folder or name is empty. Folder: {}, name: {}",
              folderExport, nameFileExport);
@@ -419,7 +418,7 @@ void RaccoonController::exportProfile(const QString &folderExport,
   eLog("Profile successfully saved to file");
 }
 
-void RaccoonController::fillMainActorData() {
+void ExtraChainController::fillMainActorData() {
   eLog("begin fill main actor data");
   auto mainId =
       nodeWrapper->node->account_controller()->current_profile().main_id();
@@ -427,8 +426,8 @@ void RaccoonController::fillMainActorData() {
   walletUiController->startControl();
 }
 
-void RaccoonController::removeFile(const QString &actor,
-                                   const QString &fileName) {
+void ExtraChainController::removeFile(const QString &actor,
+                                      const QString &fileName) {
   eLog("Begin remove file. Actor - {}  filename: {}", actor, fileName);
   auto result = nodeWrapper->node->dfs()->remove_stored_file(
       ActorId(actor.toStdString()), fileName.toStdString());
@@ -436,11 +435,11 @@ void RaccoonController::removeFile(const QString &actor,
     emit fileRemoved();
 }
 
-void RaccoonController::createToken(const QString &tokenCount,
-                                    const QString &tokenName,
-                                    const QString &symbol,
-                                    const QString &relAddress,
-                                    const QString &color) {
+void ExtraChainController::createToken(const QString &tokenCount,
+                                       const QString &tokenName,
+                                       const QString &symbol,
+                                       const QString &relAddress,
+                                       const QString &color) {
   auto count = BigNumberFloat::create(tokenCount.toStdString());
   if (!count.has_value()) {
     return;
@@ -451,7 +450,7 @@ void RaccoonController::createToken(const QString &tokenCount,
       symbol.toStdString(), count.value(), color.toStdString());
 }
 
-void RaccoonController::clearData() {
+void ExtraChainController::clearData() {
   qDebug() << "Begin clear data";
   Utils::wipeDataFiles();
   QString program = QCoreApplication::applicationFilePath();
@@ -459,7 +458,7 @@ void RaccoonController::clearData() {
   QCoreApplication::quit();
 }
 
-std::string RaccoonController::exportedData() {
+std::string ExtraChainController::exportedData() {
   std::expected<std::string, ImportError> res =
       nodeWrapper->node->export_profile();
   if (!res.has_value()) {
@@ -474,24 +473,24 @@ std::string RaccoonController::exportedData() {
   return Utils::to_base64(res.value());
 }
 
-void RaccoonController::kill() { std::exit(0); }
+void ExtraChainController::kill() { std::exit(0); }
 
-void RaccoonController::changeVpnMode(const int &mode) {
+void ExtraChainController::changeVpnMode(const int &mode) {
   qDebug() << "Set vpn mode" << mode;
 }
 
 #ifdef Q_OS_IOS
-void RaccoonController::verifyWithFaceID() { iosUtils->triggerFaceID(); }
+void ExtraChainController::verifyWithFaceID() { iosUtils->triggerFaceID(); }
 #endif
 
-bool RaccoonController::isFaceIDAvailable() {
+bool ExtraChainController::isFaceIDAvailable() {
 #ifdef Q_OS_IOS
   return iosUtils->isFaceIDAvailable();
 #endif
   return false;
 }
 
-void RaccoonController::setMainActor(const QString &newValue) {
+void ExtraChainController::setMainActor(const QString &newValue) {
   if (_mainActor != newValue) {
     _mainActor = newValue;
     eLog("main actor is {}", newValue);
@@ -499,7 +498,7 @@ void RaccoonController::setMainActor(const QString &newValue) {
   }
 }
 
-void RaccoonController::updatePath() {
+void ExtraChainController::updatePath() {
 #ifdef QT_DEBUG
   Utils::dataDir("test-data");
 #else
@@ -507,7 +506,7 @@ void RaccoonController::updatePath() {
 #endif
 }
 
-void RaccoonController::connections() {
+void ExtraChainController::connections() {
   auto dfs = nodeWrapper->node->dfs();
   auto networkManager = nodeWrapper->node->network();
   auto accController = nodeWrapper->node->account_controller();
@@ -568,15 +567,15 @@ void RaccoonController::connections() {
           });
 
   connect(nodeWrapper->node, &ExtraChainNode::dagSyncFinish, this,
-          &RaccoonController::dagSyncFinish);
+          &ExtraChainController::dagSyncFinish);
   connect(nodeWrapper->node, &ExtraChainNode::dagControlStarted, this,
-          &RaccoonController::dagControlStarted);
+          &ExtraChainController::dagControlStarted);
   connect(nodeWrapper->node, &ExtraChainNode::dagControlEnded, this,
-          &RaccoonController::dagControlEnded);
+          &ExtraChainController::dagControlEnded);
   connect(nodeWrapper->node, &ExtraChainNode::dagSearchControlStarted, this,
-          &RaccoonController::dagSearchControlStarted);
+          &ExtraChainController::dagSearchControlStarted);
   connect(nodeWrapper->node, &ExtraChainNode::dagSearchControlEnded, this,
-          &RaccoonController::dagSearchControlEnded);
+          &ExtraChainController::dagSearchControlEnded);
 
   connect(
       nodeWrapper->node, &ExtraChainNode::dagTxApproved, this,
@@ -614,20 +613,20 @@ void RaccoonController::connections() {
       });
 
   connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncStarted, this,
-          &RaccoonController::actorsStarted);
+          &ExtraChainController::actorsStarted);
   connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncEnded, this,
-          &RaccoonController::actorsEnded);
+          &ExtraChainController::actorsEnded);
   connect(nodeWrapper->node->actor_index(), &ActorIndex::firstSyncProgress,
-          this, &RaccoonController::actorsProgress);
+          this, &ExtraChainController::actorsProgress);
 
   connect(nodeWrapper->node->token_manager(),
           &TokenManager::errorNameTokenExist, this,
-          &RaccoonController::errorNameTokenExist);
+          &ExtraChainController::errorNameTokenExist);
   connect(nodeWrapper->node->token_manager(),
           &TokenManager::errorTickerTokenExist, this,
-          &RaccoonController::errorSymbolTokenExist);
+          &ExtraChainController::errorSymbolTokenExist);
   connect(nodeWrapper->node->token_manager(), &TokenManager::added, this,
-          &RaccoonController::addedToken);
+          &ExtraChainController::addedToken);
 
   QObject::connect(nodeWrapper->node->dfs(), &DfsController::downloaded,
                    [this](ActorId owner_id, Dfs::DirRow dirRow) {
@@ -662,7 +661,7 @@ void RaccoonController::connections() {
           walletUiController, &WalletUIController::renamesLoad);
 }
 
-void RaccoonController::availableFullModeInit() {
+void ExtraChainController::availableFullModeInit() {
   auto bytesAvailable = Utils::diskAvailableMemory();
   double gbAvailable =
       static_cast<double>(bytesAvailable) / (1024.0 * 1024.0 * 1024.0);
@@ -685,11 +684,11 @@ void RaccoonController::availableFullModeInit() {
   emit availableGBChanged();
 }
 
-void RaccoonController::sendTransactionFromUi(ActorId reciever,
-                                              BigNumberFloat actor,
-                                              ActorId token) {}
+void ExtraChainController::sendTransactionFromUi(ActorId reciever,
+                                                 BigNumberFloat actor,
+                                                 ActorId token) {}
 
-void RaccoonController::addNewWallet(const QString &nameWallet) {
+void ExtraChainController::addNewWallet(const QString &nameWallet) {
   auto future = QtConcurrent::run([=, this] {
     auto actor = nodeWrapper->node->account_controller()->create_wallet(
         ActorId(), nameWallet.toStdString());
@@ -703,9 +702,10 @@ void RaccoonController::addNewWallet(const QString &nameWallet) {
   });
 }
 
-void RaccoonController::createTx(const QString &walletTo,
-                                 const QString &coinName, const QString &amount,
-                                 const QString &newtwork) {
+void ExtraChainController::createTx(const QString &walletTo,
+                                    const QString &coinName,
+                                    const QString &amount,
+                                    const QString &newtwork) {
   eLog("{} {} {} {}", __FUNCTION__, walletTo, coinName, amount);
   if (walletTo.isEmpty() || coinName.isEmpty() || amount.isEmpty()) {
     QString paremError = walletTo.isEmpty()   ? "Wallet address is empty."
@@ -735,9 +735,11 @@ void RaccoonController::createTx(const QString &walletTo,
   }
 }
 
-void RaccoonController::sendTx(const QString &walletFrom,
-                               const QString &walletTo, const QString &coinName,
-                               const QString &amount, const QString &network) {
+void ExtraChainController::sendTx(const QString &walletFrom,
+                                  const QString &walletTo,
+                                  const QString &coinName,
+                                  const QString &amount,
+                                  const QString &network) {
   eLog(
       "ui sendTx. from: '{}', to '{}', coin: '{}', amount: '{}', network: '{}'",
       walletFrom, walletTo, coinName, amount, network);
@@ -792,17 +794,17 @@ void RaccoonController::sendTx(const QString &walletFrom,
   }
 }
 
-bool RaccoonController::isAvailbaleFullMode() const {
+bool ExtraChainController::isAvailbaleFullMode() const {
   return _isAvailbaleFullMode;
 }
 
-double RaccoonController::fullDagModeMinSize() const {
+double ExtraChainController::fullDagModeMinSize() const {
   return FULL_DAG_MODE_MIN_SIZE;
 }
 
-QString RaccoonController::availableGB() const { return _availableGB; }
+QString ExtraChainController::availableGB() const { return _availableGB; }
 
-void RaccoonController::closeApp() const {
+void ExtraChainController::closeApp() const {
   std::thread([] {
     std::this_thread::sleep_for(std::chrono::seconds(5));
     std::exit(0);

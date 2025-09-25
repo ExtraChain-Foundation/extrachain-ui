@@ -52,7 +52,7 @@ Rectangle {
             color: Colors.createWalletPage.text
         }
 
-        RaccoonTextField {
+        ExTextField {
             Layout.preferredHeight: 40
             Layout.preferredWidth: 360
             placeholderText: qsTr("Enter code")
@@ -64,7 +64,7 @@ Rectangle {
             Layout.preferredWidth: 1
         }
 
-        RaccoonButton {
+        ExButton {
             id: depositBtn
             Layout.preferredHeight: 50
             Layout.alignment: Qt.AlignHCenter

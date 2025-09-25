@@ -35,7 +35,7 @@
 
 #ifndef RACCOON_CONSOLE
 #include "QtGui/qicon.h"
-#include "SRC/RaccoonController.h"
+#include "SRC/ExtraChainController.h"
 #include "SRC/statusbarhelper.h"
 #include "blurhash.h"
 #include <QQuickWindow>
@@ -55,7 +55,6 @@ extern const std::string predefine_raccoon_id;
 #include "metatypes.h"
 
 #include "extrachain_version.h"
-#include "raccoon_version.h"
 
 #ifdef Q_OS_WIN
 #include <conio.h>
@@ -246,10 +245,10 @@ inline int runRaccoon(int argc, char *argv[]) {
 #endif
   engine.addImageProvider("blurhash", new BlurHashImageProvider());
 
-  auto raccoonController = std::make_unique<RaccoonController>(&engine);
+  auto extraChainController = std::make_unique<ExtraChainController>(&engine);
 
-  engine.rootContext()->setContextProperty("raccoonController",
-                                           raccoonController.get());
+  engine.rootContext()->setContextProperty("extraChainController",
+                                           extraChainController.get());
   engine.rootContext()->setContextProperty("isSoftwareRendering",
                                            isSoftwareRendering);
   engine.rootContext()->setContextProperty("isTablet",
@@ -518,7 +517,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   }
 
   Logger::start_file("extrachain");
-  eLog("RaccoonLine {}, core {}", raccoon_version, extrachain_version);
+  eLog("ExtraChain version {}", extrachain_version);
 
   // static QLockFile lockFile(".RaccoonLine.lock");
   // if (!lockFile.tryLock(100)) {

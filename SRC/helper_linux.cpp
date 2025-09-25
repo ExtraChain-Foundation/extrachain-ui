@@ -18,7 +18,7 @@
     #include "utils/exc_utils.h"
 #endif
 
-int RaccoonLinux::processInterface() {
+int ExtraChainLinux::processInterface() {
 #ifndef Q_OS_IOS
     QProcess ifconfig;
     ifconfig.start("ifconfig");
@@ -76,14 +76,14 @@ int RaccoonLinux::processInterface() {
 #endif
 }
 
-bool RaccoonLinux::isRunningAsRoot() {
+bool ExtraChainLinux::isRunningAsRoot() {
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return getuid() == 0;
 #endif
     return true;
 }
 
-void RaccoonLinux::folderWriteUser() {
+void ExtraChainLinux::folderWriteUser() {
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // TIMER_START(sudopath)
     QString realUser = qgetenv("SUDO_USER");

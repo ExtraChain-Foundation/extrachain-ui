@@ -95,7 +95,7 @@ Window {
                 text: "OK"
                 _label.font.weight: 600
                 onClicked: {
-                    raccoonController.kill()
+                    extraChainController.kill()
                 }
             }
         }

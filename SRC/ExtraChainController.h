@@ -28,7 +28,7 @@ constexpr double FULL_DAG_MODE_MIN_SIZE = 1;
 constexpr double FULL_DAG_MODE_AND_DFS_MIN_SIZE = 4;
 #endif
 
-class RaccoonController : public QObject {
+class ExtraChainController : public QObject {
   Q_OBJECT
   QQmlApplicationEngine *_engine;
   ExtraChainNodeWrapper *nodeWrapper;
@@ -55,8 +55,8 @@ public:
   Q_PROPERTY(
       QString availableGB READ availableGB NOTIFY availableGBChanged FINAL)
 
-  RaccoonController(QQmlApplicationEngine *engine);
-  ~RaccoonController();
+  ExtraChainController(QQmlApplicationEngine *engine);
+  ~ExtraChainController();
 
   QString mainActor() const { return _mainActor; }
   void setMainActor(const QString &newValue);

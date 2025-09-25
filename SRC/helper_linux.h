@@ -1,7 +1,7 @@
 #pragma once
 #include <QString>
 
-namespace RaccoonLinux {
+namespace ExtraChainLinux {
     int processInterface();
     bool isRunningAsRoot();
     void folderWriteUser();

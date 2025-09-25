@@ -6,10 +6,10 @@ function(deploy_macos)
                 message(STATUS "Start deploy.")
 
                 set(POST_BUILD_SCRIPT "${CMAKE_SOURCE_DIR}/scripts/post_build.sh")
-                set(RaccoonApp "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app")
+                set(ExtrachainApp "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app")
 
                 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${MACDEPLOYQT_EXECUTABLE} ${RaccoonApp} -qmldir=${CMAKE_SOURCE_DIR}/UI
+                    COMMAND ${MACDEPLOYQT_EXECUTABLE} ${ExtrachainApp} -qmldir=${CMAKE_SOURCE_DIR}/UI
                     COMMENT "Running macdeployqt on the built application."
                 )
 
@@ -22,7 +22,7 @@ function(deploy_macos)
                         COMMENT "Make post-build script executable."
                     )
                     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                        COMMAND ${POST_BUILD_SCRIPT} ${RaccoonApp} ${SIGNING_IDENTITY}
+                        COMMAND ${POST_BUILD_SCRIPT} ${ExtrachainApp} ${SIGNING_IDENTITY}
                         COMMENT "Running post-build script"
                     )
                 endif()

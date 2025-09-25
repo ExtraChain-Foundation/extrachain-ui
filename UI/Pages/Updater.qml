@@ -8,7 +8,7 @@ import ExtraChain 1.0
 import "../Controls"
 import "../"
 
-RaccoonPage {
+ExPage {
     id: updater
     anchors.fill: parent
     color: Colors.background
@@ -25,8 +25,8 @@ RaccoonPage {
 
     Image {
         anchors.horizontalCenter: parent.horizontalCenter; y: 150
-        height: 58; width: 86
-        source: "qrc:/images/UI/Images/raccoonline.png"
+        height: 90; width: 90
+        source: "qrc:/UI/Images/extrachain_lite.png"
         antialiasing: true
     }
 
@@ -46,7 +46,7 @@ RaccoonPage {
     MonserratText {
         anchors.bottom: parent.bottom; anchors.bottomMargin: 18
         anchors.horizontalCenter: parent.horizontalCenter
-        visible: !ios_platform && !isPlayMarket
+        visible: false//!ios_platform && !isPlayMarket
         color: "white"
         font.pixelSize: 13
         text: "or download from <font color='#70cbff'>raccoonline.com</font>"

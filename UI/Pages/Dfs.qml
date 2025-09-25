@@ -12,14 +12,14 @@ import "../Controls"
 import "../Fonts"
 import "../"
 
-RaccoonPage {
+ExPage {
     id: dfsRoot
     anchors.fill: parent
     visible: currentPage === MenuSelector.Dfs
     meshVisible: false
 
     property bool isActiveMenuAdd: false
-    property string currentActor: raccoonController?.mainActor || ""
+    property string currentActor: extraChainController?.mainActor || ""
 
     property string storageUsageInGb: dfsFileFilterModel.usedSpace
     property int maxSizeStorage: dfsDirFilterModel?.maxSpace
@@ -30,8 +30,8 @@ RaccoonPage {
 
     onVisibleChanged: {
         if(visible) {
-            console.log("jump to main actor folder", raccoonController?.mainActor)
-            dfsFileFilterModel?.jumpToFolder(raccoonController?.mainActor)
+            console.log("jump to main actor folder", extraChainController?.mainActor)
+            dfsFileFilterModel?.jumpToFolder(extraChainController?.mainActor)
             searchTF.focus = false
             storageUsageInGb = dfsFileFilterModel.usedSpace
             caclPercent()
@@ -582,7 +582,7 @@ RaccoonPage {
         }
     }
 
-    RaccoonTextField {
+    ExTextField {
         id: searchTF
         anchors.fill: parent
         parent: onboarding_current_page === Onboarding.Storage_Search ? searchTutorialItem : searchTFItem
@@ -919,7 +919,7 @@ RaccoonPage {
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: removeMessageBox
         title: "ExtraChain"
         info_text: "Are you sure you want to delete this file?"
@@ -928,7 +928,7 @@ RaccoonPage {
         property string fileId
 
         onAgree: {
-            raccoonController.removeFile(currentActor, fileId)
+            extraChainController.removeFile(currentActor, fileId)
             dfsFileFilterModel.refresh(currentActor)
             removeMessageBox.close()
         }
@@ -959,7 +959,7 @@ RaccoonPage {
             x: 5
             height: implicitHeight
 
-            RaccoonIconButton {
+            ExIconButton {
                 Layout.preferredWidth: 170
                 Layout.preferredHeight: 40
                 text: qsTr("Close")
@@ -972,7 +972,7 @@ RaccoonPage {
                 }
             }
 
-            RaccoonIconButton {
+            ExIconButton {
                 Layout.preferredWidth: 170
                 Layout.preferredHeight: 40
                 text: qsTr("Export file")
@@ -1001,7 +1001,7 @@ RaccoonPage {
                 }
             }
 
-            RaccoonIconButton {
+            ExIconButton {
                 Layout.preferredWidth: 170
                 Layout.preferredHeight: 40
                 text: qsTr("Delete file")
@@ -1014,7 +1014,7 @@ RaccoonPage {
                     console.log("current actor,", currentActor)
                     console.log("current file,", model.fileId)
 
-                    raccoonController.removeFile(currentActor, model.fileId)
+                    extraChainController.removeFile(currentActor, model.fileId)
                     dfsFileFilterModel.refresh(currentActor)
                     menuFileBox.visible = false
                 }

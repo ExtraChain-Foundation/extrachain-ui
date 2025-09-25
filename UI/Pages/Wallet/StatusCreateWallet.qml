@@ -7,7 +7,7 @@ import "../../Controls"
 import "../../Fonts"
 import "../../"
 
-RaccoonPage {
+ExPage {
     id: statusCreateRoot
     Layout.fillWidth: true
     Layout.fillHeight: true

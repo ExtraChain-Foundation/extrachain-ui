@@ -45,7 +45,7 @@ ApplicationWindow {
     property int keyboardHeight: ios_platform  ? 0 : Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio
     property int statusHeight
     property int navigationHeight
-    property string versionStr: "version " + raccoonVersion + " " + arch + (android_platform ? ", " + (isPlayMarket ? "store" : "direct" ) : "")
+    property string versionStr: "version " + extrachainVersion + " " + arch + (android_platform ? ", " + (isPlayMarket ? "store" : "direct" ) : "")
     property string general_font: Montserrat.dmsans
     property real safeAreaMarginTop: isMobile ? 0 : root.SafeArea.margins.top
     property bool vpn_client_mode: appSettings.vpnModeIndex === 0
@@ -54,7 +54,7 @@ ApplicationWindow {
     property bool logined
     property bool cheatMode
     property bool securityState
-    property bool faceIdAvailable: raccoonController.isFaceIDAvailable()
+    property bool faceIdAvailable: extraChainController.isFaceIDAvailable()
     property bool accepted: Qt.platform.os !== "android"
 
 
@@ -145,7 +145,7 @@ ApplicationWindow {
         onLoaded: item.forceActiveFocus()
     }
 
-    RaccoonOkMessageBox {
+    ExOkMessageBox {
         id: warningMessageBox
         use_check_box: false
         property string nameCallFunction
@@ -170,12 +170,12 @@ ApplicationWindow {
         anchors.bottomMargin: keyboardHeight
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: messageDialog
         onAccepted: {
             console.log("pressed OK wipe data.")
             Qt.openUrlExternally("https://raccoonline.com/#download")
-            // raccoonController.clearData();
+            // extraChainController.clearData();
             root.close()
         }
         onRejected: {
@@ -185,7 +185,7 @@ ApplicationWindow {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function onWipeData(ty, title, question) {
             if (Qt.platform.os === "ios") {
@@ -252,7 +252,7 @@ ApplicationWindow {
         id: updater
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: messageBox
         title: "ExtraChain"
         info_text: qsTr("Are you sure you want to exit?")
@@ -261,7 +261,7 @@ ApplicationWindow {
         onAgree: {
             root.accepted = true
             // root.close()
-            raccoonController.closeApp()
+            extraChainController.closeApp()
         }
     }
 
@@ -277,7 +277,7 @@ ApplicationWindow {
         }
     }
 
-    RaccoonOkMessageBox {
+    ExOkMessageBox {
         id: messageFromVpnBox
         title: "ExtraChain"
         info_text: qsTr("Access to the required permissions was not granted.<br>

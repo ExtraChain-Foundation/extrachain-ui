@@ -22,7 +22,7 @@ Rectangle {
     property string description
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function onExportImportKeystore(newMessage) {
             showMessage(newMessage)

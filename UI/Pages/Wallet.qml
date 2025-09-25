@@ -9,7 +9,7 @@ import "../Fonts"
 import "./Wallet"
 import "../"
 
-RaccoonPage {
+ExPage {
     id: walletPage
     anchors.fill: parent
     anchors.topMargin: Qt.platform.os === "osx" ? -safeAreaMarginTop + 6 : 0
@@ -842,7 +842,7 @@ RaccoonPage {
                                             elide: Text.ElideRight
                                         }
 
-                                        RaccoonTextField {
+                                        ExTextField {
                                             id: editTF
                                             width: parent.width /2
                                             height: parent.height
@@ -1027,7 +1027,7 @@ RaccoonPage {
                         radius: 8
                         z: 100
 
-                        RaccoonCheckBox {
+                        ExCheckBox {
                             id: hideMiningrewardCheckBox
                             anchors.fill: parent
                             text: qsTr("Hide mining reward")
@@ -1192,7 +1192,7 @@ RaccoonPage {
                                         DmsansText {
                                             Layout.fillWidth: true
                                             Layout.preferredHeight: paintedHeight
-                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? qsTr("Mining reward") : qsTr("Raccoon"), securityState)
+                                            text: Utils.mask(mModel.typeTx === 6 || mModel.typeTx === 4 ? qsTr("Mining reward") : qsTr("Extrachain"), securityState)
                                             color: Colors.def_color_text
                                             elide: Text.ElideRight
                                             font.pixelSize: 16
@@ -1590,7 +1590,7 @@ RaccoonPage {
                             console.log("begin add new wallet")
                             loaderWithdrawal.sourceComponent = componentCreateWallet
                             loaderWithdrawal.visible = true
-                            raccoonController.componentCreateWalletNewWallet()
+                            extraChainController.componentCreateWalletNewWallet()
                         }
                     }
                 }
@@ -1760,7 +1760,7 @@ RaccoonPage {
                 console.log("begin add new wallet")
                 loaderWithdrawal.sourceComponent = componentCreateWallet
                 loaderWithdrawal.visible = true
-                raccoonController.componentCreateWalletNewWallet()
+                extraChainController.componentCreateWalletNewWallet()
             }
         }
     }
@@ -2531,7 +2531,7 @@ RaccoonPage {
                     Layout.fillWidth: true
                 }
 
-                RaccoonTextField {
+                ExTextField {
                     id: renameTF
                     Layout.preferredHeight: 40
                     Layout.preferredWidth: 260
@@ -2653,7 +2653,7 @@ RaccoonPage {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
 
         function onDagTxApproved(hash_tx) {
             if(currentPage === MenuSelector.Wallet) {
@@ -2697,7 +2697,7 @@ RaccoonPage {
         }
 
         function onNextSecureCode() {
-            raccoonController.addNewWallet(createWalletData.nameWallet, createWalletData.currentCoin)
+            extraChainController.addNewWallet(createWalletData.nameWallet, createWalletData.currentCoin)
         }
 
         function onCloseStatusCreateWallet() {
@@ -2707,7 +2707,7 @@ RaccoonPage {
     }
 
     Connections {
-        target: raccoonController
+        target: extraChainController
         function onWalletCreated() {
             console.log("wallet created. Function on qml.")
             loaderWithdrawal.sourceComponent = componentStatusCreateWallet

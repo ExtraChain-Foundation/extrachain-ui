@@ -22,10 +22,20 @@ Dialog {
     readonly property bool status_additional_question: additional_question_text.length === 0
                                                        ? false : allowAutoLoginCheckBox.checked
     property alias agree_text: agreeTextBtn.text
+    property bool use_required_login_and_password: false
+    readonly property string entered_login: login.text.trim()
+    readonly property string entered_password: password.text.trim()
+
+    function clearLogin() {
+        login.text = ""
+        password.text = ""
+    }
+
 
     signal agree()
+    signal cancel()
 
-    Overlay.modal: BlackRectangle {}
+    Overlay.modal: BlackRectangle{}
 
     header: Item {
         width: parent.width
@@ -61,7 +71,7 @@ Dialog {
             wrapMode: Text.Wrap
         }
         
-        RaccoonCheckBox {
+        ExCheckBox {
             id: confirmationChackBox
             Layout.preferredHeight: visible *30
             Layout.fillWidth: true
@@ -76,7 +86,7 @@ Dialog {
             visible: additional_question_text.length > 0
         }
 
-        RaccoonCheckBox {
+        ExCheckBox {
             id: allowAutoLoginCheckBox
             Layout.preferredHeight: visible *22
             Layout.fillWidth: true
@@ -84,6 +94,23 @@ Dialog {
             visible: additional_question_text.length > 0
             checked: false
         }
+
+        ExTextField {
+            id: login
+            Layout.preferredHeight: visible *40
+            Layout.fillWidth: true
+            placeholderText: qsTr("Login")
+            visible: use_required_login_and_password
+        }
+        ExTextField {
+            id: password
+            Layout.preferredHeight: visible *40
+            Layout.fillWidth: true
+            placeholderText: qsTr("Password")
+            visible: use_required_login_and_password
+            echoMode: TextInput.Password
+        }
+
     }
     
     background: Rectangle {
@@ -102,11 +129,16 @@ Dialog {
             height: 1
         }
         
+        Rectangle {
+            height: parent.height
+            width: 1
+            anchors.centerIn: parent
+        }
         
         MouseArea {
             width: parent.width/2
             height: parent.height
-            anchors.horizontalCenter: parent.horizontalCenter
+            enabled: use_check_box ? confirmationChackBox.checked : true
             
             Text {
                 id: agreeTextBtn
@@ -122,6 +154,26 @@ Dialog {
                 console.log("Clicked `OK`")
                 agree()
                 accept()
+                messageBox.close()
+            }
+        }
+        
+        MouseArea {
+            width: parent.width/2
+            height: parent.height
+            x: width
+            
+            Text {
+                anchors.centerIn: parent
+                font.pixelSize: 14
+                color: Colors.def_color_text
+                font.family: Montserrat.dmsans
+                text: "Cancel"
+            }
+            
+            onClicked: {
+                console.log("Clicked `Cancel`")
+                cancel()
                 messageBox.close()
             }
         }
