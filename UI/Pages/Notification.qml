@@ -279,6 +279,7 @@ Rectangle {
                                 anchors.rightMargin: isMobile ? 16 : 30
                                 anchors.topMargin: isMobile ? 16 : 14
                                 anchors.bottomMargin: isMobile ? 16 : 14
+
                                 Rectangle {
                                     Layout.preferredHeight: isMobile ? 48 : 36
                                     Layout.preferredWidth:  Layout.preferredHeight

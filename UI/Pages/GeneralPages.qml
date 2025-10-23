@@ -91,9 +91,9 @@ Item {
             when: isDesktop
             // PropertyChanges { target: menuRow; visible: true }
             PropertyChanges { target: menuColumn; visible: false }
-            PropertyChanges { target: vpnPage; parent: mainItemRow }
+            // PropertyChanges { target: vpnPage; parent: mainItemRow }
             PropertyChanges { target: walletPage; parent: mainItemRow }
-            PropertyChanges { target: locationsPage; parent: mainItemRow }
+            // PropertyChanges { target: locationsPage; parent: mainItemRow }
             PropertyChanges { target: dfsPage; parent: mainItemRow }
             PropertyChanges { target: settingsPage; parent: nullptr }
             PropertyChanges { target: notificationPage; parent: undefined }

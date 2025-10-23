@@ -21,6 +21,9 @@ Item {
     property alias focusTf: confirmPasswordTF.focus
     property int error_border_width: 0
     property int _radius: 8
+    property alias colorText: confirmPasswordTF.color
+    property alias borderColor: bg.border.color
+    property alias placeholderColor: placeholder.color
 
     readonly property QtObject style: Colors.raccoonTextFieldDefaultStyle
 

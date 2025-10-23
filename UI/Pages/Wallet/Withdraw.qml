@@ -106,8 +106,11 @@ Rectangle {
                 useButtonMax: true
                 coin_name: current_coin
                 placeholderText: qsTr("Amount")
+                colorText: parseFloat(text) > availableBalance ? Colors.red : Colors.text_field_style.placeholder
+                borderColor: parseFloat(text) > availableBalance ? Colors.red : Colors.text_field_style.border_color
+                placeholderColor: parseFloat(text) > availableBalance ? Colors.red : Colors.grape_gray_color
                 validator: RegularExpressionValidator {
-                    regularExpression: /^((0|[1-9][0-9]*))([.,][0-9]{1,3})?$/
+                    regularExpression: /^(?:0|[1-9]\d{0,8}|10000000000)([.,]\d{1,3})?$/
                 }
 
                 onTextChanged: {
@@ -257,8 +260,9 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 20
                             text: qsTr("Receive amount")
-                            color: Colors.withdraw.text
+                            color: Colors.def_color_text
                             font.pixelSize: 16
+                            font.weight: 500
                         }
 
                         DmsansText {
@@ -266,8 +270,9 @@ Rectangle {
                             Layout.preferredWidth: paintedWidth
                             Layout.preferredHeight: 20
                             text:  "0 ExC"
-                            color: Colors.withdraw.text
+                            color: Colors.def_color_text
                             font.pixelSize: 16
+                            font.weight: 500
                         }
                     }
 
@@ -401,7 +406,7 @@ Rectangle {
         }
 
         var amount = Number(amountTF.text)
-        var ab = parseInt(availableBalance)
+        var ab = parseFloat(availableBalance)
         console.log(ab, amount)
 
         if(isNaN(amount)) {

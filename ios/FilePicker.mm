@@ -296,27 +296,49 @@ void RaccoonFilePicker::pickAnyFile() {
 }
 
 void RaccoonFilePicker::exportFile(const QString &filePath) {
-    qDebug() << "exportFile" << filePath;    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *nsFilePath = filePath.toNSString();
-        NSURL *fileURL = [NSURL fileURLWithPath:nsFilePath];
+    qDebug() << "ExportFile called with:" << filePath << "isNull:" << filePath.isNull()
+             << "isEmpty:" << filePath.isEmpty() << "length:" << filePath.length();
 
-        if (![[NSFileManager defaultManager] fileExistsAtPath:nsFilePath]) {
-            qDebug() << "Файл не знайдено: " << filePath;
-            QString errMsg = "File not found";
-            emit error(errMsg);
+        if (filePath.isNull() || filePath.isEmpty()) {
+            emit error("File path is empty");
             return;
         }
 
-        FilePickerExportDelegate *delegate = [[FilePickerExportDelegate alloc] initWithFileURL:fileURL completion:^(BOOL success, NSString * _Nullable errorMessage) {
-                                                                                        if (success) {
-                                                                                            emit copied();
-                                                                                        } else {
-                                                                                            emit error(QString::fromNSString(errorMessage));
-                                                                                        }
-                                                                                    }];
+        QByteArray utf8Path = filePath.toUtf8();
+        const char *cPath = utf8Path.constData();
 
-        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-        [delegate presentExportOptionsInViewController:rootVC];
-    });
+        NSString *nsFilePath = [NSString stringWithUTF8String:cPath];
+        if (!nsFilePath || [nsFilePath length] == 0) {
+            qDebug() << "Invalid conversion to NSString:" << filePath;
+            emit error("Invalid file path conversion");
+            return;
+        }
+
+        NSURL *fileURL = [NSURL fileURLWithPath:nsFilePath];
+        if (!fileURL) {
+            qDebug() << "NSURL is nil for path:" << filePath;
+            emit error("Failed to create NSURL");
+            return;
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FilePickerExportDelegate *delegate =
+                [[FilePickerExportDelegate alloc] initWithFileURL:fileURL
+                                                       completion:^(BOOL success, NSString * _Nullable errorMessage) {
+                if (success) {
+                    emit copied();
+                } else {
+                    emit error(QString::fromUtf8([errorMessage UTF8String]));
+                }
+            }];
+
+            UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (!rootVC) {
+                qDebug() << "No root view controller!";
+                emit error("No root view controller");
+                return;
+            }
+
+            [delegate presentExportOptionsInViewController:rootVC];
+        });
 }

@@ -6,7 +6,8 @@ import QtQuick.Dialogs
 import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Qt.labs.qmlmodels
-import ExtraChain 1.0
+import RaccoonLine 1.0
+// import SortFilterProxyModel
 
 import "../Controls"
 import "../Fonts"
@@ -16,11 +17,11 @@ import "../Delegates"
 Item {
     id: messengerRoot
     anchors.fill: parent
-    visible: root.currentPage === MenuSelector.Messenger
+    visible: root.sellected_window === MenuSelector.Messenger
 
     readonly property string _time_format: "hh:mm"
     readonly property int _list_delegate_row_left_margin: 5
-    readonly property int _radius: 8
+    readonly property int _radius: 0//8
     readonly property int _delegate_chat_width: chatList.width - chatScrollBar.width -1
     property bool reply_state: false
     property bool edit_state: false
@@ -39,10 +40,7 @@ Item {
     onVisibleChanged: {
         if (!visible) return
 
-        userList.model = uiController.loadUserNames()
-        // personProxyModel.sourceModel = messengerController.userModel
-        chatProxyModel.sourceModel = messengerController.chatListModel
-
+        messengerController.setUserFilterModel(uiController.loadUserNames())
         messengerController.updateChatListModel()
     }
 
@@ -71,7 +69,7 @@ Item {
             hideMenu()
         }
 
-        function onCurrentPageChanged() {
+        function onSellected_windowChanged() {
             hideMenu()
         }
     }
@@ -173,41 +171,8 @@ Item {
         color: Colors.background
         visible: (root.isMobile && swipeView.currentIndex === 0) || !root.isMobile
 
-        SortFilterProxyModel {
-            id: personProxyModel
-            sourceModel: messengerController?.userModel || 0
-            filters: [
-                RegExpFilter {
-                    roleName: "username"
-                    pattern: textField.text
-                    caseSensitivity: Qt.CaseInsensitive
-                }
-            ]
-
-            sorters: [
-                StringSorter { roleName: "username" }
-            ]
-        }
-
-        SortFilterProxyModel {
-            id: chatProxyModel
-            sourceModel: messengerController?.chatListModel || 0
-
-            sorters: [
-                RoleSorter {
-                    roleName: "has_messages"
-                    ascendingOrder: false
-                },
-                RoleSorter {
-                    roleName: "date_time_last_message"
-                    ascendingOrder: false
-                }
-            ]
-        }
-
-
         Item {
-            width: parent.width -3
+            width: parent.width
             height: parent.height
 
             Item {
@@ -215,9 +180,10 @@ Item {
                 width: parent.width
                 height: root.isMobile ? 40 : 44
 
-                ExTextField {
+                RaccoonTextField {
                     id: textField
-                    width: parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: isMobile ? parent.width - 10 : parent.width
                     height: parent.height - 4
                     y: 2
                     anchors.bottom: parent.bottom
@@ -229,72 +195,81 @@ Item {
 
                     onTextChanged: {
                         hideMenu()
+
+                        if(selectorChatsOrAllUsers.all_user_state) {
+                            messengerController.filterUser(text)
+                        } else {
+                            messengerController.filterByChats(text)
+                        }
                     }
                 }
             }
 
-            Rectangle {
+            DeepIndigoButton {
                 id: selectorChatsOrAllUsers
                 anchors.top: textFieldBox.bottom
                 anchors.topMargin: root.isMobile ? 5 : 4
                 width: parent.width
                 height: 40
-                radius: _radius
-                color: Colors.text_field_style.background
+                _radius: 0
+                // color: "#35383D"//Colors.background
                 property bool all_user_state: false
+                opacity: ccMouse.pressed ? 0.8 : 1.0
 
-                MouseArea {
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    height: parent.height
-                    onClicked: {
-                        selectorChatsOrAllUsers.all_user_state = false
-                        hideMenu()
-                    }
-
-                    IconText {
-                        anchors.centerIn: parent
-                        font.pixelSize: 28
-                        text: IcoMoon.chatbox
-                        color: Colors.checkBox.text
-                        opacity: selectorChatsOrAllUsers.all_user_state ? 0.7 : 1.0
-                    }
-                }
-
-                Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.height
-                    width: 1
+                MonserratText {
+                    anchors.centerIn: parent
+                    text: !selectorChatsOrAllUsers.all_user_state ? qsTr("Start New Chat") : qsTr("Back to Contacts")
+                    color: Colors.def_color_text
+                    opacity: ccMouse.pressed ? 0.8 : 1.0
                 }
 
                 MouseArea {
-                    anchors.left: parent.horizontalCenter
-                    anchors.right: parent.right
-                    height: parent.height
-
+                    id: ccMouse
+                    anchors.fill: parent
                     onClicked: {
-                        selectorChatsOrAllUsers.all_user_state = true
-                        hideMenu()
-                    }
-
-                    IconText {
-                        anchors.centerIn: parent
-                        font.pixelSize: 28
-                        text: IcoMoon.community
-                        color: Colors.checkBox.text
-                        opacity: selectorChatsOrAllUsers.all_user_state ? 1.0 : 0.7
+                        selectorChatsOrAllUsers.all_user_state = !selectorChatsOrAllUsers.all_user_state
                     }
                 }
+            }
+
+            Rectangle {
+                anchors.top: selectorChatsOrAllUsers.bottom
+                anchors.topMargin: root.isMobile ? 5 : 4
+                width: parent.width
+                height: 1
+                color: "#35383D"
+            }
+
+            DmsansText {
+                id: titleChatsOrContacts
+                anchors.top: selectorChatsOrAllUsers.bottom
+                anchors.topMargin: root.isMobile ? 8 : 7
+                width: parent.width
+                height: 40
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: Colors.def_color_text
+                font.pixelSize: 18
+                font.weight: 500
+                text: !selectorChatsOrAllUsers.all_user_state ? qsTr("Chats") : qsTr("Contacts")
+            }
+
+            Rectangle {
+                anchors.top: titleChatsOrContacts.bottom
+                anchors.topMargin: root.isMobile ? 5 : 4
+                width: parent.width
+                height: 1
+                color: "#35383D"
             }
 
             ListView {
                 id: userList
                 anchors.fill: parent
-                anchors.topMargin: textFieldBox.height + selectorChatsOrAllUsers.height + 8
+                anchors.topMargin: textFieldBox.height + selectorChatsOrAllUsers.height + 60
                 clip: true
                 spacing: 1
                 visible: selectorChatsOrAllUsers.all_user_state
-                // model: personProxyModel
+                model: messengerController.filterAllUsers
                 boundsBehavior: Flickable.StopAtBounds
                 currentIndex: -1
                 ScrollBar.vertical: ScrollBar {
@@ -321,9 +296,8 @@ Item {
                 delegate: Rectangle {
                     height: 55
                     radius: _radius
-                    width: userList.width
-                    color: Colors.background // index === userList.currentIndex ? Colors.connect_zone : Colors.background
-
+                    width: ListView.view.width
+                    color: ListView.currentIndex === index ? (Colors.darkTheme ? "#25252F" : "#F4F8FB") : "transparent"
                     RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: _list_delegate_row_left_margin
@@ -334,23 +308,24 @@ Item {
                             Layout.preferredWidth: 36
                             Layout.alignment: Qt.AlignVCenter
                             radius: height / 2
-                            color: colorFromText(modelData.username)
                             gradient: Gradient {
                                 GradientStop {
                                     position: 0.0
-                                    color: adjustBrightness(colorFromText(modelData.username), _bright_koef_from)
+                                    color: adjustBrightness(colorFromText(modelData), _bright_koef_from)
                                 }
                                 GradientStop {
                                     position: 1.0
-                                    color: adjustBrightness(colorFromText(modelData.username), _bright_koef_to)
+                                    color: adjustBrightness(colorFromText(modelData), _bright_koef_to)
                                 }
                             }
 
                             MonserratText {
                                 anchors.centerIn: parent
                                 font.pixelSize: parent.height / 2
-                                text: "M"/*modelData.username && modelData.username.length > 0 ? modelData.username[0].toUpperCase() : ""*/
+                                text: modelData && modelData.length > 0 ? modelData[0].toUpperCase() : "M"
                                 layer.enabled: true
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
                                 layer.effect: DropShadow {
                                     horizontalOffset: 1
                                     verticalOffset: 0
@@ -365,7 +340,7 @@ Item {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
                             font.pixelSize: 14
-                            text: extraChainController?.mainActor === modelData.actorId ? "Create mirror self-chat" : modelData.username
+                            text: raccoonController?.mainActor === modelData ? "Create mirror self-chat" : modelData
                             color: Colors.country_list_old.country_name
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: 5
@@ -376,6 +351,7 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
+                            userList.currentIndex = index
                             hideMenu()
                             if(uiController.loadUserName('').length === 0) {
                                 change_username_box.open()
@@ -383,7 +359,7 @@ Item {
                             }
 
                             userList.currentIndex = index
-                            userList.current_user = modelData.actorId
+                            userList.current_user = modelData
                             var founded = false
 
                             var chats = chatsModel.model
@@ -403,9 +379,9 @@ Item {
                             if(founded)
                                 return;
 
-                            current_user = modelData.actorId
+                            current_user = messengerController.actorIdByUserName(modelData)
                             create_chat_message_box.current_index_of_users_list = index
-                            create_chat_message_box.current_username = modelData.username
+                            create_chat_message_box.current_username = modelData
                             create_chat_message_box.open()
                             te.focus = true
                         }
@@ -416,11 +392,11 @@ Item {
             ListView {
                 id: chatsModel
                 anchors.fill: parent
-                anchors.topMargin: textFieldBox.height + selectorChatsOrAllUsers.height + 8
+                anchors.topMargin: textFieldBox.height + selectorChatsOrAllUsers.height + 60
                 clip: true
                 spacing: 1
                 visible: !selectorChatsOrAllUsers.all_user_state
-                model: messengerController.chatListModel // chatProxyModel
+                model: messengerController.filterChats
                 property string current_chat
                 property string current_chat_id
                 property int type
@@ -433,9 +409,9 @@ Item {
 
                 delegate: SwipeDelegate {
                     id: swipeDelegate
-
                     height: 55
                     width: chatsModel.width
+                    leftPadding: 0
 
                     onClicked: {
                         hideMenu()
@@ -491,7 +467,7 @@ Item {
                     background: Rectangle {
                         id: backgroundSwipeBox
                         radius: _radius
-                        color: index === chatsModel.currentIndex ? Colors.connect_zone : Colors.background
+                        color: index === chatsModel.currentIndex ? /*Colors.connect_zone*/ (Colors.darkTheme ? "#25252F" : "#F4F8FB") : Colors.background
                     }
 
                     swipe.right: Rectangle {
@@ -521,11 +497,8 @@ Item {
                     }
 
                     contentItem: Item {
-
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: _list_delegate_row_left_margin
-                            anchors.rightMargin: _list_delegate_row_left_margin
                             spacing: 5
                             Rectangle {
                                 Layout.preferredHeight: 36
@@ -569,7 +542,7 @@ Item {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
                                     font.pixelSize: 14
-                                    text: name_chat === "Mirror" ? "Mirror" : uiController.loadUserName(name_chat)
+                                    text: name_chat === "Mirror" ? "Mirror" : name_chat
                                     color: Colors.country_list_old.country_name
                                     verticalAlignment: Text.AlignBottom
                                     leftPadding: 4
@@ -660,24 +633,17 @@ Item {
                 visible: selectorChatsOrAllUsers.all_user_state ? userList.model.count === 0 : chatsModel.model.count === 0
             }
         }
-
-        Rectangle {
-            width: 1
-            height: parent.height
-            anchors.right: parent.right
-            anchors.rightMargin: 1
-            color: Colors.text_field_style.background
-            opacity: 0.8
-        }
     }
 
-    Item {
+    Rectangle {
         anchors.fill: parent
+        color: "yellow"
+        visible: false
 
         Rectangle {
             id: chatItem
             anchors.fill: parent
-            color: Colors.background
+            color: Colors.darkTheme ? "#25252F" : "#F4F8FB"//Colors.background
             visible: (root.isMobile && swipeView.currentIndex === 1) || !root.isMobile
 
             DropArea {
@@ -710,13 +676,14 @@ Item {
             Item {
                 id: userInfoItem
                 width: parent.width
-                height: root.isMobile ? 40 : 44
+                height: 50//root.isMobile ? 40 : 40
                 visible: inputMessageBox.visible
 
                 Rectangle {
                     width: parent.width
-                    height: 40
+                    height: 50
                     anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 5
                     color: Colors.text_field_style.background
                     radius: _radius
                     visible: userInfo.text.length > 0
@@ -747,29 +714,29 @@ Item {
                         anchors.left: parent.left//backButton.right
                         anchors.leftMargin: 5
                         anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height * 0.9
+                        height: parent.height * 0.8
                         width: height
                         radius: height / 2
-                        color: "white"//colorFromText(chatsModel.current_chat)
-                        // gradient: Gradient {
-                        //     GradientStop {
-                        //         position: 0.0
-                        //         color: adjustBrightness(colorFromText(chatsModel.current_chat), _bright_koef_from)
-                        //     }
-                        //     GradientStop {
-                        //         position: 1.0
-                        //         color: adjustBrightness(colorFromText(chatsModel.current_chat), _bright_koef_to)
-                        //     }
-                        // }
+                        color: colorFromText(chatsModel.current_chat)
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0.0
+                                color: adjustBrightness(colorFromText(chatsModel.current_chat), _bright_koef_from)
+                            }
+                            GradientStop {
+                                position: 1.0
+                                color: adjustBrightness(colorFromText(chatsModel.current_chat), _bright_koef_to)
+                            }
+                        }
 
-                        // layer.enabled: true
-                        // layer.effect: DropShadow {
-                        //     horizontalOffset: 1
-                        //     verticalOffset: 0
-                        //     radius: 10
-                        //     samples: 32
-                        //     color: "red"//Colors.default_shadow
-                        // }
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            horizontalOffset: 1
+                            verticalOffset: 0
+                            radius: 10
+                            samples: 32
+                            color: Colors.default_shadow
+                        }
 
                         MonserratText {
                             anchors.centerIn: parent
@@ -813,7 +780,6 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         style: Colors.button_square_send_message_style
                         icon: IcoMoon.chat_settings
-                        koef_icon_size: 0.66
                         height: 32
                         width: 32
                         onClicked: {
@@ -834,7 +800,6 @@ Item {
                     right: parent.right
                     bottom: replyBox.top
                     top: userInfoItem.bottom
-                    leftMargin: 5
                     rightMargin: 5
                     bottomMargin: 0
                 }
@@ -1234,10 +1199,8 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.leftMargin: 3
-                anchors.rightMargin: 3
                 height: Math.min(80, Math.max(60, te.implicitHeight + (te.lineCount > 1 ? 2 : 0)))
-                color: Colors.background
+                color: "transparent"
                 visible: false
 
                 MouseArea {
@@ -1249,7 +1212,6 @@ Item {
                 ScrollView {
                     id: view
                     anchors.fill: parent
-                    anchors.margins: 1
                     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                     ScrollBar.vertical.policy: ScrollBar.AlwaysOff
                     ScrollBar.horizontal.interactive: false
@@ -1257,7 +1219,6 @@ Item {
                     TextArea {
                         id: te
                         wrapMode: TextEdit.Wrap
-                        // clip: true
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                         topPadding: 10
@@ -1272,7 +1233,7 @@ Item {
 
                         onFocusChanged: {
                             console.log("focus_changed", focus)
-                            messengerController?.updateChatListModel();
+                            // messengerController?.updateChatListModel();
                         }
 
                         onTextChanged: {
@@ -1318,7 +1279,7 @@ Item {
                                         }
 
                         background: Rectangle {
-                            color: Colors.text_field_style.background
+                            color: adjustBrightness(Colors.text_field_style.background, 20)
                             radius: _radius
                         }
                     }
@@ -1329,16 +1290,15 @@ Item {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.topMargin: 14
-                    anchors.leftMargin: 3
+                    anchors.leftMargin: 0
                     style: Colors.button_square_send_message_style
                     icon: IcoMoon.attach
                     rotation_icon: 45
-                    koef_icon_size: 0.66
                     width: opacity ? visible * 44 : 18
                     height: 32
-                    hoverEnabled: true
+                    // hoverEnabled: true
                     z: replyBox.z +1
-                    onEntered: {
+                    onClicked: {
                         console.log("mouse_entered")
                         if(menuAddFile.visible)
                             return
@@ -1365,11 +1325,11 @@ Item {
                         }
                     }
 
-                    onClicked: {
-                        hideMenu()
-                        menuAddFile.visible = true
-                        menuAddFileContainMouse = false
-                    }
+                    // onClicked: {
+                    //     hideMenu()
+                    //     menuAddFile.visible = true
+                    //     menuAddFileContainMouse = false
+                    // }
                 }
 
                 SquareButton {
@@ -1377,16 +1337,32 @@ Item {
                     anchors.right: sendMessageButton.left
                     anchors.top: parent.top
                     anchors.topMargin: 14
-                    anchors.rightMargin: 4
+                    anchors.rightMargin: 0
                     style: Colors.button_square_send_message_style
                     icon: IcoMoon.gif
-                    koef_icon_size: 0.66
                     width: visible * 44
                     height: 32
+                    visible: !voiceMessageRecordIncicatorBox.visible
                     z: 100
 
                     onClicked: {
-                        gifMenu.visible = true
+                        // gifMenu.visible = true
+                    }
+                }
+
+                Rectangle{
+                    id: voiceMessageRecordIncicatorBox
+                    anchors.centerIn: sendMessageButton
+                    width: 50
+                    height: width
+                    radius: width/2
+                    color: adjustBrightness(Colors.red, 40)
+                    visible: false
+                    z: 110
+                    SequentialAnimation on width {
+                        loops: Animation.Infinite
+                        NumberAnimation { from: 100; to: 110; duration: 800; easing.type: Easing.InOutQuad }
+                        NumberAnimation { from: 110; to: 100; duration: 800; easing.type: Easing.InOutQuad }
                     }
                 }
 
@@ -1395,16 +1371,35 @@ Item {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.topMargin: 14
-                    anchors.rightMargin: 4
-                    // visible: root.isMobile
-                    style: Colors.button_square_send_message_style
-                    icon: IcoMoon.send
-                    rotation_icon: 45
-                    koef_icon_size: 0.66
+                    anchors.rightMargin: 0
+                    style: te.text.length > 0 ? Colors.button_square_send_message_style : Colors.button_square_send_voice_message_style
+                    icon: te.text.length > 0 ? IcoMoon.send : IcoMoon.microphone
+                    rotation_icon: te.text.length > 0 ? 45 : 0
                     width: visible * 44
                     height: 32
-                    enabled: te.text.length > 0
-                    z: 100
+                    z: 120
+                    property bool isPressed: false
+                    onPressed: {
+                        if(te.text.length === 0 && !isPressed) {
+                            console.log("[pressed] begin record voice message")
+                            isPressed = true
+                            te.focus = false
+                            sendMessageButton.koef_icon_size = 1.5
+                            voiceMessageRecordIncicatorBox.visible = true
+                            swipeView.interactive = false
+                        }
+                    }
+
+                    onReleased: {
+                        if(te.text.length === 0) {
+                            console.log("[released] finished record voice message")
+                            isPressed = false
+                            te.forceActiveFocus()
+                            sendMessageButton.koef_icon_size = 1.0
+                            voiceMessageRecordIncicatorBox.visible = false
+                            swipeView.interactive = true
+                        }
+                    }
 
                     onClicked: {
                         if (te.text.trim().length === 0) return
@@ -1574,7 +1569,7 @@ Item {
                     hideMenu()
                 }
             } else if (currentIndex === 1) {
-                if (!interactive) {
+                if (!interactive && !voiceMessageRecordIncicatorBox.visible) {
                     Qt.callLater(() => interactive = true)
                 }
             }
@@ -1582,6 +1577,7 @@ Item {
 
         Item {
             id: listChatsMobileItem
+            visible: swipeView.currentIndex === 0
         }
 
         Item {
@@ -1590,7 +1586,7 @@ Item {
         }
     }
 
-    ExMessageBox {
+    RaccoonMessageBox {
         id: create_chat_message_box
 
         property int current_index_of_users_list: -1
@@ -1600,7 +1596,8 @@ Item {
         info_text: "Would you like to create a chat with " + current_username + "?"
         use_check_box: false
         onAgree: {
-            let result = messengerController?.createChat(current_user)
+            var usernameId = messengerController.actorIdByUserName(current_username)
+            let result = messengerController?.createChat(usernameId)
 
             if (result) {
                 userList.currentIndex = current_index_of_users_list
@@ -1619,19 +1616,24 @@ Item {
                 notificationToolTip.showMessage()
             }
 
-            console.log("create_chat_result:", result)
+            console.log("create_chat_result:", current_username)
         }
     }
 
-    ExMessageBox {
+    RaccoonMessageBox {
         id: change_username_box
         title: "Create chat"
-        info_text: "Your username is empty. Please go to settings and set a username. Would you like to go there now?"
+        info_text: "You haven't set a username yet. Please go to settings and set a username. Would you like to go there now?"
         use_check_box: false
 
         onAgree: {
-            currentPage = MenuSelector.Settings
-            settingsPage.openUsernamePage()
+            if (isMobile) {
+                root.sellected_window = MenuSelector.Settings
+                settingsPage.openUsernamePage()
+            } else {
+                settingsPopup.open()
+                settingsPopup.settingsPage.openUsernamePage()
+            }
         }
     }
 
@@ -1642,7 +1644,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            opacity: 0.1
+            opacity: menuChat.visible ? 0 : 0.02
         }
 
         onClicked: {
@@ -1713,7 +1715,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: root.isMobile ? 40 : 50
 
-                ExTextField {
+                RaccoonTextField {
                     id: searchGifTextField
                     width: parent.width - 4
                     height: isMobile ? 40 : 42

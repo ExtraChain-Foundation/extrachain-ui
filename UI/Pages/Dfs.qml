@@ -215,7 +215,7 @@ ExPage {
                                 Layout.alignment: Qt.AlignVCenter
                                 text: model.encrypted ? IcoMoon.lock_close : IcoMoon.file
                                 font.pixelSize: 20
-                                color: Colors.dfs_page.list_text
+                                color: Colors.dfs_page.title
 
                                 MouseArea {
                                     anchors.fill: parent; anchors.margins: -10
@@ -435,14 +435,14 @@ ExPage {
                                 case 0: {
                                     console.log("begin export")
                                     exportFolderDialog.filename = blurredItem.name
-                                    exportFolderDialog.index = blurredItem.index
+                                    exportFolderDialog.index = filesView.currentIndex
                                     exportFolderDialog.currentFolder = "/";
                                     exportFolderDialog.currentFolder = StandardPaths.standardLocations(StandardPaths.HomeLocation)[0];
 
                                     if(ios_platform) {
                                         console.log("begin export file for ios.", blurredItem.name)
                                         menuFileBox.visible = false
-                                        let path = dfsFileFilterModel.exportData(blurredItem.index);
+                                        let path = dfsFileFilterModel.exportData(filesView.currentIndex);
                                         if(path !== "")
                                             filePicker.exportFile(path);
                                     } else {

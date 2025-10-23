@@ -25,8 +25,8 @@ Popup {
     background: Rectangle {
         radius: 8
         gradient: Gradient {
-            GradientStop { color: Colors.settings_page.gradient_begin; position: 0.0 }
-            GradientStop { color: Colors.settings_page.gradient_end; position: 1.0 }
+            GradientStop { color: Colors.popup.gradient_begin; position: 0.0 }
+            GradientStop { color: Colors.popup.gradient_end; position: 1.0 }
         }
         
         Rectangle {
