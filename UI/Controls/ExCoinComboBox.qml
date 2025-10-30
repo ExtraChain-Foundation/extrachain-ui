@@ -31,7 +31,7 @@ ComboBox {
                 rightPadding: selectCoinTF.indicator.width + selectCoinTF.spacing
                 text: coin
                 font: selectCoinTF.font
-                color: Colors.raccoonComboBoxDefaultStyle.selected_text
+                color: Colors.extrachainComboBoxDefaultStyle.selected_text
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
@@ -48,7 +48,7 @@ ComboBox {
         IconText {
             anchors.centerIn: parent
             text: IcoMoon.down
-            color: Colors.raccoonComboBoxDefaultStyle.selected_text
+            color: Colors.extrachainComboBoxDefaultStyle.selected_text
         }
     }
 
@@ -69,7 +69,7 @@ ComboBox {
             rightPadding: selectCoinTF.indicator.width + selectCoinTF.spacing
             text: selectCoinTF.currentCoin
             font: selectCoinTF.font
-            color: Colors.raccoonComboBoxDefaultStyle.selected_text
+            color: Colors.extrachainComboBoxDefaultStyle.selected_text
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
@@ -79,8 +79,8 @@ ComboBox {
         height: isMobile ? 58 : 44
         width: selectCoinTF.width
         radius: 8
-        color: Colors.raccoonComboBoxDefaultStyle.background
-        border.color: Colors.raccoonComboBoxDefaultStyle.border
+        color: Colors.extrachainComboBoxDefaultStyle.background
+        border.color: Colors.extrachainComboBoxDefaultStyle.border
         border.width: 1
 
         Rectangle {
@@ -118,7 +118,7 @@ ComboBox {
 
         background: Rectangle {
             radius: 12
-            color: Colors.raccoonComboBoxDefaultStyle.background
+            color: Colors.extrachainComboBoxDefaultStyle.background
         }
     }
 }

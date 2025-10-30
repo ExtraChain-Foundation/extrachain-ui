@@ -91,7 +91,6 @@ public slots:
   void clearData();
   std::string exportedData();
   void kill();
-  void changeVpnMode(const int &mode);
 #ifdef Q_OS_IOS
   void verifyWithFaceID();
 #endif

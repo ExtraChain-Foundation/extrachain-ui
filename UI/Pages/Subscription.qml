@@ -39,7 +39,7 @@ Item {
         ListElement {
             name: "Trial"
             price: "<span style='font-size:24px'>FREE/</span><span style='font-size:16px'>7 days</span>"
-            features: "• Unlimited access to VPNs\n• 15 GB File Storage"
+            features: "• 15 GB File Storage"
             available: true
 
         }
@@ -47,7 +47,7 @@ Item {
         ListElement {
             name: "Basic"
             price: "<span style='font-size:24px'>500 ROCC/</span><span style='font-size:16px'>month</span>"
-            features: "• Unlimited access to VPNs\n• 15 GB File Storage"
+            features: "• 15 GB File Storage"
             available: true
         }
 
@@ -428,10 +428,8 @@ Item {
 
                             function getModel(index) {
                                 switch(index) {
-                                case 0: return ["Unlimited access to VPNs"]
-                                case 1: return ["Unlimited access to VPNs", "15 GB File Storage"]
-                                case 2: return ["All Basic features", "Wandering flow feature", "100 GB File Storage"]
-                                case 3: return ["All High Security features", "Traffic Priority", "1 TB File Storage"]
+                                case 0: return ["All Basic features", "Wandering flow feature", "100 GB File Storage"]
+                                case 1: return ["All High Security features", "Traffic Priority", "1 TB File Storage"]
                                 }
                             }
                         }

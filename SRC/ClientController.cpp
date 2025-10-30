@@ -1162,7 +1162,7 @@ void ClientController::skipAuth() {
 }
 
 QString ClientController::fixFileName(const QString &fileName) {
-  return Utils::fixFileName(fileName, "_");
+  return Utils::fix_file_name(fileName, "_");
 }
 
 QString ClientController::firstId() {
@@ -1564,8 +1564,9 @@ QVariantList ClientController::loadUserNames() {
 
   if (usernames_file_id.empty()) {
     auto search_result =
-        Dfs::Tables::ActorDirFile::search_file_by_folder_and_name(
-            network_id, Dfs::Basic::TEMPLATE_VECTOR, "Usernames");
+        Dfs::Tables::DirsFile::ActorSpace::search_file_by_folder_and_name(
+            m_node->dfs()->get_db_instance(), network_id,
+            Dfs::Basic::TEMPLATE_VECTOR, "Usernames");
     if (!search_result.has_value()) {
       return list;
     }
@@ -1580,7 +1581,7 @@ QVariantList ClientController::loadUserNames() {
     }
   }
 
-  auto rows = m_node->dfs()->get_vector_rows(network_id, usernames_file_id);
+  auto rows = m_node->dfs()->read_vector_rows(network_id, usernames_file_id);
   if (!rows.has_value()) {
     return list;
   }
@@ -1625,8 +1626,9 @@ QString ClientController::loadUserName(QString actorId) {
 
   if (usernames_file_id.empty()) {
     auto search_result =
-        Dfs::Tables::ActorDirFile::search_file_by_folder_and_name(
-            network_id, Dfs::Basic::TEMPLATE_VECTOR, "Usernames");
+        Dfs::Tables::DirsFile::ActorSpace::search_file_by_folder_and_name(
+            m_node->dfs()->get_db_instance(), network_id,
+            Dfs::Basic::TEMPLATE_VECTOR, "Usernames");
     if (!search_result.has_value()) {
       return "";
     }
@@ -1646,8 +1648,8 @@ QString ClientController::loadUserName(QString actorId) {
         m_node->account_controller()->current_profile().main_id().toQString();
   }
 
-  auto row = m_node->dfs()->get_vector_row(network_id, usernames_file_id,
-                                           actorId.toStdString());
+  auto row = m_node->dfs()->read_vector_row(network_id, usernames_file_id,
+                                            actorId.toStdString());
   if (!row.has_value()) {
     return "";
   }
@@ -1714,9 +1716,9 @@ void ClientController::loadSubscription() {
 
   if (sub_file_id.empty()) {
     auto search_result =
-        Dfs::Tables::ActorDirFile::search_file_by_folder_and_name(
-            extrachain_id, Dfs::Basic::TEMPLATE_VECTOR,
-            "ExtraChainSubscription");
+        Dfs::Tables::DirsFile::ActorSpace::search_file_by_folder_and_name(
+            m_node->dfs()->get_db_instance(), extrachain_id,
+            Dfs::Basic::TEMPLATE_VECTOR, "ExtraChainSubscription");
     if (!search_result.has_value()) {
       return;
     }
@@ -1732,8 +1734,8 @@ void ClientController::loadSubscription() {
   }
 
   auto system_actor_id = m_node->account_controller()->system_actor().id();
-  auto row = m_node->dfs()->get_vector_row(extrachain_id, sub_file_id,
-                                           system_actor_id.to_string());
+  auto row = m_node->dfs()->read_vector_row(extrachain_id, sub_file_id,
+                                            system_actor_id.to_string());
 
   if (m_subscribed != row.has_value()) {
     m_subscribed = row.has_value();
@@ -1746,8 +1748,9 @@ void ClientController::addSubscription(int type, bool auto_renew) {
 
   if (sub_file_id.empty()) {
     auto search_result =
-        Dfs::Tables::ActorDirFile::search_file_by_folder_and_name(
-            extrachain_id, Dfs::Basic::TEMPLATE_VECTOR, "TestSubscription");
+        Dfs::Tables::DirsFile::ActorSpace::search_file_by_folder_and_name(
+            m_node->dfs()->get_db_instance(), extrachain_id,
+            Dfs::Basic::TEMPLATE_VECTOR, "TestSubscription");
     if (!search_result.has_value()) {
       return;
     }
@@ -1765,6 +1768,7 @@ QStringList ClientController::getPhrase() {
   QStringList result;
   for (const auto &word : mnemonic) {
     result << QString::fromStdString(word);
+    qDebug() << "word" << word;
   }
   return result;
 }
@@ -1927,8 +1931,9 @@ void ClientController::addFiles(const QStringList &files,
                  sf == Dfs::ServiceFolder::Chat) {
         const std::string filename = QFileInfo(file).fileName().toStdString();
         const auto searchResult =
-            Dfs::Tables::ActorDirFile::search_file_by_folder_and_name(
-                mainId, Dfs::Basic::TEMPLATE_CHAT, filename);
+            Dfs::Tables::DirsFile::ActorSpace::search_file_by_folder_and_name(
+                m_node->dfs()->get_db_instance(), mainId,
+                Dfs::Basic::TEMPLATE_CHAT, filename);
         const auto &fileId = searchResult.value().file_id;
         const QString dfsPath = QString::fromStdWString(
             DfsB::fsActrRootW + DfsB::separator +

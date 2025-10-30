@@ -14,7 +14,7 @@ ExPage {
     color: Colors.background
     visible: false
 
-    property string url: isPlayMarket ? "https://play.google.com/store/apps/details?id=com.raccoonline." + isMessenger ? "vpnapp" : "messenger" : "https://raccoonline.com/#download"
+    property string url: isPlayMarket ? "https://play.google.com/store/apps/details?id=com.extrachain." + isMessenger ? "app" : "messenger" : "https://extrachain.com/#download"
     property string version
 
     onVisibleChanged: {
@@ -49,7 +49,7 @@ ExPage {
         visible: false//!ios_platform && !isPlayMarket
         color: "white"
         font.pixelSize: 13
-        text: "or download from <font color='#70cbff'>raccoonline.com</font>"
+        text: "or download from <font color='#70cbff'>extrachain.com</font>"
 
         MouseArea {
             anchors.fill: parent; anchors.margins: -16

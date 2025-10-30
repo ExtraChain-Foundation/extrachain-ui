@@ -175,7 +175,7 @@ ExPage {
         target: uiController
         function onLogout() {
             loginPage.visible = true
-            currentPage = MenuSelector.Vpn
+            currentPage = MenuSelector.Wallet
         }
     }
 
@@ -1122,7 +1122,6 @@ ExPage {
                                 autologin = autologinCheckBox.checked
                                 view.incrementCurrentIndex()
 
-                                settingsWindow.sellectedWindow = 0
                                 welcomePage.startReg(registration_current_login, registration_current_password)
                                 // console.log("User login", registration_current_ip, registration_current_login, registration_current_password, registration_current_confirm_password)
 
@@ -1134,7 +1133,6 @@ ExPage {
                                 }
                                 hexExportBlock.hex = uiController.importedHex(fullPhrase)
                                 console.log("hexExportBlock.hex", hexExportBlock.hex)
-                                started = false
                             }
                         }
                     }
@@ -1240,7 +1238,6 @@ Write it down and store it in a secure place — preferably offline and out of s
 
                             Repeater {
                                 id: repeaterMnemonicPhase
-
                                 Rectangle {
                                     width: rlFlowDelegate.implicitWidth
                                     height: 24
@@ -1272,7 +1269,7 @@ Write it down and store it in a secure place — preferably offline and out of s
                                             rightPadding: 4
                                             text: modelData
                                             font.pixelSize: 12
-                                            color: Colors.def_color_text
+                                            color: "white"
                                             horizontalAlignment: Text.AlignHCenter
                                             verticalAlignment: Text.AlignVCenter
                                         }

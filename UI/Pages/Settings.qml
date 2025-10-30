@@ -165,14 +165,12 @@ Item {
                 onClicked: {
                     console.log("show settings", currentPage, settingsPopup.visible)
                     if(currentPage === MenuSelector.Settings) {
-                        if(saved_previous_window === MenuSelector.Vpn)
-                            currentPage = MenuSelector.Vpn
-                        else if(saved_previous_window === MenuSelector.Wallet)
+                        if(saved_previous_window === MenuSelector.Wallet)
                             currentPage = MenuSelector.Wallet
                         else if(saved_previous_window === MenuSelector.Locations)
                             currentPage = MenuSelector.Locations
                         else
-                            currentPage = MenuSelector.Vpn
+                            currentPage = MenuSelector.Wallet
                     }
                 }
             }
@@ -428,8 +426,8 @@ Item {
                             icon: IcoMoon.attention
                             onClicked: {
                                 appSettings.onboard_finished = false
-                                onboarding_current_page = Onboarding.Vpn_Tab_To_Connect
-                                currentPage = MenuSelector.Vpn
+                                onboarding_current_page = Onboarding.Wallet_Access
+                                currentPage = MenuSelector.Wallet
                                 settingsPopup.close()
                             }
                         }

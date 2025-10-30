@@ -25,7 +25,7 @@ Item {
     property alias borderColor: bg.border.color
     property alias placeholderColor: placeholder.color
 
-    readonly property QtObject style: Colors.raccoonTextFieldDefaultStyle
+    readonly property QtObject style: Colors.extrachainTextFieldDefaultStyle
 
     signal max()
     signal copy()
@@ -56,7 +56,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: 20
         height: 20
-        color: Colors.raccoonTextFieldDefaultStyle.max_button
+        color: Colors.extrachainTextFieldDefaultStyle.max_button
         text: IcoMoon.search
         font.pixelSize: 20
         verticalAlignment: Text.AlignTop
@@ -71,7 +71,7 @@ Item {
         text: coin_name
         font.family: Montserrat.dmsans
         visible: coin_name.length > 0
-        color: Colors.raccoonTextFieldDefaultStyle.name_coin
+        color: Colors.extrachainTextFieldDefaultStyle.name_coin
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 16
     }
@@ -85,7 +85,7 @@ Item {
         font.family: Montserrat.dmsans
         text: qsTr("Max")
         visible: useButtonMax
-        color: Colors.raccoonTextFieldDefaultStyle.max_button
+        color: Colors.extrachainTextFieldDefaultStyle.max_button
         verticalAlignment: Text.AlignVCenter
         MouseArea {
             anchors.fill: parent
@@ -102,7 +102,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: 20
         height: 20
-        color: Colors.raccoonTextFieldDefaultStyle.max_button
+        color: Colors.extrachainTextFieldDefaultStyle.max_button
         text: IcoMoon.copy
         font.pixelSize: 20
         verticalAlignment: Text.AlignTop

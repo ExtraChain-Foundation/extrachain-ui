@@ -6,7 +6,7 @@ import QtQuick.Dialogs
 import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Qt.labs.qmlmodels
-import RaccoonLine 1.0
+import ExtraChain 1.0
 // import SortFilterProxyModel
 
 import "../Controls"
@@ -180,7 +180,7 @@ Item {
                 width: parent.width
                 height: root.isMobile ? 40 : 44
 
-                RaccoonTextField {
+                ExTextField {
                     id: textField
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: isMobile ? parent.width - 10 : parent.width
@@ -340,7 +340,7 @@ Item {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
                             font.pixelSize: 14
-                            text: raccoonController?.mainActor === modelData ? "Create mirror self-chat" : modelData
+                            text: extraChainController?.mainActor === modelData ? "Create mirror self-chat" : modelData
                             color: Colors.country_list_old.country_name
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: 5
@@ -1586,7 +1586,7 @@ Item {
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: create_chat_message_box
 
         property int current_index_of_users_list: -1
@@ -1620,7 +1620,7 @@ Item {
         }
     }
 
-    RaccoonMessageBox {
+    ExMessageBox {
         id: change_username_box
         title: "Create chat"
         info_text: "You haven't set a username yet. Please go to settings and set a username. Would you like to go there now?"
@@ -1673,7 +1673,7 @@ Item {
         Item {
             id: tenor
             property string apiKey: "AIzaSyDmXbY_-Z2w11dJlkN7wNQww5IEx2AJVf8"
-            property string searchQuery: searchGifTextField.text.length > 0 ? searchGifTextField.text : "raccoon"
+            property string searchQuery: searchGifTextField.text.length > 0 ? searchGifTextField.text : "extrachain"
             property int limit: 100
             property var results: []
 
@@ -1715,7 +1715,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: root.isMobile ? 40 : 50
 
-                RaccoonTextField {
+                ExTextField {
                     id: searchGifTextField
                     width: parent.width - 4
                     height: isMobile ? 40 : 42

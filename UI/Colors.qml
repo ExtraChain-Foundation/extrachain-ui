@@ -7,15 +7,15 @@ import QtQuick
 
 QtObject {
     property bool isDarkTheme: true
-    property string logo_and_text: Colors.isDarkTheme ? "qrc:/new_design/UI/Images/new_design/raccoon_logo_and_text.png"
-                                                      : "qrc:/new_design/UI/Images/new_design/raccoon_logo_and_text_wt.png"
+    property string logo_and_text: Colors.isDarkTheme ? "qrc:/new_design/UI/Images/new_design/EXTRACHAIN_logo_and_text.png"
+                                                      : "qrc:/new_design/UI/Images/new_design/EXTRACHAIN_logo_and_text_wt.png"
 
     property color background: isDarkTheme ? "#191A1A" : "#E7E8EC"
     property color background_start: isDarkTheme ? "#10191A1A" : "#10E7E8EC"
     property color background_end: isDarkTheme ? "#20191A1A" : "#30E7E8EC"
     property color background_old: isDarkTheme ? "#081420" : "#F5F5F6"
     property color selector_menu: isDarkTheme ? "#191A1A" : "#FFFFFF"
-    property color raccoon_icon: isDarkTheme ? "#FFFFFF" : "#000000"
+    property color extrachain_icon: isDarkTheme ? "#FFFFFF" : "#000000"
     property color mining_background: isDarkTheme ? "#191A1A" : background
     property color mining_text_color: "#70C8FF"
     property color border_color: isDarkTheme ? "#1069839a" : "white"
@@ -43,7 +43,7 @@ QtObject {
         property color border: "#292E2D"
     }
 
-    property QtObject raccoon_page: QtObject {
+    property QtObject extrachain_page: QtObject {
         property color gradient_begin: "#01191A1A"
         property color gradient_end: "#07314D"
     }
@@ -97,13 +97,13 @@ QtObject {
         property color text: "#3891D5"
     }
 
-    property QtObject raccoonComboBoxDefaultStyle: QtObject {
+    property QtObject extrachainComboBoxDefaultStyle: QtObject {
         property color background: isDarkTheme ? "#191A1A" : "#E7E8EC"
         property color selected_text: isDarkTheme ? "#908E98" : "#090909"
         property color border: "#3C394E"
     }
 
-    property QtObject raccoonTextFieldDefaultStyle: QtObject {
+    property QtObject extrachainTextFieldDefaultStyle: QtObject {
         property color max_button: isDarkTheme ? "#FFFFFF" : "#090909"
         property color name_coin:  isDarkTheme ? "#A4A8AD" : "#757575"
         property color error_border_color: "#FF0000"
@@ -395,20 +395,6 @@ QtObject {
         property color background: "#2A3135"
     }
 
-    property QtObject vpn_sphere: QtObject {
-        property color blue: "#70C8FF"
-        property color sky_blue:"#4A90E2"
-    }
-
-    property QtObject vpn: QtObject {
-        property color status_disconnected: "#ED6372"
-        property color status_connecting: "#F0B503"
-        property color status_connected: "#70C8FF"
-        property color popup_gradient_begin: "#70C8FF"
-        property color popup_gradient_end: Colors.isDarkTheme ? "#143053" : "#E3F4FF"
-
-    }
-
     property QtObject onboarding: QtObject {
         property color close_button_pressed_color: "#69839A"
         property color title: "#70C8FF"
@@ -444,7 +430,7 @@ QtObject {
     }
 
     property QtObject login_page: QtObject {
-        property color mnemonic_background: "#0D0A21"
+        property color mnemonic_background: "#A4A8AD"
     }
 
     property QtObject notification: QtObject {

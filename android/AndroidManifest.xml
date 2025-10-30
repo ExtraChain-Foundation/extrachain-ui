@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.extrachain.vpnapp" android:installLocation="auto" android:versionCode="40" android:versionName="0.5.0.5" xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.extrachain.app" android:installLocation="auto" android:versionCode="40" android:versionName="0.5.0.5" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk android:minSdkVersion="28"/>
 
@@ -35,7 +35,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
 
-    <application android:name="org.qtproject.qt.android.bindings.QtApplication" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:allowBackup="true" android:fullBackupOnly="false" android:icon="@drawable/icon" android:label="RaccoonLine VPN" android:theme="@style/AppTheme">
+    <application android:name="org.qtproject.qt.android.bindings.QtApplication" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:allowBackup="true" android:fullBackupOnly="false" android:icon="@drawable/icon" android:label="ExtrachainApp" android:theme="@style/AppTheme">
 
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.raccoonline.vpnapp.QtActivityExtension" android:label="-- %%INSERT_APP_NAME%% --" android:screenOrientation="unspecified" android:launchMode="singleTop" android:exported="true">
             <intent-filter>

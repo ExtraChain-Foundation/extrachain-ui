@@ -1212,23 +1212,6 @@ ExPage {
         property bool dfsLoaded
 
         onClicked: {
-
-            // if (!dfsRoot.checkSubscription()) {
-            //     return
-            // }
-
-            // if (!root.cheatMode && !uiController.subscribeActive) {
-            //     notificationToolTip.showMessage("Currently unavailable, please try again later", Tooltip.Message)
-            //     return
-            // }
-
-            // if (!root.cheatMode && !uiController.subscribed) {
-            //     notificationToolTip.showMessage(qsTr("Please subscribe to gain access to the VPN service"), Tooltip.Message)
-            //     currentPage = MenuSelector.Wallet
-            //     walletPage.showSubscriptionPage()
-            //     return
-            // }
-
             console.log("pressed new file or folder in. show menu.")
             if(ios_platform) {
                 popupfromFMOrGallery.open()
@@ -1416,13 +1399,6 @@ ExPage {
 
         if (!root.cheatMode && !uiController.subscribeActive) {
             notificationToolTip.showMessage(qsTr("Currently unavailable, please try again later"))
-            return false
-        }
-
-        if (!root.cheatMode && !uiController.subscribed) {
-            notificationToolTip.showMessage(qsTr("Please subscribe to gain access to the VPN service"))
-            currentPage = MenuSelector.Wallet
-            walletPage.showSubscriptionPage()
             return false
         }
 

@@ -76,7 +76,7 @@ ExPage {
 
             ListElement {
                 coin: "ExC"
-                icon: "qrc:/images/UI/Images/raccoon.png"
+                icon: "qrc:/images/UI/Images/extrachain_lite.png"
             }
         }
 

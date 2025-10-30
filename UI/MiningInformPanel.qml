@@ -127,11 +127,11 @@ Rectangle {
             Layout.preferredHeight: 20
             Layout.alignment: Qt.AlignVCenter
             font.family: IcoMoon.iconmoon
-            text: IcoMoon.raccoon
+            text: IcoMoon.exc_logo
             font.pixelSize: 16
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            color: Colors.raccoon_icon
+            color: Colors.extrachain_icon
             visible: Colors.isDarkTheme
         }
 
@@ -160,7 +160,7 @@ Rectangle {
                 font.pixelSize: 16
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                color: Colors.raccoon_icon
+                color: Colors.extrachain_icon
             }
         }
     }

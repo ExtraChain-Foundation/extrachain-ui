@@ -129,7 +129,7 @@ Rectangle {
                 IconText {
                     anchors.centerIn: parent
                     text: IcoMoon.down
-                    color: Colors.raccoonComboBoxDefaultStyle.selected_text
+                    color: Colors.extrachainComboBoxDefaultStyle.selected_text
                 }
             }
 
@@ -139,7 +139,7 @@ Rectangle {
                 rightPadding: 15
                 text: selectWalletCB.currentText
                 font: selectWalletCB.font
-                color: Colors.raccoonComboBoxDefaultStyle.selected_text
+                color: Colors.extrachainComboBoxDefaultStyle.selected_text
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
@@ -191,7 +191,7 @@ Rectangle {
 
                 background: Rectangle {
                     radius: 12
-                    color: Colors.raccoonComboBoxDefaultStyle.background
+                    color: Colors.extrachainComboBoxDefaultStyle.background
                 }
             }
         }

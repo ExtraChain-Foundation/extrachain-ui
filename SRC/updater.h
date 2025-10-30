@@ -1,65 +1,60 @@
 #pragma once
 
 #include <QString>
-#include <memory>
 #include <boost/describe.hpp>
+#include <memory>
 
 class QNetworkAccessManager;
 class QNetworkReply;
 class ClientController;
 
 struct UpdaterVersion {
-    std::string version;
+  std::string version;
 };
 BOOST_DESCRIBE_STRUCT(UpdaterVersion, (), (version))
 
 class Updater {
 public:
-    Updater(ClientController* clientController = nullptr);
-    ~Updater();
+  Updater(ClientController *clientController = nullptr);
+  ~Updater();
 
-    std::pair<bool, std::string> checkForUpdates();
-    void                         downloadUpdate(const std::string& version);
-    void                         update();
-    void                         install();
-    void                         patchUpdate();
+  std::pair<bool, std::string> checkForUpdates();
+  void downloadUpdate(const std::string &version);
+  void update();
+  void install();
+  void patchUpdate();
 
 private:
-    bool getLatestVersion();
-    void downloadFile(const QString& url, const QString& fileName);
-    bool downloadFileSync(const QString& url, const QString& fileName);
+  bool getLatestVersion();
+  void downloadFile(const QString &url, const QString &fileName);
+  bool downloadFileSync(const QString &url, const QString &fileName);
 
-    bool compareVersions(const std::string& current, const std::string& latest);
+  bool compareVersions(const std::string &current, const std::string &latest);
 
-    std::unique_ptr<QNetworkAccessManager> networkManager;
-    std::string                            onlineVersion;
+  std::unique_ptr<QNetworkAccessManager> networkManager;
+  std::string onlineVersion;
 
-    ClientController* clientController;
+  ClientController *clientController;
 
-    const QString clientType =
-#ifdef RACCOON_MESSENGER
-        "messenger";
-#else
-        "vpn";
-#endif
+  const QString clientType = "app";
 
-    const QString os =
+  const QString os =
 #ifdef Q_OS_WINDOWS
-        "WINDOWS";
+      "WINDOWS";
 #elif defined(Q_OS_ANDROID)
-        "ANDROID";
-    QString savedApkPath;
+      "ANDROID";
+  QString savedApkPath;
 #elif defined(Q_OS_IOS)
-            "IOS";
+      "IOS";
 #elif defined(Q_OS_MACOS)
-            "MAC";
+      "MAC";
 #elif defined(Q_OS_LINUX)
-    #ifdef RACCOON_CLIENT_CONSOLE
-            "MINING_LINUX_CLIENT_ARCHIVE";
-    #else
-            "LINUX";
-    #endif
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
+      "MINING_LINUX_CLIENT_ARCHIVE";
 #else
-            "UNKNOWN";
+      "LINUX";
+#endif
+#else
+      "UNKNOWN";
 #endif
 };

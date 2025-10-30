@@ -33,7 +33,7 @@
 #include "SRC/consolecommandprocessor.h"
 #endif
 
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
 #include "QtGui/qicon.h"
 #include "SRC/ExtraChainController.h"
 #include "SRC/statusbarhelper.h"
@@ -47,9 +47,9 @@
 #include "SRC/updater.h"
 #endif
 
-#if defined(RACCOON_CONSOLE) && !defined(RACCOON_CLIENT_CONSOLE)
+#if defined(EXTRACHAIN_CONSOLE) && !defined(EXTRACHAIN_CLIENT_CONSOLE)
 extern const std::string predefine_token_id;
-extern const std::string predefine_raccoon_id;
+extern const std::string predefine_extrachain_id;
 #endif
 
 #include "metatypes.h"
@@ -174,8 +174,8 @@ void setTitleBarColor(QWindow *window) {
 }
 #endif
 
-inline int runRaccoon(int argc, char *argv[]) {
-#ifndef RACCOON_CONSOLE
+inline int runExtrachain(int argc, char *argv[]) {
+#ifndef EXTRACHAIN_CONSOLE
   QGuiApplication app(argc, argv);
 
   app.setApplicationName("ExtraChain");
@@ -187,11 +187,8 @@ inline int runRaccoon(int argc, char *argv[]) {
   AndroidUtils::initialize();
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-  // RaccoonLinux::processInterface();
-
   if (!RaccoonLinux::isRunningAsRoot()) {
     eInfo("Root access required");
-    eInfo("Administrator privileges needed for VPN network operations");
     // eInfo("Usage: sudo {}",
     // QFileInfo(QCoreApplication::applicationFilePath()).fileName());
     return 1;
@@ -257,7 +254,7 @@ inline int runRaccoon(int argc, char *argv[]) {
   auto statusBarHelper = StatusBarHelper();
   engine.rootContext()->setContextProperty("statusBarHelper", &statusBarHelper);
 
-#ifdef RACCOON_MESSENGER
+#ifdef EXTRACHAIN_MESSENGER
   engine.rootContext()->setContextProperty("isMessenger", true);
 #else
   engine.rootContext()->setContextProperty("isMessenger", false);
@@ -301,7 +298,7 @@ inline int runRaccoon(int argc, char *argv[]) {
 #endif
 }
 
-void runConsoleRaccoonInput(ExtraChainNode *node) {
+void runConsoleExtrachainInput(ExtraChainNode *node) {
   std::string command;
   bool running = true;
   ConsoleCommandProcessor inputProcessor(*node);
@@ -354,9 +351,9 @@ QString readPassword(const QString &prompt) {
 #endif
 }
 
-inline int runConsoleRaccoon(int argc, char *argv[],
-                             std::thread &consoleInputThread) {
-#ifdef RACCOON_CLIENT_CONSOLE
+inline int runConsoleExtrachain(int argc, char *argv[],
+                                std::thread &consoleInputThread) {
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
   Logger::instance().set_compact_console(true);
   // Logger::instance().set_debug(true);
 #endif
@@ -381,7 +378,6 @@ inline int runConsoleRaccoon(int argc, char *argv[],
 
   if (!RaccoonLinux::isRunningAsRoot()) {
     eInfo("Root access required");
-    eInfo("Administrator privileges needed for VPN network operations");
     // eInfo("Usage: sudo {}",
     // QFileInfo(QCoreApplication::applicationFilePath()).fileName());
     return 1;
@@ -414,40 +410,31 @@ inline int runConsoleRaccoon(int argc, char *argv[],
       "dag-mode", "Choose dag mode: full (higher rewards) / light", "mode");
   QCommandLineOption dfsMode(
       "dfs-mode", "Choose dfs mode: full (higher rewards) / light", "mode");
-  QCommandLineOption vpnMode(
-      "vpn-mode",
-      "Choose vpn mode: exit-point / proxy (default) "
-      "<exit-point> mode: higher rewards, provides internet access to users, "
-      "legal "
-      "liability for exit traffic "
-      "<proxy> mode: lower rewards, only forwards traffic to other nodes",
-      "mode");
+
   QCommandLineOption connectToNode("connect-to-node",
                                    "Connect to existing node by IP", "ip");
 
   parser.addOptions({loginOption, passOption, registration, showPhraseOption,
                      showHexOption, importOption, importPhraseOption, dagMode,
-                     dfsMode, vpnMode});
+                     dfsMode});
 
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
 #ifdef QT_DEBUG
   parser.addOption(connectToNode);
 #endif
 #else
   // QCommandLineOption console({ "console", "c" }, "Console application");
   QCommandLineOption clearDataOption("clear-data", "Wipe all data");
-  QCommandLineOption initRaccoon("init-raccoon", "Create first raccoon");
   QCommandLineOption subscriptionOption(
       "create-subscription-vector",
       "Create subscription vector from local system id");
 
-  parser.addOptions(
-      {clearDataOption, initRaccoon, connectToNode, subscriptionOption});
+  parser.addOptions({clearDataOption, connectToNode, subscriptionOption});
 #endif
 
   parser.process(app);
 
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
   QTimer updateTimer;
 
   QObject::connect(&updateTimer, &QTimer::timeout, []() {
@@ -457,7 +444,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
       eInfo("New version available: {}", version);
       updater.update();
 
-      QString updaterPath = QDir::currentPath() + "/RaccoonLine_Update.tar.gz";
+      QString updaterPath = QDir::currentPath() + "/ExtraChain_Update.tar.gz";
       QFile updaterFile(updaterPath);
       if (updaterFile.exists() && updaterFile.size() != 0) {
         updater.install();
@@ -480,7 +467,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
     eInfo("New version available: {}", version);
     updater.update();
 
-    QString updaterPath = QDir::currentPath() + "/RaccoonLine_Update.tar.gz";
+    QString updaterPath = QDir::currentPath() + "/ExtraChain_Update.tar.gz";
     QFile updaterFile(updaterPath);
     if (updaterFile.exists() && updaterFile.size() != 0) {
       updater.install();
@@ -519,15 +506,14 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   Logger::start_file("extrachain");
   eLog("ExtraChain version {}", extrachain_version);
 
-  // static QLockFile lockFile(".RaccoonLine.lock");
+  // static QLockFile lockFile(".ExtraChain.lock");
   // if (!lockFile.tryLock(100)) {
-  //     fmt::println("RaccoonLine Console already running in directory {}",
+  //     fmt::println("ExtraChain Console already running in directory {}",
   //     QDir::currentPath()); std::exit(0);
   // }
 
-  bool isMainRaccoon = false;
-#ifndef RACCOON_CLIENT_CONSOLE
-  isMainRaccoon = parser.isSet(initRaccoon);
+  bool isMainExtrachain = false;
+#ifndef EXTRACHAIN_CLIENT_CONSOLE
   if (parser.isSet(clearDataOption) || QFile("wipe").exists()) {
     eLog("Make wipe...");
     Utils::wipeDataFiles();
@@ -552,7 +538,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   auto filesToDelete = std::make_shared<QStringList>();
   ExtraChainNodeWrapper *nodeWrapper =
       new ExtraChainNodeWrapper(&app, false, true);
-  nodeWrapper->Init();
+  nodeWrapper->init();
 
   auto dagModeStr = parser.value(dagMode);
   if (dagModeStr.toLower() == "light") {
@@ -709,14 +695,14 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   loginHash = Utils::calculate_hash((login + password).toStdString());
   // }
 
-  if (isMainRaccoon) {
-#if defined(RACCOON_CONSOLE) && !defined(RACCOON_CLIENT_CONSOLE)
-    Actor<KeyPrivate> raccoon_actor;
-    raccoon_actor =
-        raccoon_actor.fromJson(QByteArray::fromStdString(predefine_raccoon_id));
+  if (isMainExtrachain) {
+#if defined(EXTRACHAIN_CONSOLE) && !defined(EXTRACHAIN_CLIENT_CONSOLE)
+    Actor<KeyPrivate> EXTRACHAIN_actor;
+    EXTRACHAIN_actor = EXTRACHAIN_actor.fromJson(
+        QByteArray::fromStdString(predefine_EXTRACHAIN_id));
 
     nodeWrapper->node->account_controller()->create_profile(
-        loginHash, ActorType::User, raccoon_actor);
+        loginHash, ActorType::User, EXTRACHAIN_actor);
     eInfo("Created profile with your login and password");
     loginResult = true;
 #endif
@@ -809,7 +795,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
                   "create new profile");
           }
 
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
           if (!parser.isSet(registration)) {
             std::exit(0);
           }
@@ -828,7 +814,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
           loginResult = true;
         }
       } else {
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
         if (parser.isSet(registration)) {
           eInfo("Registration not required, just login");
         }
@@ -840,13 +826,6 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   }
   if (loginResult) {
     auto network = nodeWrapper->node->network();
-
-#ifdef RACCOON_CLIENT_CONSOLE
-    auto permission =
-        (vpnModeStr == "exit-point")
-            ? raccoon::vpn::VPNManager::VPNPermission::PROXY_SERVER
-            : raccoon::vpn::VPNManager::VPNPermission::PROXY;
-#endif
 
     if (parser.isSet(connectToNode)) {
       network->save_first_node(parser.value(connectToNode).toStdString());
@@ -864,8 +843,8 @@ inline int runConsoleRaccoon(int argc, char *argv[],
     network->connect_network();
   }
 
-#if defined(RACCOON_CONSOLE) && !defined(RACCOON_CLIENT_CONSOLE)
-  if (isMainRaccoon) {
+#if defined(EXTRACHAIN_CONSOLE) && !defined(EXTRACHAIN_CLIENT_CONSOLE)
+  if (isMainExtraChain) {
     QObject::connect(
         nodeWrapper->node->network(),
         &NetworkManager::newSocketActivatedWithParams,
@@ -890,7 +869,7 @@ inline int runConsoleRaccoon(int argc, char *argv[],
                 Token::one_billion, "#071b30", predefine_token_id);
 
             if (tokenDataExpected.has_value()) {
-              eSuccess("Raccoon token created and sended to network: {}",
+              eSuccess("ExtraChain token created and sended to network: {}",
                        tokenDataExpected.value().owner_id);
               Token::rocc_token_id = tokenDataExpected.value().token_id;
               eLog("Token rocc id is  {}", Token::rocc_token_id);
@@ -902,17 +881,17 @@ inline int runConsoleRaccoon(int argc, char *argv[],
   }
 #endif
 
-#ifndef RACCOON_CLIENT_CONSOLE
+#ifndef EXTRACHAIN_CLIENT_CONSOLE
   bool subscription_create = parser.isSet(subscriptionOption);
 
   if (subscription_create) {
     auto res =
-        nodeWrapper->node->create_subscription_vector("RaccoonSubscription");
+        nodeWrapper->node->create_subscription_vector("ExtraChainSubscription");
     if (res) {
-      eSuccess("RaccoonSubscription created");
+      eSuccess("ExtraChainSubscription created");
       std::exit(0);
     } else {
-      eLog("RaccoonSubscription created: error");
+      eLog("ExtraChainSubscription created: error");
       std::exit(0);
     }
   }
@@ -963,8 +942,6 @@ inline int runConsoleRaccoon(int argc, char *argv[],
               tx.sender(), tx.receiver(), op,
               tx.amount().to_string(NumeralBase::Dec));
       });
-
-  // runConsoleRaccoonInput(nodeWrapper->node);
 
   SimpleConsole::start([nodeWrapper](const std::string &command) {
     static ConsoleCommandProcessor inputProcessor(*nodeWrapper->node);

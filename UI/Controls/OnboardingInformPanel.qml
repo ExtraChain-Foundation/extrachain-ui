@@ -117,7 +117,7 @@ Rectangle {
                     if(text === qsTr("Complete")) {
                         onboarding_current_page = Onboarding.Finished
                         appSettings.onboard_finished = true
-                        currentPage = MenuSelector.Vpn
+                        currentPage = MenuSelector.Wallet
                         appSettings.onboard_current_index_page = onboarding_current_page
                     } else {
                         onboarding_current_page++;
@@ -130,9 +130,6 @@ Rectangle {
 
     function title() {
         switch(onboarding_current_page) {
-        case Onboarding.Vpn_Tab_To_Connect: return qsTr("Tap to connect<br>securely to the VPN")
-        case Onboarding.Vpn_Connection_Status: return qsTr("Connection Status")
-        case Onboarding.Vpn_Location_Select: return qsTr("Location Select<br>& Connection Info")
         case Onboarding.Mining_Info: return qsTr("Mining Info")
         case Onboarding.Wallet_Access : return qsTr("Wallet Access")
         case Onboarding.Notifications_And_Settings: return qsTr("Notifications & Settings")
@@ -149,9 +146,6 @@ Rectangle {
 
     function description() {
         switch(onboarding_current_page) {
-        case Onboarding.Vpn_Tab_To_Connect: return qsTr("Protect your data in one click")
-        case Onboarding.Vpn_Connection_Status: return qsTr("Check if you’re securely connected or<br>not. Stay aware of your VPN protection")
-        case Onboarding.Vpn_Location_Select: return qsTr("To proceed, please select a location from<br>the list of available options")
         case Onboarding.Mining_Info: return qsTr("Earn tokens while staying connected.<br>Passive rewards with every session")
         case Onboarding.Wallet_Access : return qsTr("Track your balance and earnings.<br>Everything you’ve mined in one place")
         case Onboarding.Notifications_And_Settings: return qsTr("Manage alerts and preferences here.<br>Set it once, enjoy forever.")

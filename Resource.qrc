@@ -7,14 +7,10 @@
         <file>UI/Utils.qml</file>
         <file>UI/Images/bg.svg</file>
         <file>UI/MessageWindow.qml</file>
-        <file>translations/RaccoonLine_uk.qm</file>
-        <file>translations/RaccoonLine_ru.qm</file>
         <file>UI/Images/extrachain_lite.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>UI/Images/canada.png</file>
-        <file>UI/Images/raccoon.png</file>
-        <file>UI/Images/raccoonline.png</file>
         <file>UI/Images/file.png</file>
         <file>UI/Images/image.png</file>
         <file>UI/Images/fatal.png</file>
@@ -22,10 +18,8 @@
         <file>UI/Images/file.svg</file>
         <file>UI/Images/Header.png</file>
         <file>UI/Images/bg.svg</file>
-        <file>UI/Images/raccoon_text_and_icon_logo.svg</file>
         <file>UI/Images/mobile_top_header.svg</file>
         <file>UI/Images/upnp.png</file>
-        <file>UI/Images/raccoon-round.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>UI/Fonts/Inter-Regular.ttf</file>
@@ -527,15 +521,9 @@
         <file>UI/Images/flags/st vincent and the grenadines.png</file>
     </qresource>
     <qresource prefix="/new_design">
-        <file>UI/Images/new_design/vpn_connecting_button.svg</file>
-        <file>UI/Images/new_design/vpn_not_cennected_button.svg</file>
-        <file>UI/Images/new_design/vpn_connected_button.svg</file>
         <file>UI/Images/new_design/dark_blue_shadow.svg</file>
         <file>UI/Images/new_design/light_blue_shadow.svg</file>
-        <file>UI/Images/new_design/vpn.svg</file>
         <file>UI/Images/new_design/effect_for_box.png</file>
-        <file>UI/Images/new_design/raccoon_coin.svg</file>
-        <file>UI/Images/new_design/raccoon_logo_and_text.png</file>
         <file>UI/Images/new_design/mining.png</file>
         <file>UI/Images/new_design/upgrage.svg</file>
         <file>UI/Images/new_design/BlueButton.png</file>
@@ -551,7 +539,6 @@
         <file>UI/Images/new_design/upload.svg</file>
         <file>UI/Images/new_design/power_off.svg</file>
         <file>UI/Images/new_design/power_on.svg</file>
-        <file>UI/Images/new_design/raccoon_logo_and_text_wt.png</file>
     </qresource>
     <qresource prefix="/lottie">
         <file>UI/Lottie/Loader.html</file>

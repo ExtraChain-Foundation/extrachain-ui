@@ -83,9 +83,7 @@ Rectangle {
 
                 onClicked: {
                     if(currentPage === MenuSelector.Notification) {
-                        if(saved_previous_window === MenuSelector.Vpn)
-                            currentPage = MenuSelector.Vpn
-                        else if(saved_previous_window === MenuSelector.Wallet)
+                       if(saved_previous_window === MenuSelector.Wallet)
                             currentPage = MenuSelector.Wallet
                         else if(saved_previous_window === MenuSelector.Locations)
                             currentPage = MenuSelector.Locations
@@ -94,7 +92,7 @@ Rectangle {
                         else if(saved_previous_window === MenuSelector.Dfs)
                             currentPage = MenuSelector.Dfs
                         else
-                            currentPage = MenuSelector.Vpn
+                            currentPage = MenuSelector.Wallet
                     }
                 }
             }

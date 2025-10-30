@@ -47,7 +47,8 @@ void DfsFileFilterModel::jumpToFolder(const QString &folder) {
   emit currentActorChanged();
 
   eLog("Current dir: {}", currentDir);
-  auto dirRows = Dfs::Tables::ActorDirFile::get_dir_rows(ActorId(currentDir));
+  auto dirRows = Dfs::Tables::DirsFile::ActorSpace::get_dir_rows(
+      node->dfs()->get_db_instance(), ActorId(currentDir));
   if (!dirRows.has_value())
     return;
 
@@ -383,8 +384,8 @@ QString DfsFileFilterModel::toBase64(const std::string &fileId,
     return "";
   }
   auto res = node->dfs()->export_file(actor.value(), fileId, fs_path.value());
-  auto dir_row_result =
-      Dfs::Tables::ActorDirFile::get_dir_row(actor.value(), fileId);
+  auto dir_row_result = Dfs::Tables::DirsFile::ActorSpace::get_dir_row(
+      node->dfs()->get_db_instance(), actor.value(), fileId);
 
   if (res.has_value() || res.error() == ExportFileError::OutputFileExists) {
     QFile f(pathToTmpExportDir + "/" + dir_row_result->name.c_str());
@@ -458,7 +459,7 @@ void DfsFileFilterModel::mainDir() {
   DbConnector dirsFile(Dfs::Basic::dirsPath);
   dirsFile.open();
   auto actors = dirsFile.select("SELECT actor_id FROM " +
-                                Dfs::Tables::DirsFile::TableName);
+                                Dfs::Tables::DirsFile::TableNameDirs);
   for (auto &row : actors) {
     append(toMap(DfsModelDirType::Actor, row["actor_id"], "", 0, 0));
   }

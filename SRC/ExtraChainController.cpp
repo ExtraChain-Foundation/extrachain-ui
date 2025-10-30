@@ -39,22 +39,18 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
 #ifdef Q_OS_MAC
   QString appData;
 #ifdef Q_OS_MACOS
-  appData = QString("/Users/%1/Library/Application Support/RaccoonLine")
+  appData = QString("/Users/%1/Library/Application Support/Extrachain")
                 .arg(getMacUser());
-#ifdef RACCOON_MESSENGER
-  appData += "Messenger";
-#endif
-
 #elif defined(Q_OS_IOS)
   appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
-            "/RaccoonLine";
+            "/Extrachain";
 #else
 #endif
   qDebug() << appData;
   bool res = QDir().mkdir(appData) || QDir(appData).exists();
   qDebug() << res;
   if (!res) {
-    eInfo("Can't create RaccoonLine folder");
+    eInfo("Can't create Extrachain folder");
     qApp->quit();
   }
 
@@ -97,7 +93,7 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
   Logger::start_file("extrachain");
 #endif
 
-  eLog("RaccoonLine {}, core {}", extrachain_version, extrachain_version);
+  eLog("Extrachain {}, core {}", extrachain_version, extrachain_version);
 
   bool networkStatus = true;
 #ifdef Q_OS_WIN
@@ -106,7 +102,7 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
 
   bool isProfilesEmpty = AccountController::profiles_list().empty();
   bool hashExists = AutologinHash::is_available();
-  eLog("Contructor RaccoonOnlineController isProfilesEmpty: {}  hashExists: {}",
+  eLog("Contructor ExtrachainController isProfilesEmpty: {}  hashExists: {}",
        isProfilesEmpty, hashExists);
 
   auto rootContext = engine->rootContext();
@@ -136,7 +132,7 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
   rootContext->setContextProperty("messengerController", &mc);
 
   bool isPlayMarket = false;
-#ifdef RACCOON_PLAY_MARKET
+#ifdef EXTRACHAIN_PLAY_MARKET
   isPlayMarket = true;
 #endif
   rootContext->setContextProperty("isPlayMarket", isPlayMarket);
@@ -152,7 +148,6 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
         auto node = nodeWrapper->node;
         availableFullModeInit();
 
-        nodeWrapper->node->init_vpn(nullptr);
         uiController = new ClientController();
         uiController->setNode(node);
         uiController->setShareUtils(shareUtils);
@@ -193,27 +188,12 @@ ExtraChainController::ExtraChainController(QQmlApplicationEngine *engine)
       },
       Qt::QueuedConnection);
 
-  nodeWrapper->Init(true);
+  nodeWrapper->init(true);
 }
 
 ExtraChainController::~ExtraChainController() {
-  // if (!nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId.empty()) {
-  //     for (auto &it : nodeWrapper->node->vpnConfigStorage.vpnFileAddedFileId)
-  //     {
-  //         if
-  //         (nodeWrapper->node->dfs()->removeLocalFile(nodeWrapper->node->accountController()->mainActor().id(),
-  //                                                       it))
-  //             eLog("DFS file with VPN keys deleted");
-  //     }
-  // }
-  // if
-  // (!m_vpnConnectorManager->vpnConnectorManager->vpnFileLocalPath.isEmpty())
-  //     m_vpnConnectorManager->vpnConnectorManager->vpnManager->removePublicKeyToFile(
-  //         m_vpnConnectorManager->vpnConnectorManager->vpnFileLocalPath);
-
-  eLog("[Destructor RaccoonLineController].");
+  eLog("[Destructor ExtraChainController].");
   if (uiController != nullptr && uiController->needWipe()) {
-    // Utils::wipeDataFiles();
     QFile("wipe").open(QFile::WriteOnly);
   }
 
@@ -475,10 +455,6 @@ std::string ExtraChainController::exportedData() {
 
 void ExtraChainController::kill() { std::exit(0); }
 
-void ExtraChainController::changeVpnMode(const int &mode) {
-  qDebug() << "Set vpn mode" << mode;
-}
-
 #ifdef Q_OS_IOS
 void ExtraChainController::verifyWithFaceID() { iosUtils->triggerFaceID(); }
 #endif
@@ -533,14 +509,14 @@ void ExtraChainController::connections() {
             case Network::SocketServiceError::IncompatibleNetwork:
               emit wipeData(1, "<b>Network incompatibility</b>",
                             "Please download the updated client from "
-                            "<b>raccoonline.com</b><br><br>Click "
+                            "<b>extrachain.com</b><br><br>Click "
                             "<b>OK</b> to "
                             "open the website.");
               break;
             case Network::SocketServiceError::VersionTooOld:
               emit wipeData(2, "<b>Update Required</b>",
                             "Please download the latest version from "
-                            "<b>raccoonline.com</b><br><br>Click "
+                            "<b>extrachain.com</b><br><br>Click "
                             "<b>OK</b> to "
                             "open the website.");
               break;
@@ -549,7 +525,7 @@ void ExtraChainController::connections() {
                             "Your node version is newer than the other node "
                             "supports. Please wait for the node "
                             "to be updated or use an older client version from "
-                            "<b>raccoonline.com</b><br><br>"
+                            "<b>extrachain.com</b><br><br>"
                             "Click <b>OK</b> to open the website.");
               break;
             default:
@@ -628,28 +604,28 @@ void ExtraChainController::connections() {
   connect(nodeWrapper->node->token_manager(), &TokenManager::added, this,
           &ExtraChainController::addedToken);
 
-  QObject::connect(nodeWrapper->node->dfs(), &DfsController::downloaded,
-                   [this](ActorId owner_id, Dfs::DirRow dirRow) {
-                     auto network_id =
-                         nodeWrapper->node->actor_index()->network_id();
-                     auto raccoon_id =
-                         ActorId("46710a2d823c23db9fc2ac01e0f84212a8128373");
+  QObject::connect(
+      nodeWrapper->node->dfs(), &DfsController::downloaded,
+      [this](ActorId owner_id, Dfs::DirRow dirRow) {
+        auto network_id = nodeWrapper->node->actor_index()->network_id();
+        auto extrachain_id =
+            ActorId("46710a2d823c23db9fc2ac01e0f84212a8128373");
 
-                     if (owner_id == network_id && dirRow.folder.has_value() &&
-                         dirRow.folder.value() == Dfs::Basic::TEMPLATE_VECTOR &&
-                         dirRow.name == "Usernames") {
-                       auto main_id = nodeWrapper->node->account_controller()
-                                          ->current_profile()
-                                          .main_id();
-                       uiController->loadUserName(main_id.toQString());
-                     }
+        if (owner_id == network_id && dirRow.folder.has_value() &&
+            dirRow.folder.value() == Dfs::Basic::TEMPLATE_VECTOR &&
+            dirRow.name == "Usernames") {
+          auto main_id = nodeWrapper->node->account_controller()
+                             ->current_profile()
+                             .main_id();
+          uiController->loadUserName(main_id.toQString());
+        }
 
-                     if (owner_id == raccoon_id && dirRow.folder.has_value() &&
-                         dirRow.folder.value() == Dfs::Basic::TEMPLATE_VECTOR &&
-                         dirRow.name == "RaccoonSubscription") {
-                       uiController->loadSubscription();
-                     }
-                   });
+        if (owner_id == extrachain_id && dirRow.folder.has_value() &&
+            dirRow.folder.value() == Dfs::Basic::TEMPLATE_VECTOR &&
+            dirRow.name == "ExtrachainSubscription") {
+          uiController->loadSubscription();
+        }
+      });
 
   QObject::connect(walletUiController, &WalletUIController::notificationTx,
                    notificationController,

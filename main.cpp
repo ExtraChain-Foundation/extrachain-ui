@@ -1,6 +1,6 @@
 #include "metatypes.h"
 
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
 #include "SRC/ClientController.h"
 #include "SRC/ExtraChainController.h"
 #include <QIcon>
@@ -31,14 +31,14 @@
 #include "ios/ImagePicker.h"
 #endif
 
-#if defined(RACCOON_CONSOLE) && !defined(RACCOON_CLIENT_CONSOLE)
+#if defined(EXTRACHAIN_CONSOLE) && !defined(EXTRACHAIN_CLIENT_CONSOLE)
 const std::string predefine_token_id =
     "[\"468faf2f1be6504a9a26f7f027f7e43380b0d77d\",2,"
     "\"YSa4cmnQ8NsaZTOe3n3LzBo9LXHVB4PIz2iHcsyH3cI\","
     "\"8ueBTAdbr4zJckpYu3R__tCTPG9n_"
     "hziXySAdkMy5dFhJrhyadDw2xplM57efcvMGj0tcdUHg8jPaIdyzIfdwg\"]";
 
-const std::string predefine_raccoon_id =
+const std::string predefine_EXTRACHAIN_id =
     "[\"46710a2d823c23db9fc2ac01e0f84212a8128373\",1,"
     "\"lwiqDsEnbrfmYWDqshZDVCGpHs6ahbEHYykzCkrSutE\","
     "\"MU3JIBdQ7MA1ncYfLsXTL95a0Mxq3Fs_oNO_Ot1IPQyXCKoOwSdut-"
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
   QZXing::registerQMLImageProvider(engine);
 #endif
 
-  RaccoonFilePicker filePicker;
+  ExtrachainFilePicker filePicker;
   engine.rootContext()->setContextProperty("filePicker", &filePicker);
 
   std::unique_ptr<ExtraChainController> roc =
@@ -93,14 +93,14 @@ int main(int argc, char *argv[]) {
 
   return app.exec();
 #else
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
   LogsManager::debugLogs = false;
 #else
   LogsManager::debugLogs = true;
 #endif
 
 #if defined(Q_OS_LINUX) && !defined(QT_DEBUG) &&                               \
-    (defined(IS_RC) || defined(RACCOON_CLIENT_CONSOLE))
+    (defined(IS_RC) || defined(EXTRACHAIN_CLIENT_CONSOLE))
   Logger::instance().set_compact_console(false);
   LogsManager::debugLogs = false;
 #endif
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     std::string prefixWin = "-qmljsdebugger";
 
     bool isAlwaysConsole = false;
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
     isAlwaysConsole = true;
 #endif
 
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
       try {
 #endif
         std::thread consoleInputThread;
-        runConsoleRaccoon(argc, argv, consoleInputThread);
+        runConsoleExtrachain(argc, argv, consoleInputThread);
         if (consoleInputThread.joinable()) {
           consoleInputThread.join();
         }
@@ -144,7 +144,7 @@ int main(int argc, char *argv[]) {
 #ifndef QT_DEBUG
       try {
 #endif
-        runRaccoon(argc, argv);
+        runExtrachain(argc, argv);
 #ifndef QT_DEBUG
       } catch (const std::exception &err) {
         std::cout << "EXCEPTION: " << err.what() << std::endl;
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 #endif
     }
   } else {
-    runRaccoon(argc, argv);
+    runExtrachain(argc, argv);
   }
 
   if (consoleInputThread.joinable()) {

@@ -4,7 +4,7 @@
 #include "utils/variant_model.h"
 #include "utils/db_connector.h"
 
-struct RaccoonNotification {
+struct ExtraChainNotification {
     Notification::NotifyType type;
     std::string              sender, receiver, date, time, amount;
     int                      timestamp;
@@ -20,7 +20,7 @@ class NotificationController : public VariantModel {
     Q_OBJECT
 
     std::unique_ptr<DbConnector>     dbConnector;
-    std::vector<RaccoonNotification> notifications;
+    std::vector<ExtraChainNotification> notifications;
     std::set<std::string>            _hashesNotification;
     bool                             isShowMiningRewardNotifications = false;
 
@@ -50,7 +50,7 @@ public:
         }
         std::vector<DbRow> rows = dbConnector->select_all(Config::DataStorage::notificationTable);
         for (auto& row : rows) {
-            RaccoonNotification rn;
+            ExtraChainNotification rn;
             rn.type = Notification::fromInt(std::stoi(row["type"]));
             if (rn.type != Notification::NotifyType::Message) {
                 rn.receiver        = row["receiver"];
@@ -84,7 +84,7 @@ public:
                          const QString&                  receiver,
                          const int&                      timestamp) {
 
-        RaccoonNotification rn;
+        ExtraChainNotification rn;
         rn.type            = type;
         rn.amount          = amount.toStdString();
         rn.receiver        = receiver.toStdString();

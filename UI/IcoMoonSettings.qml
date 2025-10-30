@@ -20,7 +20,6 @@ QtObject {
     property string fault_tx:       String.fromCharCode(parseInt('e969', 16))
     property string desigh:         String.fromCharCode(parseInt('e968', 16))
     property string attention:      String.fromCharCode(parseInt('e963', 16))
-    property string vpn:            String.fromCharCode(parseInt('e964', 16))
     property string raccoon:        String.fromCharCode(parseInt('e965', 16))
     property string storage:        String.fromCharCode(parseInt('e966', 16))
     property string wallet:         String.fromCharCode(parseInt('e967', 16))

@@ -14,7 +14,7 @@
 #include "extrachain_version.h"
 #include "utils/exc_utils.h"
 
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
 #include "SRC/ClientController.h"
 #endif
 
@@ -60,7 +60,7 @@ bool Updater::getLatestVersion() {
     return false;
   }
 
-  QNetworkRequest request(QUrl("https://raccoonline.com/api/" + clientType +
+  QNetworkRequest request(QUrl("https://extrachain.com/api/" + clientType +
                                "/actual-version?app_system=" + os));
   QNetworkReply *reply = networkManager->get(request);
 
@@ -91,7 +91,7 @@ void Updater::downloadUpdate(const std::string &version) {
       QString("https://extrachain.com/api/assets/apps/ExtraChain_Setup_%1.exe")
           .arg(QString::fromStdString(version));
 
-  this->downloadFile(url, "RaccoonLine_Updater.exe");
+  this->downloadFile(url, "extrachain_Updater.exe");
   return;
 #endif
 
@@ -108,13 +108,12 @@ void Updater::downloadUpdate(const std::string &version) {
       "Extrachain";
 #endif
 
-  QString url =
-      QString("https://raccoonline.com/api/assets/apps/%1_%2%3.tar.gz")
-          .arg(appName)
-          .arg(QString::fromStdString(version))
-          .arg(arch);
+  QString url = QString("https://extrachain.com/api/assets/apps/%1_%2%3.tar.gz")
+                    .arg(appName)
+                    .arg(QString::fromStdString(version))
+                    .arg(arch);
 
-#ifdef RACCOON_CLIENT_CONSOLE
+#ifdef EXTRACHAIN_CLIENT_CONSOLE
   this->downloadFileSync(url, "ExtraChain_Update.tar.gz");
 #else
   this->downloadFile(url, "ExtraChain_Update.tar.gz");
@@ -166,7 +165,7 @@ void Updater::install() {
     QStringList tarArgs;
     tarArgs << "-xzf" << updaterPath;
 
-#ifdef RACCOON_CONSOLE
+#ifdef EXTRACHAIN_CONSOLE
     tarArgs << "-C" << binPath;
 #else
     tarArgs << "-C" << QDir(binPath).absoluteFilePath("..");
@@ -198,7 +197,7 @@ void Updater::patchUpdate() {
       compareVersions(savedVersion.toStdString(), extrachain_version)) {
     eLog("[Updater] Patch version... {}", os);
 
-    QString url = "https://raccoonline.com/api/" + clientType +
+    QString url = "https://extrachain.com/api/" + clientType +
                   "/increment-statistic?app_system=" + os;
     QNetworkAccessManager *manager = new QNetworkAccessManager();
     QNetworkRequest request(url);
@@ -241,7 +240,7 @@ void Updater::downloadFile(const QString &url, const QString &fileName) {
     reply->deleteLater();
     delete file;
     delete helper;
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
     emit clientController->updaterDownloadFinished(false);
 #endif
     return;
@@ -249,7 +248,7 @@ void Updater::downloadFile(const QString &url, const QString &fileName) {
 
   ClientController *controller = clientController;
 
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
   QObject::connect(reply, &QNetworkReply::downloadProgress, controller,
                    &ClientController::updaterDownloadProgress);
 #endif
@@ -271,7 +270,7 @@ void Updater::downloadFile(const QString &url, const QString &fileName) {
     reply->deleteLater();
     delete helper;
 
-#ifndef RACCOON_CONSOLE
+#ifndef EXTRACHAIN_CONSOLE
     emit controller->updaterDownloadFinished(success);
 #endif
   });

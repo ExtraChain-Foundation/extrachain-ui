@@ -784,7 +784,7 @@ ExPage {
                                     font.pixelSize: 24
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
-                                    color: Colors.raccoon_icon
+                                    color: Colors.extrachain_icon
                                 }
 
                                 Item {
@@ -1181,7 +1181,7 @@ ExPage {
                                         font.pixelSize: 16
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignHCenter
-                                        color: Colors.raccoon_icon
+                                        color: Colors.extrachain_icon
                                     }
 
                                     ColumnLayout {
@@ -1266,7 +1266,7 @@ ExPage {
                                         font.pixelSize: 16
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignHCenter
-                                        color: Colors.raccoon_icon
+                                        color: Colors.extrachain_icon
                                     }
 
                                     ColumnLayout {

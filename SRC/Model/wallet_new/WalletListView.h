@@ -6,7 +6,7 @@
 #include <QClipboard>
 #include <QGuiApplication>
 
-constexpr float raccoon_coin_price = 0.48;
+constexpr float EXTRACHAIN_coin_price = 0.48;
 
 struct BalanceDataInfo {
     struct BalanceDataItem {
@@ -32,7 +32,7 @@ struct BalanceDataInfo {
     std::list<BalanceDataItem> listBalanceDataItem;
     void                       add(const BalanceDataItem& balanceDataItem);
     int                        size() const;
-    float                      price = raccoon_coin_price;
+    float                      price = EXTRACHAIN_coin_price;
 };
 
 class WalletListView : public QAbstractItemModel {
@@ -86,7 +86,7 @@ signals:
     void requestUpdateBalance();
 
 protected:
-    QString calcValue(const BigNumberFloat& balance, const float& price = raccoon_coin_price) const;
+    QString calcValue(const BigNumberFloat& balance, const float& price = EXTRACHAIN_coin_price) const;
 
 private:
     QString      _totalBalance;

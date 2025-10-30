@@ -117,11 +117,11 @@ Rectangle {
                 orientation: Gradient.Horizontal
                 GradientStop {
                     position: 0.0
-                    color: Colors.raccoon_page.gradient_begin
+                    color: Colors.extrachain_page.gradient_begin
                 }
                 GradientStop {
                     position: 1.0
-                    color: Colors.raccoon_page.gradient_end
+                    color: Colors.extrachain_page.gradient_end
                 }
             }
         }

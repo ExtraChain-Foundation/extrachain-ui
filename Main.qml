@@ -48,7 +48,6 @@ ApplicationWindow {
     property string versionStr: "version " + extrachainVersion + " " + arch + (android_platform ? ", " + (isPlayMarket ? "store" : "direct" ) : "")
     property string general_font: Montserrat.dmsans
     property real safeAreaMarginTop: isMobile ? 0 : root.SafeArea.margins.top
-    property bool vpn_client_mode: appSettings.vpnModeIndex === 0
     property bool isNewProfile
     readonly property bool isOnboardingState: !appSettings.onboard_finished
     property bool logined
@@ -174,7 +173,7 @@ ApplicationWindow {
         id: messageDialog
         onAccepted: {
             console.log("pressed OK wipe data.")
-            Qt.openUrlExternally("https://raccoonline.com/#download")
+            Qt.openUrlExternally("https://extrachain.com/#download")
             // extraChainController.clearData();
             root.close()
         }
@@ -213,7 +212,6 @@ ApplicationWindow {
         property bool showExportPage: false
         property int depositSelectedWalletIndex: -1
         property double trialStartTimestamp
-        property int vpnModeIndex: 0
         property int onboard_current_index_page
         property bool onboard_finished: false
         property bool showMessageSwitchToLightMode: true
@@ -274,18 +272,6 @@ ApplicationWindow {
                 root.requestActivate()
                 root.raise()
             }
-        }
-    }
-
-    ExOkMessageBox {
-        id: messageFromVpnBox
-        title: "ExtraChain"
-        info_text: qsTr("Access to the required permissions was not granted.<br>
-                    The application cannot continue and will be closed.")
-        use_check_box: false
-
-        onAgree: {
-            Qt.quit()
         }
     }
 

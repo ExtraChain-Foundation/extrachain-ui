@@ -53,7 +53,7 @@ Rectangle {
             id: logoImg
             parent: itemDesktopItemLogo
             anchors.fill: parent
-            source: "qrc:/images/UI/Images/raccoon_text_and_icon_logo.svg"
+            source: "qrc:/images/UI/Images/extrachain_text_and_icon_logo.svg"
             antialiasing: true
         }
 
